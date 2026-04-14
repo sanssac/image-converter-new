@@ -26,6 +26,9 @@ document.addEventListener('DOMContentLoaded', () => {
   
   if (!dropZone || !convertBtn) return; // Not a converter page
   
+  const dropZoneH2 = dropZone.querySelector('h2');
+  const defaultDropText = dropZoneH2 ? dropZoneH2.textContent : 'Drop images here';
+  
   const progressContainer = document.getElementById('progressContainer');
   const progressFill = document.getElementById('progressFill');
 
@@ -108,6 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   async function handleFiles(files) {
+    const wasEmpty = queuedFiles.length === 0;
     progressContainer.classList.remove('visible');
     resultCard.classList.remove('visible');
   
@@ -141,6 +145,11 @@ document.addEventListener('DOMContentLoaded', () => {
       queuedFiles.push({ file: fileToQueue, result: null, id: Math.random().toString(36).substr(2, 9), processing: false });
     }
     renderGallery();
+    if (wasEmpty && queuedFiles.length > 0) {
+      setTimeout(() => {
+        convertBtn.scrollIntoView({ behavior: 'smooth', block: 'end' });
+      }, 100);
+    }
   }
 
   window.removeFile = function(id) {
@@ -152,8 +161,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (queuedFiles.length === 0) {
       fileGallery.classList.remove('visible');
       convertBtn.classList.remove('visible');
+      if (dropZoneH2) dropZoneH2.textContent = defaultDropText;
       return;
     }
+    if (dropZoneH2) dropZoneH2.textContent = `${queuedFiles.length} file(s) selected - Drop more?`;
+    
     fileGallery.innerHTML = '';
     queuedFiles.forEach(q => {
       const div = document.createElement('div');
