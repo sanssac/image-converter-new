@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <!-- SEO Meta Tags -->
+  <title>Free Online Image Converter | Fast, Secure, 100% Client-Side</title>
+  <meta name="description" content="Quickly convert WEBP, HEIC, PNG, JPG, and 1500+ formats online. Free, unmetered, absolutely private batch processing. Your files never leave your device." />
+  <meta name="keywords" content="image converter, batch image processing, convert webp to jpg, convert heic to jpg, image to png, secure image conversion, free browser image tool" />
+  <meta name="author" content="Image Converter" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://yourwebsite.com/" />
+  
+  <!-- Open Graph / Social Media -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Free Online Image Converter | Secure & Fast" />
+  <meta property="og:description" content="Convert WEBP, HEIC, PNG, JPG locally in your browser. No server uploads means absolute privacy." />
+  <meta property="og:url" content="https://yourwebsite.com/" />
+  
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Free Online Image Converter" />
+  <meta name="twitter:description" content="Convert your images locally with absolute privacy. No file limits, fast batch processing." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
+  <link rel="stylesheet" href="/assets/css/style.css" />
+  
+  <!-- Analytics & AdSense Placeholders -->
+  <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script> window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-XXXXXXXXXX'); </script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+</head>
+<body>
+  <div class="mesh-glow mesh-1"></div>
+  <div class="mesh-glow mesh-2"></div>
+  <div id="toastContainer"></div>
+
+  <header>
+    <a href="/" class="logo-link">
+      <div class="logo">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      </div>
+      <h1>Image <span>Converter</span></h1>
+    </a>
+    <nav>
+      <a href="/jpg-to-png">JPG to PNG</a>
+      <a href="/png-to-jpg">PNG to JPG</a>
+      <a href="/compress-image">Compress Image</a>
+      <a href="/blog">Blog</a>
+    </nav>
+  </header>
+
+  <div class="page-container">
+    <main>
+
+    <!-- Format Tabs -->
+    <div class="format-tabs glass-panel" id="formatTabs">
+      <button class="tab active" data-target="image/jpeg">To JPG</button>
+      <button class="tab" data-target="image/png">To PNG</button>
+      <button class="tab" data-target="image/webp">To WEBP</button>
+    </div>
+
+    <!-- Drop Zone -->
+    <div class="drop-zone glass-panel" id="dropZone">
+      <div class="icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="17 8 12 3 7 8"/>
+          <line x1="12" y1="3" x2="12" y2="15"/>
+        </svg>
+      </div>
+      <h2>Drop images here</h2>
+      <p>Supports formats including JPG, PNG, WEBP, HEIC, SVG</p>
+      <div class="cloud-row">
+        <button class="btn-cloud" id="btnLocal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg> Device
+        </button>
+        <button class="btn-cloud" id="btnUrl">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> URL
+        </button>
+      </div>
+      <input type="file" id="fileInput" accept="image/*,.heic" multiple />
+
+      <!-- URL Modal -->
+      <div class="url-modal" id="urlModal">
+        <input type="url" id="urlInput" placeholder="https://example.com/image.jpg" />
+        <div class="url-actions">
+          <button class="btn-cancel" id="btnUrlCancel">Cancel</button>
+          <button class="btn-fetch" id="btnUrlFetch">Fetch Image</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- File Gallery -->
+    <div class="file-gallery" id="fileGallery"></div>
+
+    <!-- Convert Button -->
+    <button class="btn-convert" id="convertBtn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 3v3m6.366-.366-2.12 2.12M21 12h-3m.366 6.366-2.12-2.12M12 21v-3m-6.366.366 2.12-2.12M3 12h3m-.366-6.366 2.12 2.12"/>
+      </svg>
+      <span id="convertBtnText">Convert Images</span>
+    </button>
+    
+    <!-- Progress Bar -->
+    <div class="progress-container" id="progressContainer">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <!-- Result -->
+    <div class="result-card glass-panel" id="resultCard">
+      <div class="result-header">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+          <polyline points="22 4 12 14.01 9 11.01"/>
+        </svg>
+        Converted successfully!
+      </div>
+      <div class="stats">
+        <span id="batchCountText"></span>
+        <span id="batchSizeOrig"></span>
+        <span id="batchSizeNew"></span>
+      </div>
+      <div class="action-row">
+        <button class="btn-download" id="downloadBtn" style="flex:1">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          <span id="downloadText">Download</span>
+        </button>
+        <button class="btn-copy" id="copyBtn" title="Copy to Clipboard" aria-label="Copy Base64">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+          </svg>
+        </button>
+
+
+      <!-- Related SEO Internal Links -->
+      <section class="related-tools glass-panel">
+        <h3>Related Free Tools</h3>
+        <a href="/jpg-to-png">Convert JPG to PNG</a>
+        <a href="/webp-to-jpg">Convert WebP to JPG</a>
+        <a href="/png-to-jpg">Convert PNG to JPG</a>
+        <a href="/compress-image">Compress Image Files</a>
+      </section>
+
+    </main>
+
+
+  </div>
+
+  <canvas id="canvas"></canvas>
+
+  <footer>
+    <div class="footer-links">
+       <a href="/privacy-policy">Privacy Policy</a>
+       <a href="/terms">Terms of Service</a>
+       <a href="/about">About Us</a>
+       <a href="/contact">Contact</a>
+    </div>
+    <div class="footer-copy">
+       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+       Your files never leave your device — 100% client-side rendering.
+    </div>
+  </footer>
+
+  <script src="/assets/js/app.js"></script>
+</body>
+</html>
