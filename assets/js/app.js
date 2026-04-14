@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (qualitySlider) {
     const qualityVal = document.getElementById('qualityVal');
     qualitySlider.addEventListener('input', (e) => {
-      qualityVal.textContent = `${e.target.value}%`;
+      if (qualityVal) qualityVal.textContent = `${e.target.value}%`;
     });
   }
 
