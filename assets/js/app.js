@@ -167,10 +167,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (dropZoneH2) dropZoneH2.textContent = `${queuedFiles.length} file(s) selected - Drop more?`;
     
     fileGallery.innerHTML = '';
-    queuedFiles.forEach(q => {
+    queuedFiles.forEach((q, index) => {
       const div = document.createElement('div');
       div.className = `file-item ${q.result ? 'done' : ''}`;
       div.id = `item-${q.id}`;
+      div.style.animationDelay = `${index * 0.05}s`;
       
       const url = q.processing ? '' : URL.createObjectURL(q.file);
       const thumbElement = q.processing 
