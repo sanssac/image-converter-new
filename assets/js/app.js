@@ -56,6 +56,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // ── Active Nav Link Highlight ─────────
+  const currentPath = window.location.pathname.replace(/\/$/, '') || '/';
+  document.querySelectorAll('header nav a').forEach(link => {
+    try {
+      const linkPath = new URL(link.href, window.location.origin).pathname.replace(/\/$/, '') || '/';
+      if (linkPath === currentPath) link.classList.add('nav-active');
+    } catch(e) {}
+  });
+
   if (!dropZone || !convertBtn) return; // Not a converter page
   
   const dropZoneH2 = dropZone.querySelector('h2');
@@ -63,6 +72,33 @@ document.addEventListener('DOMContentLoaded', () => {
   
   const progressContainer = document.getElementById('progressContainer');
   const progressFill = document.getElementById('progressFill');
+
+  // Inject progress label element dynamically so we don't need to edit all HTML files
+  let progressLabel = document.createElement('div');
+  progressLabel.id = 'progressLabel';
+  progressLabel.className = 'progress-label';
+  progressContainer.insertAdjacentElement('afterend', progressLabel);
+
+  // Inject clear button into result card once
+  const clearBtn = document.createElement('button');
+  clearBtn.id = 'clearBtn';
+  clearBtn.className = 'btn-clear';
+  clearBtn.innerHTML = `<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.5"/></svg> Convert More Images`;
+  clearBtn.addEventListener('click', () => {
+    queuedFiles.forEach(q => { if (q.thumbUrl) URL.revokeObjectURL(q.thumbUrl); });
+    queuedFiles = [];
+    convertedFiles = [];
+    const baContainer = document.getElementById('beforeAfterContainer');
+    if (baContainer) baContainer.querySelectorAll('img').forEach(img => URL.revokeObjectURL(img.src));
+    resultCard.classList.remove('visible');
+    progressContainer.classList.remove('visible');
+    progressLabel.textContent = '';
+    convertBtn.disabled = false;
+    convertBtnText.textContent = isCompression ? 'Compress Images' : 'Convert Images';
+    renderGallery();
+    dropZone.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
+  resultCard.appendChild(clearBtn);
 
   const urlModal = document.getElementById('urlModal');
   const urlInput = document.getElementById('urlInput');
@@ -326,14 +362,20 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       
       progressFill.style.width = `${((i + 1) / queuedFiles.length) * 100}%`;
+      progressLabel.textContent = `Converting ${i + 1} of ${queuedFiles.length}...`;
     }
 
     convertBtnText.textContent = isCompression ? 'Compress Images' : 'Convert Images';
 
     batchCountText.innerHTML = `<strong>${convertedFiles.length}</strong> file(s) processed`;
     batchSizeOrig.innerHTML = `Original: <strong>${fmtBytes(totalOrigSize)}</strong>`;
-    batchSizeNew.innerHTML = `Processed: <strong style="color:#d8b4fe">${fmtBytes(totalNewSize)}</strong>`;
+
+    const savingsPct = totalOrigSize > 0 ? Math.round((1 - totalNewSize / totalOrigSize) * 100) : 0;
+    const pillClass = savingsPct >= 0 ? 'savings-pill' : 'savings-pill worse';
+    const pillText = savingsPct >= 0 ? `↓ ${savingsPct}% smaller` : `↑ ${Math.abs(savingsPct)}% larger`;
+    batchSizeNew.innerHTML = `Processed: <strong style="color:#d8b4fe">${fmtBytes(totalNewSize)}</strong> <span class="${pillClass}">${pillText}</span>`;
     
+    progressLabel.textContent = '';
     downloadText.textContent = convertedFiles.length > 1 ? 'Download ZIP' : `Download ${targetExt.toUpperCase()}`;
     if (copyBtn) copyBtn.style.display = convertedFiles.length === 1 ? 'flex' : 'none';
 

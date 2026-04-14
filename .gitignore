@@ -1,0 +1,30 @@
+# Image Converter — Project .gitignore
+
+# Python cache (from scripts/)
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+
+# Local env
+.env
+.env.local
+
+# Vercel local dev
+.vercel/
