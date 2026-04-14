@@ -54,6 +54,7 @@
   }
   </script>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="manifest" href="/manifest.json" />
 </head>
 <body data-target-mime="image/jpeg" data-mode="compress">
   <div class="mesh-glow mesh-1"></div>
@@ -111,6 +112,16 @@
         </svg>
         100% secure — images never leave your device
       </div>
+
+      <div class="settings-panel glass-panel" id="settingsPanel" style="margin-bottom:20px; padding:20px; display:flex; flex-direction:column; gap:10px;">
+        <label for="qualitySlider" style="display:flex; justify-content:space-between; font-weight:600; color:var(--text-main, #e2e8f0); font-size:14px;">
+          <span>Compression Quality</span>
+          <strong id="qualityVal" style="color:#a855f7;">70%</strong>
+        </label>
+        <input type="range" id="qualitySlider" min="10" max="100" value="70" style="width:100%; accent-color:#818cf8; cursor:pointer;" />
+        <p style="font-size:12px; color:var(--text-muted, #94a3b8); margin:0;">Lower quality yields vastly smaller file sizes. 70% is optimal for Web.</p>
+      </div>
+
 
       <div class="file-gallery" id="fileGallery"></div>
 

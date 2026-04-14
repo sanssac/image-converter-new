@@ -12,6 +12,15 @@ function showToast(message, type = 'info') {
   }, 3000);
 }
 
+// ── PWA Service Worker ────────────────
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch(err => {
+      console.log('SW registration failed: ', err);
+    });
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const dropZone    = document.getElementById('dropZone');
   const fileInput   = document.getElementById('fileInput');
@@ -24,6 +33,29 @@ document.addEventListener('DOMContentLoaded', () => {
   const downloadText= document.getElementById('downloadText');
   const canvas      = document.getElementById('canvas');
   
+  // ── Theme Manager ─────────────────────
+  const headerElem = document.querySelector('header');
+  if (headerElem) {
+    const toggleBtn = document.createElement('button');
+    toggleBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`;
+    toggleBtn.style = "background:none; border:none; color:inherit; cursor:pointer; margin-left:12px; display:flex; align-items:center; transition:0.2s;";
+    headerElem.appendChild(toggleBtn);
+    
+    toggleBtn.addEventListener('click', () => {
+      const newTheme = document.body.dataset.theme === 'light' ? 'dark' : 'light';
+      document.body.dataset.theme = newTheme;
+      localStorage.setItem('theme', newTheme);
+      toggleBtn.innerHTML = newTheme === 'light' 
+        ? `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>`
+        : `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`;
+    });
+    
+    if (localStorage.getItem('theme') === 'light') {
+      document.body.dataset.theme = 'light';
+      toggleBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>`;
+    }
+  }
+
   if (!dropZone || !convertBtn) return; // Not a converter page
   
   const dropZoneH2 = dropZone.querySelector('h2');
@@ -59,6 +91,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const batchCountText = document.getElementById('batchCountText');
   const batchSizeOrig  = document.getElementById('batchSizeOrig');
   const batchSizeNew   = document.getElementById('batchSizeNew');
+
+  const qualitySlider = document.getElementById('qualitySlider');
+  if (qualitySlider) {
+    const qualityVal = document.getElementById('qualityVal');
+    qualitySlider.addEventListener('input', (e) => {
+      qualityVal.textContent = `${e.target.value}%`;
+    });
+  }
 
   let queuedFiles = [];
   let convertedFiles = []; 
@@ -210,7 +250,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const targetExt = targetExtMap[targetMime] || 'jpg';
     
     const isCompression = document.body.dataset.mode === 'compress';
-    const quality = isCompression ? 0.7 : 0.92;
+    let quality = isCompression ? 0.7 : 0.92;
+    const qualitySlider = document.getElementById('qualitySlider');
+    if (qualitySlider) {
+      quality = parseInt(qualitySlider.value, 10) / 100;
+      // Persist the slider text explicitly
+      const qualityVal = document.getElementById('qualityVal');
+      if (qualityVal) qualityVal.textContent = `${qualitySlider.value}%`;
+    }
 
     convertedFiles = [];
     let totalOrigSize = 0;
@@ -275,6 +322,33 @@ document.addEventListener('DOMContentLoaded', () => {
     
     downloadText.textContent = convertedFiles.length > 1 ? 'Download ZIP' : `Download ${targetExt.toUpperCase()}`;
     if (copyBtn) copyBtn.style.display = convertedFiles.length === 1 ? 'flex' : 'none';
+
+    // Before/After visual comparison injected natively for Compress Mode single files
+    if (isCompression && convertedFiles.length === 1 && queuedFiles[0] && queuedFiles[0].file) {
+       let baContainer = document.getElementById('beforeAfterContainer');
+       if (!baContainer) {
+         baContainer = document.createElement('div');
+         baContainer.id = 'beforeAfterContainer';
+         baContainer.style = "position:relative; width:100%; height:250px; background:rgba(0,0,0,0.2); overflow:hidden; border-radius:10px; margin-top:10px; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05);";
+         resultCard.insertBefore(baContainer, resultCard.querySelector('.action-row'));
+       }
+       const origUrl = URL.createObjectURL(queuedFiles[0].file);
+       const newUrl = URL.createObjectURL(convertedFiles[0].blob);
+       baContainer.innerHTML = `
+         <img src="${origUrl}" style="position:absolute; width:100%; height:100%; object-fit:contain;" />
+         <div style="position:absolute; top:8px; left:8px; background:rgba(0,0,0,0.6); padding:4px 8px; font-size:11px; border-radius:4px; font-weight:600; color:#fff; z-index:5;">Original</div>
+         
+         <img id="afterImg" src="${newUrl}" style="position:absolute; width:100%; height:100%; object-fit:contain; clip-path: inset(0 0 0 50%);" />
+         <div style="position:absolute; top:8px; right:8px; background:rgba(168,85,247,0.9); padding:4px 8px; font-size:11px; border-radius:4px; font-weight:600; color:#fff; z-index:5;">Optimized</div>
+         
+         <div id="baLine" style="position:absolute; top:0; left:50%; width:2px; height:100%; background:#fff; pointer-events:none; box-shadow:0 0 10px rgba(0,0,0,0.8); z-index:10; display:flex; align-items:center; justify-content:center;">
+           <div style="width:24px; height:24px; border-radius:50%; background:#fff; box-shadow:0 2px 6px rgba(0,0,0,0.3); display:flex; align-items:center; justify-content:center;">
+             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+           </div>
+         </div>
+         <input type="range" min="0" max="100" value="50" style="position:absolute; top:0; left:0; width:100%; height:100%; outline:none; margin:0; opacity:0; cursor:ew-resize; z-index:20;" oninput="document.getElementById('afterImg').style.clipPath = 'inset(0 0 0 ' + this.value + '%)'; document.getElementById('baLine').style.left = this.value + '%';">
+       `;
+    }
 
     resultCard.classList.add('visible');
     showToast('Success!', 'success');

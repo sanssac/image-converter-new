@@ -1,0 +1,16 @@
+{
+  "name": "Image Converter PWA",
+  "short_name": "Converter",
+  "description": "Free, precise, and entirely client-side image converter supporting JPG, PNG, WEBP, and HEIC.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#a855f7",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml"
+    }
+  ]
+}
