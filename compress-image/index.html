@@ -20,6 +20,39 @@
     window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
   </script>
   <script defer src="/_vercel/insights/script.js"></script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Does compressing an image ruin the quality?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Our compressor uses smart lossy compression to reduce file sizes by up to 70% while keeping visual differences nearly imperceptible to the human eye."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Are my compressed images uploaded to a server?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. All compression happens directly on your device inside your web browser. No files are uploaded or stored online, ensuring maximum privacy."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is there a limit to how many images I can compress?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Because the processing is done locally on your machine, our tool has no artificial usage limits. Compress as many images as you need for free."
+        }
+      }
+    ]
+  }
+  </script>
 </head>
 <body data-target-mime="image/jpeg" data-mode="compress">
   <div class="mesh-glow mesh-1"></div>
@@ -31,7 +64,7 @@
       <div class="logo">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
       </div>
-      <h1>Image <span>Converter</span></h1>
+      <div class="site-title">Image <span>Converter</span></div>
     </a>
     <nav>
       <a href="/jpg-to-png">JPG to PNG</a>
@@ -43,6 +76,7 @@
 
   <div class="page-container">
     <main>
+      <h1 style="text-align:center; font-size: 28px; margin: 10px 0 20px; background: linear-gradient(135deg, #818cf8, #d8b4fe); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Free Image Compressor Online</h1>
 
 
       <div class="format-tabs glass-panel" id="formatTabs">
@@ -70,6 +104,13 @@
         </div>
       </div>
 
+      <div class="trust-badge">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+        100% secure — images never leave your device
+      </div>
+
       <div class="file-gallery" id="fileGallery"></div>
 
       <button class="btn-convert" id="convertBtn">
@@ -87,11 +128,40 @@
         </div>
       </div>
 
+      <!-- Related SEO Internal Links -->
+      <section class="related-tools glass-panel">
+        <h3>Related Free Tools</h3>
+        <a href="/">Convert Multiple Formats</a>
+        <a href="/jpg-to-png">Convert JPG to PNG</a>
+        <a href="/png-to-jpg">Convert PNG to JPG</a>
+        <a href="/webp-to-jpg">Convert WebP to JPG</a>
+      </section>
+
       <article class="seo-article glass-panel">
-        <h1>Reduce Image File Size Online</h1>
-        <p>Large image files drastically slow down website loading times resulting in poor SEO and lost visitors. They also consume excessive storage on mobile devices.</p>
-        <h2>How does the compressor work?</h2>
-        <p>This tool utilizes aggressive browser-level serialization, dynamically stripping invisible EXIF metadata, reducing embedded color profiles, and applying a ~70% lossy compression ratio which creates massively smaller files with virtually zero human-detectable difference in visual quality.</p>
+        <h2>Reduce Image File Size Online Securely</h2>
+        <p>Bloated, large image files drastically slow down website loading times, which results in poor SEO rankings and lost visitors. Furthermore, unoptimized files quickly consume excessive storage on mobile devices and make emailing photos frustrating. Our free image compressor provides an instant, easy way to resize and shrink your JPG, PNG, WEBP, and HEIC files to manageable sizes.</p>
+        
+        <h3>How does the compression work?</h3>
+        <p>This tool utilizes aggressive browser-level serialization, dynamically stripping invisible EXIF metadata (such as camera location data, device type, and exposure settings), and reducing embedded color profiles. It then applies an intelligent ~70% lossy compression ratio which creates massively smaller files with virtually zero human-detectable difference in visual quality. The result is a web-ready image that looks identical but weighs a fraction of the original size.</p>
+
+        <h3>Fast, Private, and Client-Side</h3>
+        <p>We believe in absolute privacy. Unlike traditional cloud compressors that require you to upload your personal or proprietary business images, our app uses advanced HTML5 technology to compress files locally on your own hardware. Your data never touches our servers. This ensures a 100% secure environment that operates instantly, without waiting for uploads or downloads to complete.</p>
+        
+        <div class="faq-section">
+          <h3>Frequently Asked Questions</h3>
+          <div class="faq-item">
+            <div class="faq-question">Does compressing an image ruin the quality?</div>
+            <div class="faq-answer">Our compressor uses smart lossy compression to reduce file sizes by up to 70% while keeping visual differences nearly imperceptible to the human eye.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-question">Are my compressed images uploaded to a server?</div>
+            <div class="faq-answer">No. All compression happens directly on your device inside your web browser. No files are uploaded or stored online, ensuring maximum privacy.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-question">Is there a limit to how many images I can compress?</div>
+            <div class="faq-answer">Because the processing is done locally on your machine, our tool has no artificial usage limits. Compress as many images as you need for free.</div>
+          </div>
+        </div>
       </article>
 
 
