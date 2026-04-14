@@ -1,42 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>About Us | Image Converter</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Us | Image Converter — Built for Privacy</title>
+  <meta name="description" content="Learn about Image Converter — a free, browser-based tool built to convert your images privately. No uploads. No servers. Just fast, secure conversion." />
+  <link rel="canonical" href="https://image-converter-rho-six.vercel.app/about/" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/assets/css/style.css" />
-  
   <!-- Vercel Web Analytics -->
-  <script>
-    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
-  </script>
+  <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
   <script defer src="/_vercel/insights/script.js"></script>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="manifest" href="/manifest.json" />
+  <meta property="og:image" content="https://image-converter-rho-six.vercel.app/assets/images/og-banner.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:image" content="https://image-converter-rho-six.vercel.app/assets/images/og-banner.png" />
 </head>
 <body>
   <div class="mesh-glow mesh-1"></div>
   <div class="mesh-glow mesh-2"></div>
-  
+  <div id="toastContainer"></div>
+
   <header>
     <a href="/" class="logo-link">
-      <div class="logo"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
-      <h1>Image <span>Converter</span></h1>
+      <div class="logo">
+        <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      </div>
+      <div class="site-title">Image <span>Converter</span></div>
     </a>
-    <nav><a href="/">Home</a><a href="/blog">Blog</a></nav>
+    <nav>
+      <a href="/jpg-to-png">JPG to PNG</a>
+      <a href="/png-to-jpg">PNG to JPG</a>
+      <a href="/compress-image">Compress Image</a>
+      <a href="/blog">Blog</a>
+    </nav>
   </header>
 
   <div class="page-container">
     <main>
       <article class="seo-article glass-panel">
         <h1>About Image Converter</h1>
-        <p>Image Converter was built out of frustration with online tools that forced us to upload massive images onto their servers—only to wait minutes for it to download in lower quality.</p>
-        <p>We utilize the raw native power of HTML5 `canvas.toBlob()` to perform identical lossy and lossless algorithms entirely via your local graphics processor. This means infinite scale, zero loading bars natively, and absolute privacy.</p>
+        <p>Image Converter was built out of a simple frustration: <strong>why do online tools force you to upload your private photos to unknown servers?</strong> Every time you use a cloud-based image converter, your file travels across the internet, gets stored temporarily on someone else's machine, and is processed by code you can't inspect.</p>
+
+        <p>We built a better way. By leveraging the raw power of the <strong>HTML5 Canvas API</strong> and modern browser technology, Image Converter performs all conversions entirely inside your own browser. Your photos never leave your device. Not even for a millisecond.</p>
+
+        <h2>What We Believe</h2>
+        <p>Privacy is a right, not a premium feature. We built this tool to be 100% free, with no paywalls, no file size limits, no watermarks, and no account required. Convert as many images as you need — your data stays yours.</p>
+
+        <h2>How It Works</h2>
+        <p>When you drop an image into our converter, here's what actually happens:</p>
+        <ul>
+          <li>Your file is read locally by your browser's File API</li>
+          <li>It's drawn onto an invisible HTML5 Canvas element</li>
+          <li>The Canvas serializes it to your chosen format using <code>canvas.toBlob()</code></li>
+          <li>The result is offered back to you as an instant download</li>
+        </ul>
+        <p>No network request is ever made with your image data. The entire pipeline runs on your device's own graphics hardware — which is why it's also much faster than uploading to a server and waiting.</p>
+
+        <h2>Supported Formats</h2>
+        <p>We support conversion between <strong>JPG, PNG, WebP, and HEIC</strong> — covering the most common formats used by phones, cameras, and web browsers today. HEIC files (the default format from iPhone cameras) are decoded using the open-source <code>heic2any</code> library, running entirely locally.</p>
+
+        <h2>Open & Transparent</h2>
+        <p>This tool is built with <strong>Vanilla HTML, CSS, and JavaScript</strong> — no frameworks, no black boxes. It works offline after your first visit thanks to a Service Worker that caches the app locally. It's designed to be fast, lightweight, and inspectable.</p>
       </article>
+
+      <section class="related-tools glass-panel">
+        <h3>Start Converting</h3>
+        <a href="/">Convert Any Image</a>
+        <a href="/jpg-to-png">JPG to PNG</a>
+        <a href="/compress-image">Compress Images</a>
+        <a href="/blog">Read Our Blog</a>
+      </section>
     </main>
   </div>
-  
+
   <footer>
-    <div class="footer-links"><a href="/privacy-policy">Privacy Policy</a><a href="/terms">Terms of Service</a><a href="/about">About Us</a><a href="/contact">Contact</a></div>
+    <div class="footer-links">
+      <a href="/privacy-policy">Privacy Policy</a>
+      <a href="/terms">Terms of Service</a>
+      <a href="/about">About Us</a>
+      <a href="/contact">Contact</a>
+    </div>
+    <div class="footer-copy">Your files never leave your device — 100% client-side rendering.</div>
   </footer>
+  <script src="/assets/js/app.js"></script>
 </body>
 </html>

@@ -1,43 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Contact Us | Image Converter</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact Us | Image Converter Support</title>
+  <meta name="description" content="Get in touch with the Image Converter team. Report bugs, ask questions, or reach out about partnerships and integrations." />
+  <link rel="canonical" href="https://image-converter-rho-six.vercel.app/contact/" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/assets/css/style.css" />
-  
   <!-- Vercel Web Analytics -->
-  <script>
-    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
-  </script>
+  <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
   <script defer src="/_vercel/insights/script.js"></script>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="manifest" href="/manifest.json" />
+  <style>
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 24px; }
+    @media (max-width: 640px) { .contact-grid { grid-template-columns: 1fr; } }
+    .contact-card {
+      padding: 20px; border-radius: 14px;
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .contact-card-icon { font-size: 24px; margin-bottom: 4px; }
+    .contact-card h3 { font-size: 15px; font-weight: 600; color: #e2e8f0; margin: 0; }
+    .contact-card p { font-size: 13px; color: #94a3b8; margin: 0; line-height: 1.5; }
+    .contact-card a { color: #818cf8; text-decoration: none; font-weight: 500; }
+    .contact-card a:hover { text-decoration: underline; }
+    [data-theme="light"] .contact-card { background: rgba(0,0,0,0.03); border-color: rgba(0,0,0,0.1); }
+    [data-theme="light"] .contact-card h3 { color: #0f172a; }
+    [data-theme="light"] .contact-card p { color: #475569; }
+  </style>
+  <meta property="og:image" content="https://image-converter-rho-six.vercel.app/assets/images/og-banner.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:image" content="https://image-converter-rho-six.vercel.app/assets/images/og-banner.png" />
 </head>
 <body>
   <div class="mesh-glow mesh-1"></div>
   <div class="mesh-glow mesh-2"></div>
-  
+  <div id="toastContainer"></div>
+
   <header>
     <a href="/" class="logo-link">
-      <div class="logo"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
-      <h1>Image <span>Converter</span></h1>
+      <div class="logo">
+        <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      </div>
+      <div class="site-title">Image <span>Converter</span></div>
     </a>
-    <nav><a href="/">Home</a></nav>
+    <nav>
+      <a href="/jpg-to-png">JPG to PNG</a>
+      <a href="/png-to-jpg">PNG to JPG</a>
+      <a href="/compress-image">Compress Image</a>
+      <a href="/blog">Blog</a>
+    </nav>
   </header>
 
   <div class="page-container">
     <main>
       <article class="seo-article glass-panel">
-        <h1>Contact Support</h1>
-        <p>If you encounter breaking bugs converting certain obscure filetypes, or wish to inquire regarding business level sponsorship or AdSense integration directly, please contact us!</p>
-        <p><strong>Email:</strong> admin@image-converter-rho-six.vercel.app</p>
-        <p>Business hours: M-F 9am to 5pm EST.</p>
+        <h1>Contact &amp; Support</h1>
+        <p>Have a question, found a bug, or want to talk business? We're a small team and we read every message. Reach out through any of the channels below.</p>
+
+        <div class="contact-grid">
+          <div class="contact-card">
+            <div class="contact-card-icon">🐛</div>
+            <h3>Bug Reports</h3>
+            <p>If a specific file type isn't converting correctly or you're seeing an error, let us know. Include the file format and browser you're using.</p>
+            <a href="mailto:support@image-converter-rho-six.vercel.app">support@image-converter-rho-six.vercel.app</a>
+          </div>
+          <div class="contact-card">
+            <div class="contact-card-icon">💼</div>
+            <h3>Business &amp; Partnerships</h3>
+            <p>Interested in sponsorship, AdSense partnerships, or white-label licensing of our converter engine? Let's talk.</p>
+            <a href="mailto:business@image-converter-rho-six.vercel.app">business@image-converter-rho-six.vercel.app</a>
+          </div>
+          <div class="contact-card">
+            <div class="contact-card-icon">💡</div>
+            <h3>Feature Requests</h3>
+            <p>Want support for a new format like AVIF or TIFF? Have an idea for a new tool? We prioritize features based on user demand.</p>
+            <a href="mailto:support@image-converter-rho-six.vercel.app">Send a request</a>
+          </div>
+          <div class="contact-card">
+            <div class="contact-card-icon">📖</div>
+            <h3>General Questions</h3>
+            <p>Not sure how something works? Check our <a href="/blog">Blog</a> or <a href="/about">About</a> page first — many common questions are answered there.</p>
+          </div>
+        </div>
+
+        <h2>Before You Contact Us</h2>
+        <p>Since Image Converter is 100% client-side, <strong>we never have access to your files</strong>. If a conversion fails, the issue is always on the browser side. Here are the most common fixes:</p>
+        <ul>
+          <li><strong>HEIC not converting?</strong> Make sure the <code>heic2any</code> library has fully loaded (wait 2–3 seconds after page load on slow connections).</li>
+          <li><strong>Image looks wrong?</strong> Try a hard refresh — <kbd>Ctrl + Shift + R</kbd> — to clear any cached version of the app.</li>
+          <li><strong>Download not starting?</strong> Check that your browser isn't blocking automatic downloads from this domain.</li>
+        </ul>
       </article>
     </main>
   </div>
-  
+
   <footer>
-    <div class="footer-links"><a href="/privacy-policy">Privacy Policy</a><a href="/terms">Terms of Service</a><a href="/about">About Us</a><a href="/contact">Contact</a></div>
+    <div class="footer-links">
+      <a href="/privacy-policy">Privacy Policy</a>
+      <a href="/terms">Terms of Service</a>
+      <a href="/about">About Us</a>
+      <a href="/contact">Contact</a>
+    </div>
+    <div class="footer-copy">Your files never leave your device — 100% client-side rendering.</div>
   </footer>
+  <script src="/assets/js/app.js"></script>
 </body>
 </html>
