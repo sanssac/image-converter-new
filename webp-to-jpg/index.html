@@ -5,12 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <title>Convert WebP to JPG Online Free | Image Converter</title>
-  <meta name="description" content="Quickly convert next-gen WebP images back into widely compatible JPG format. Free, unlimited, client-side decoding." />
+  <meta name="description" content="Instantly convert WebP images to universally compatible JPG format. Free, unlimited, 100% private — runs entirely in your browser, no uploads needed." />
+  <meta name="keywords" content="webp to jpg, convert webp, webp to jpeg, webp converter, free image converter" />
   <link rel="canonical" href="https://yourwebsite.com/webp-to-jpg/" />
-  
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
   
   <link rel="stylesheet" href="/assets/css/style.css" />
   
@@ -23,8 +25,33 @@
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": "WebP to JPG Converter"
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Why convert WebP to JPG?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "WebP is not supported by older software and some CMS platforms. Converting to JPG ensures your images are universally compatible with every device, app, and system."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does converting WebP to JPG lose quality?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A small amount of quality may be lost since JPG uses lossy compression, but at 90%+ quality settings the difference is invisible to the human eye."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is this tool safe to use?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. All conversion happens entirely inside your browser using HTML5 Canvas. Your images never leave your device and are never uploaded to any server."
+        }
+      }
+    ]
   }
   </script>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -40,7 +67,7 @@
       <div class="logo">
         <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
       </div>
-      <h1>Image <span>Converter</span></h1>
+      <div class="site-title">Image <span>Converter</span></div>
     </a>
     <nav>
       <a href="/jpg-to-png">JPG to PNG</a>
@@ -52,10 +79,10 @@
 
   <div class="page-container">
     <main>
-
+      <h1 style="text-align:center; font-size: 28px; margin: 10px 0 20px; background: linear-gradient(135deg, #818cf8, #d8b4fe); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Convert WebP to JPG Online Free</h1>
 
       <div class="format-tabs glass-panel" id="formatTabs">
-        <button class="tab active" data-target="image/jpeg">WEBP to JPG Mode</button>
+        <button class="tab active" data-target="image/jpeg">WEBP → JPG Mode</button>
       </div>
 
       <div class="drop-zone glass-panel" id="dropZone">
@@ -63,14 +90,15 @@
           <svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
         </div>
         <h2>Drop WEBP files here</h2>
+        <p>Also accepts JPG, PNG, HEIC and more</p>
         <div class="cloud-row">
           <button class="btn-cloud" id="btnLocal"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg> Device</button>
           <button class="btn-cloud" id="btnUrl"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> URL</button>
         </div>
-        <input type="file" id="fileInput" accept="image/webp" multiple />
+        <input type="file" id="fileInput" accept="image/webp,image/*" multiple />
 
         <div class="url-modal" id="urlModal">
-          <input type="url" id="urlInput" placeholder="https://example.com/image.jpg" />
+          <input type="url" id="urlInput" placeholder="https://example.com/image.webp" />
           <div class="url-actions">
             <button class="btn-cancel" id="btnUrlCancel">Cancel</button>
             <button class="btn-fetch" id="btnUrlFetch">Fetch Image</button>
@@ -78,26 +106,84 @@
         </div>
       </div>
 
+      <div class="trust-badge">
+        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+        100% secure — images never leave your device
+      </div>
+
       <div class="file-gallery" id="fileGallery"></div>
-      <button class="btn-convert" id="convertBtn"><span id="convertBtnText">Convert to JPG</span></button>
+
+      <button class="btn-convert" id="convertBtn">
+        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3m6.366-.366-2.12 2.12M21 12h-3m.366 6.366-2.12-2.12M12 21v-3m-6.366.366 2.12-2.12M3 12h3m-.366-6.366 2.12 2.12"/></svg>
+        <span id="convertBtnText">Convert to JPG</span>
+      </button>
+
       <div class="progress-container" id="progressContainer"><div class="progress-fill" id="progressFill"></div></div>
 
       <div class="result-card glass-panel" id="resultCard">
-        <div class="result-header">Converted!</div>
+        <div class="result-header">
+          <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          Converted to JPG successfully!
+        </div>
         <div class="stats"><span id="batchCountText"></span><span id="batchSizeOrig"></span><span id="batchSizeNew"></span></div>
-        <div class="action-row"><button class="btn-download" id="downloadBtn" style="flex:1"><span id="downloadText">Download</span></button></div>
+        <div class="action-row">
+          <button class="btn-download" id="downloadBtn" style="flex:1"><span id="downloadText">Download JPG</span></button>
+          <button class="btn-copy" id="copyBtn" title="Copy to Clipboard" aria-label="Copy to Clipboard">
+            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+            </svg>
+          </button>
+        </div>
       </div>
 
+      <!-- Related SEO Internal Links -->
+      <section class="related-tools glass-panel">
+        <h3>Related Free Tools</h3>
+        <a href="/">Convert Multiple Formats</a>
+        <a href="/jpg-to-png">Convert JPG to PNG</a>
+        <a href="/png-to-jpg">Convert PNG to JPG</a>
+        <a href="/compress-image">Compress Image Files</a>
+      </section>
+
       <article class="seo-article glass-panel">
-        <h1>Restore Compatibility with WebP to JPG</h1>
-        <p>WebP is Google's new format, heavily used across the internet to save bandwidth. Unfortunately, many older applications, desktop software, and CMS platforms do not yet recognize `.webp` files. Converting them back to JPG ensures 100% compatibility across all digital devices.</p>
+        <h2>Restore Compatibility with WebP to JPG</h2>
+        <p>WebP is Google's next-generation image format, heavily used across the internet to save bandwidth. Unfortunately, many older applications, desktop software, and CMS platforms do not yet recognize <code>.webp</code> files. Converting them back to JPG ensures 100% compatibility across all digital devices and platforms.</p>
+        <h3>Why Convert WebP to JPG?</h3>
+        <p>While WebP offers smaller file sizes, JPG remains the most universally supported image format. Convert WebP to JPG when you need to email photos, upload to platforms that don't support WebP, or edit in software like older Photoshop versions.</p>
+        <div class="faq-section">
+          <h3>Frequently Asked Questions</h3>
+          <div class="faq-item">
+            <div class="faq-question">Why convert WebP to JPG?</div>
+            <div class="faq-answer">WebP is not supported by older software and some platforms. Converting to JPG ensures universal compatibility across all devices and apps.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-question">Does converting WebP to JPG lose quality?</div>
+            <div class="faq-answer">A small amount of quality may be lost due to JPG's lossy compression, but at normal quality settings the difference is invisible to the human eye.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-question">Is this tool safe to use?</div>
+            <div class="faq-answer">Yes. All conversion happens inside your browser. Your images never leave your device and are never uploaded to any server.</div>
+          </div>
+        </div>
       </article>
 
-
     </main>
-
   </div>
+
   <canvas id="canvas"></canvas>
+
+  <footer>
+    <div class="footer-links">
+       <a href="/privacy-policy">Privacy Policy</a>
+       <a href="/terms">Terms of Service</a>
+       <a href="/about">About Us</a>
+       <a href="/contact">Contact</a>
+    </div>
+    <div class="footer-copy">Your files never leave your device — 100% client-side rendering.</div>
+  </footer>
+
   <script src="/assets/js/app.js"></script>
 </body>
 </html>

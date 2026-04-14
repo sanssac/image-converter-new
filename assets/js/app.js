@@ -101,7 +101,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   let queuedFiles = [];
-  let convertedFiles = []; 
+  let convertedFiles = [];
+  let isCompression = false; // hoisted so download handler can read it 
 
   function fmtBytes(b) {
     if (!b) return '0 B';
@@ -238,7 +239,7 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
         <div class="status">Done</div>
         <button class="btn-remove remove" aria-label="Remove file" onclick="removeFile('${q.id}')" ${q.processing ? 'disabled' : ''}>
-           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+           <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
       `;
       fileGallery.appendChild(div);
@@ -261,7 +262,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const targetExtMap = { 'image/jpeg':'jpg', 'image/png':'png', 'image/webp':'webp' };
     const targetExt = targetExtMap[targetMime] || 'jpg';
     
-    const isCompression = document.body.dataset.mode === 'compress';
+    isCompression = document.body.dataset.mode === 'compress';
     let quality = isCompression ? 0.7 : 0.92;
     const qualitySlider = document.getElementById('qualitySlider');
     if (qualitySlider) {
@@ -347,6 +348,9 @@ document.addEventListener('DOMContentLoaded', () => {
        }
        const origUrl = URL.createObjectURL(queuedFiles[0].file);
        const newUrl = URL.createObjectURL(convertedFiles[0].blob);
+       // Revoke old URLs from previous compress runs to prevent memory leaks
+       const oldImgs = baContainer.querySelectorAll('img');
+       oldImgs.forEach(img => { if(img.src.startsWith('blob:')) URL.revokeObjectURL(img.src); });
        baContainer.innerHTML = `
          <img src="${origUrl}" style="position:absolute; width:100%; height:100%; object-fit:contain;" />
          <div style="position:absolute; top:8px; left:8px; background:rgba(0,0,0,0.6); padding:4px 8px; font-size:11px; border-radius:4px; font-weight:600; color:#fff; z-index:5;">Original</div>
@@ -415,7 +419,6 @@ document.addEventListener('DOMContentLoaded', () => {
       document.body.appendChild(a);
       a.click();
       setTimeout(() => { URL.revokeObjectURL(url); document.body.removeChild(a); }, 500);
-      downloadText.textContent = 'Download ZIP';
     }
   });
 });
