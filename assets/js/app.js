@@ -120,8 +120,15 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!url) return;
     btnUrlFetch.textContent = 'Fetching...';
     try {
-      const res = await fetch(url);
-      if (!res.ok) throw new Error('Fetch failed');
+      let res;
+      try {
+        res = await fetch(url);
+        if (!res.ok) throw new Error('Fetch failed');
+      } catch(e) {
+        // Fallback to anonymous proxy logic
+        res = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`);
+        if (!res.ok) throw new Error('Proxy Fetch failed');
+      }
       const blob = await res.blob();
       const fname = url.split('/').pop().split('?')[0] || 'downloaded-image';
       const file = new File([blob], fname, { type: blob.type });
@@ -130,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
       urlInput.value = '';
       showToast('Image fetched successfully!', 'success');
     } catch (err) {
-      showToast('CORS Block: The server rejected anonymous access.', 'error');
+      showToast('CORS Block: Even the proxy failed to fetch the file.', 'error');
     }
     btnUrlFetch.textContent = 'Fetch Image';
   });
@@ -159,14 +166,14 @@ document.addEventListener('DOMContentLoaded', () => {
       const ext = f.name.split('.').pop().toLowerCase();
       
       let fileToQueue = f;
+      const queueId = Math.random().toString(36).substr(2, 9);
       if (ext === 'heic' || ext === 'heif') {
          if (typeof heic2any === 'undefined') {
            showToast('HEIC library not loaded yet.', 'error');
            continue;
          }
          try {
-           const queueId = Math.random().toString(36).substr(2, 9);
-           queuedFiles.push({ file: f, result: null, id: queueId, processing: true });
+           queuedFiles.push({ file: f, result: null, id: queueId, processing: true, thumbUrl: '' });
            renderGallery();
            
            const conversionResult = await heic2any({ blob: f, toType: 'image/jpeg' });
@@ -174,7 +181,10 @@ document.addEventListener('DOMContentLoaded', () => {
            fileToQueue = new File([blob], f.name.replace(/\.[^.]+$/, '.jpg'), { type: 'image/jpeg' });
            
            const qItem = queuedFiles.find(q => q.id === queueId);
-           if (qItem) { qItem.file = fileToQueue; qItem.processing = false; renderGallery(); }
+           if (qItem) { qItem.file = fileToQueue; qItem.processing = false; qItem.thumbUrl = URL.createObjectURL(fileToQueue); renderGallery(); }
+           
+           // Throttling / GC yielding for older iOS Safari limits
+           await new Promise(resolve => setTimeout(resolve, 50));
            continue;
          } catch (e) {
            showToast(`Failed to process HEIC: ${f.name}`, 'error');
@@ -182,7 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
            continue;
          }
       }
-      queuedFiles.push({ file: fileToQueue, result: null, id: Math.random().toString(36).substr(2, 9), processing: false });
+      queuedFiles.push({ file: fileToQueue, result: null, id: queueId, processing: false, thumbUrl: URL.createObjectURL(fileToQueue) });
     }
     renderGallery();
     if (wasEmpty && queuedFiles.length > 0) {
@@ -193,6 +203,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   window.removeFile = function(id) {
+    const qItem = queuedFiles.find(q => q.id === id);
+    if (qItem && qItem.thumbUrl) URL.revokeObjectURL(qItem.thumbUrl);
     queuedFiles = queuedFiles.filter(q => q.id !== id);
     renderGallery();
   }
@@ -213,7 +225,7 @@ document.addEventListener('DOMContentLoaded', () => {
       div.id = `item-${q.id}`;
       div.style.animationDelay = `${index * 0.05}s`;
       
-      const url = q.processing ? '' : URL.createObjectURL(q.file);
+      const url = q.processing ? '' : q.thumbUrl;
       const thumbElement = q.processing 
           ? `<div class="skeleton-loader"></div>`
           : `<img src="${url}" />`;
@@ -270,6 +282,7 @@ document.addEventListener('DOMContentLoaded', () => {
          totalOrigSize += q.file.size;
          totalNewSize += q.result.size;
       } else {
+         await new Promise(resolve => setTimeout(resolve, 15)); // Yield to main thread for UI animations
          totalOrigSize += q.file.size;
          const objUrl = URL.createObjectURL(q.file);
          const blob = await new Promise((resolve) => {
@@ -346,7 +359,7 @@ document.addEventListener('DOMContentLoaded', () => {
              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
            </div>
          </div>
-         <input type="range" min="0" max="100" value="50" style="position:absolute; top:0; left:0; width:100%; height:100%; outline:none; margin:0; opacity:0; cursor:ew-resize; z-index:20;" oninput="document.getElementById('afterImg').style.clipPath = 'inset(0 0 0 ' + this.value + '%)'; document.getElementById('baLine').style.left = this.value + '%';">
+         <input type="range" class="ba-slider" min="0" max="100" value="50" style="position:absolute; top:0; left:0; width:100%; height:100%; outline:none; margin:0; opacity:0; cursor:ew-resize; z-index:20; touch-action: pan-y;" oninput="document.getElementById('afterImg').style.clipPath = 'inset(0 0 0 ' + this.value + '%)'; document.getElementById('baLine').style.left = this.value + '%';">
        `;
     }
 
@@ -356,16 +369,19 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   if (copyBtn) {
-      copyBtn.addEventListener('click', async () => {
+      copyBtn.addEventListener('click', () => {
         if (convertedFiles.length !== 1) return;
         try {
           const item = new ClipboardItem({ [convertedFiles[0].blob.type]: convertedFiles[0].blob });
-          await navigator.clipboard.write([item]);
-          copyBtn.classList.add('success');
-          showToast('Image copied to clipboard!', 'success');
-          setTimeout(() => copyBtn.classList.remove('success'), 2000);
+          navigator.clipboard.write([item]).then(() => {
+            copyBtn.classList.add('success');
+            showToast('Image copied to clipboard!', 'success');
+            setTimeout(() => copyBtn.classList.remove('success'), 2000);
+          }).catch(err => {
+            showToast('Browser blocked asynchronous copy logic.', 'error');
+          });
         } catch (err) {
-          showToast('Clipboard copy requires HTTPS or secure context.', 'error');
+          showToast('Clipboard Copy not definitively supported on this browser.', 'error');
         }
       });
   }
@@ -385,10 +401,13 @@ document.addEventListener('DOMContentLoaded', () => {
       if (typeof JSZip === 'undefined') {
         showToast("JSZip library has not loaded yet.", "error"); return;
       }
-      downloadText.textContent = 'Composing ZIP...';
+      downloadText.textContent = 'Zipping 0%...';
       const zip = new JSZip();
       convertedFiles.forEach(cf => zip.file(cf.name, cf.blob));
-      const zipBlob = await zip.generateAsync({ type: 'blob' });
+      const zipBlob = await zip.generateAsync({ type: 'blob' }, (metadata) => {
+         downloadText.textContent = `Zipping ${Math.round(metadata.percent)}%...`;
+      });
+      downloadText.textContent = 'Download ZIP';
       const url = URL.createObjectURL(zipBlob);
       const a = document.createElement('a');
       a.href = url;

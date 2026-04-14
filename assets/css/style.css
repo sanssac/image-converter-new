@@ -310,6 +310,16 @@ footer {
   animation: slideUpFade 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) backwards;
 }
 
+/* ── Accessibility (a11y) ───────────── */
+:focus-visible {
+  outline: 2px solid #a855f7;
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+button:focus-visible, a:focus-visible, input:focus-visible {
+  outline: 2px solid #a855f7;
+}
+
 /* ── Light Mode Theme Engine ────────── */
 [data-theme="light"] {
   background: #f8fafc;
@@ -343,3 +353,14 @@ footer {
 [data-theme="light"] footer { background: rgba(255,255,255,0.5); border-top: 1px solid rgba(0,0,0,0.1); color: #475569; }
 [data-theme="light"] .footer-links a { color: #334155; }
 [data-theme="light"] .toast { background: rgba(255,255,255,0.95); color: #0f172a; border: 1px solid rgba(0,0,0,0.1); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+
+/* ── Mobile Touch Overrides ─────────── */
+@media (hover: none) {
+  .file-item:hover { transform: none; border-color: rgba(255,255,255,0.08); }
+  .file-item:hover .thumb img { transform: none; }
+  .btn-convert:hover { box-shadow: 0 4px 20px rgba(99,102,241,0.3); transform: none; }
+  .drop-zone:hover:not(.dragging) { border-color: rgba(99,102,241,0.4); background: rgba(24, 24, 27, 0.45); box-shadow: none; }
+  
+  [data-theme="light"] .drop-zone:hover:not(.dragging) { background: rgba(255, 255, 255, 0.65); border-color: rgba(99,102,241,0.5); }
+  [data-theme="light"] .file-item:hover { background: rgba(255,255,255,0.7); border-color: rgba(0,0,0,0.1); }
+}
