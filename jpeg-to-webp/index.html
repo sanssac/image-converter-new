@@ -3,28 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>Convert JPEG to WebP Online Free | Image Converter</title>
   <meta name="description" content="Quickly convert JPG/JPEG images to PNG with transparent background support. Free, secure, client-side browser conversion." />
   <meta name="keywords" content="jpg to png, convert jpg to png, jpeg to png, transparent png converter, free online image converter" />
   <link rel="canonical" href="https://image-converter-rho-six.vercel.app/jpg-to-png/" />
-  
-  <meta property="og:title" content="Convert JPEG to WebP Online Free | Image Converter" />
-  <meta property="og:description" content="Quickly and securely convert your JPG images to PNG format directly in your browser. No files uploaded." />
-  
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js" defer></script>
-  
   <link rel="stylesheet" href="/assets/css/style.css" />
-  
   <!-- Vercel Web Analytics -->
   <script>
     window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
   </script>
   <script defer src="/_vercel/insights/script.js"></script>
-  
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -63,12 +55,21 @@
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta name="twitter:image" content="https://image-converter-rho-six.vercel.app/assets/images/og-banner.png" />
+
+  <!-- Standard SEO / Social Meta Tags -->
+  <meta name="author" content="Image Converter" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://image-converter-rho-six.vercel.app/jpg-to-png/" />
+  <meta property="og:title" content="Convert JPEG to WebP Online Free | Image Converter" />
+  <meta property="og:description" content="Quickly convert JPG/JPEG images to PNG with transparent background support. Free, secure, client-side browser conversion." />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Convert JPEG to WebP Online Free | Image Converter" />
+  <meta name="twitter:description" content="Quickly convert JPG/JPEG images to PNG with transparent background support. Free, secure, client-side browser conversion." />
 </head>
 <body data-target-mime="image/webp">
   <div class="mesh-glow mesh-1"></div>
   <div class="mesh-glow mesh-2"></div>
   <div id="toastContainer"></div>
-
   <header>
     <a href="/" class="logo-link">
       <div class="logo">
@@ -83,17 +84,13 @@
       <a href="/blog">Blog</a>
     </nav>
   </header>
-
   <div class="page-container">
     <main>
       <h1 style="text-align:center; font-size: 28px; margin: 10px 0 20px; background: linear-gradient(135deg, #818cf8, #d8b4fe); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Convert JPEG to WebP Online Free</h1>
-
-
       <!-- Format Tabs Locked to PNG -->
       <div class="format-tabs glass-panel" id="formatTabs">
         <button class="tab active" data-target="image/png">Converting to WebP</button>
       </div>
-
       <div class="drop-zone glass-panel" id="dropZone">
         <div class="icon">
           <svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
@@ -105,23 +102,18 @@
         </div>
         <input type="file" id="fileInput" accept="image/*,.heic" multiple />
       </div>
-
       <div class="trust-badge">
         <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
         </svg>
         100% secure — images never leave your device
       </div>
-
       <div class="file-gallery" id="fileGallery"></div>
-
       <button class="btn-convert" id="convertBtn">
         <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3m6.366-.366-2.12 2.12M21 12h-3m.366 6.366-2.12-2.12M12 21v-3m-6.366.366 2.12-2.12M3 12h3m-.366-6.366 2.12 2.12"/></svg>
         <span id="convertBtnText">Convert to WebP</span>
       </button>
-      
       <div class="progress-container" id="progressContainer"><div class="progress-fill" id="progressFill"></div></div>
-
       <div class="result-card glass-panel" id="resultCard">
         <div class="result-header">Converted to PNG successfully!</div>
         <div class="stats"><span id="batchCountText"></span><span id="batchSizeOrig"></span><span id="batchSizeNew"></span></div>
@@ -135,7 +127,6 @@
           </button>
         </div>
       </div>
-
       <!-- Related SEO Internal Links -->
       <section class="related-tools glass-panel">
         <h3>Related Free Tools</h3>
@@ -144,20 +135,15 @@
         <a href="/png-to-jpg">Convert PNG to JPG</a>
         <a href="/compress-image">Compress Image Files</a>
       </section>
-
       <!-- SEO Content -->
       <article class="seo-article glass-panel">
         <h2>How to Convert JPG to PNG Online Securely</h2>
         <p>Converting a JPEG (JPG) image to a PNG is one of the most common web operations, usually required when you need to preserve intricate details without lossy artifacts, or when you are preparing assets that may eventually require transparent backgrounds.</p>
-        
         <h3>Why convert JPG to PNG?</h3>
         <p>JPG relies on lossy compression. Every time you save a JPG, it loses a fractional amount of quality. PNG, on the other hand, is a lossless format. While it doesn't miraculously restore lost data from your JPG, saving an image as a PNG prevents any further deterioration. It is also the web standard for images that require transparency, making it a critical format for logos, web UI components, and digital illustrations.</p>
-        
         <h3>Is this tool safe to use?</h3>
         <p>Yes. Many online converters force you to upload your personal photos to their servers, where they might be stored and processed via backend APIs. This tool runs <strong>100% inside your browser</strong> using HTML5 technologies. Your image data never leaves your device, guaranteeing absolute privacy. This is particularly important for sensitive documents, personal photographs, and unreleased business assets.</p>
-
         <p>If you find that your resulting PNG file is too large, you might want to try our <a href="/compress-image">Compress Image</a> tool to safely reduce its footprint while maintaining visual quality.</p>
-        
         <div class="faq-section">
           <h3>Frequently Asked Questions</h3>
           <div class="faq-item">
@@ -174,15 +160,9 @@
           </div>
         </div>
       </article>
-
-
     </main>
-
-
   </div>
-
   <canvas id="canvas"></canvas>
-
   <footer>
     <div class="footer-links">
        <a href="/privacy-policy">Privacy Policy</a>
@@ -192,7 +172,6 @@
     </div>
     <div class="footer-copy">Your files never leave your device — 100% client-side rendering.</div>
   </footer>
-
   <script src="/assets/js/app.js"></script>
 </body>
 </html>

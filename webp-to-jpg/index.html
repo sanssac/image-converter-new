@@ -3,25 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>Convert WebP to JPG Online Free | Image Converter</title>
   <meta name="description" content="Instantly convert WebP images to universally compatible JPG format. Free, unlimited, 100% private — runs entirely in your browser, no uploads needed." />
   <meta name="keywords" content="webp to jpg, convert webp, webp to jpeg, webp converter, free image converter" />
   <link rel="canonical" href="https://image-converter-rho-six.vercel.app/webp-to-jpg/" />
-
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js" defer></script>
-  
   <link rel="stylesheet" href="/assets/css/style.css" />
-  
   <!-- Vercel Web Analytics -->
   <script>
     window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
   </script>
   <script defer src="/_vercel/insights/script.js"></script>
-  
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -60,12 +55,21 @@
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta name="twitter:image" content="https://image-converter-rho-six.vercel.app/assets/images/og-banner.png" />
+
+  <!-- Standard SEO / Social Meta Tags -->
+  <meta name="author" content="Image Converter" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://image-converter-rho-six.vercel.app/webp-to-jpg/" />
+  <meta property="og:title" content="Convert WebP to JPG Online Free | Image Converter" />
+  <meta property="og:description" content="Instantly convert WebP images to universally compatible JPG format. Free, unlimited, 100% private — runs entirely in your browser, no uploads needed." />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Convert WebP to JPG Online Free | Image Converter" />
+  <meta name="twitter:description" content="Instantly convert WebP images to universally compatible JPG format. Free, unlimited, 100% private — runs entirely in your browser, no uploads needed." />
 </head>
 <body data-target-mime="image/jpeg">
   <div class="mesh-glow mesh-1"></div>
   <div class="mesh-glow mesh-2"></div>
   <div id="toastContainer"></div>
-
   <header>
     <a href="/" class="logo-link">
       <div class="logo">
@@ -80,15 +84,12 @@
       <a href="/blog">Blog</a>
     </nav>
   </header>
-
   <div class="page-container">
     <main>
       <h1 style="text-align:center; font-size: 28px; margin: 10px 0 20px; background: linear-gradient(135deg, #818cf8, #d8b4fe); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Convert WebP to JPG Online Free</h1>
-
       <div class="format-tabs glass-panel" id="formatTabs">
         <button class="tab active" data-target="image/jpeg">WEBP → JPG Mode</button>
       </div>
-
       <div class="drop-zone glass-panel" id="dropZone">
         <div class="icon">
           <svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
@@ -100,23 +101,18 @@
         </div>
         <input type="file" id="fileInput" accept="image/webp,image/*" multiple />
       </div>
-
       <div class="trust-badge">
         <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
         </svg>
         100% secure — images never leave your device
       </div>
-
       <div class="file-gallery" id="fileGallery"></div>
-
       <button class="btn-convert" id="convertBtn">
         <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3m6.366-.366-2.12 2.12M21 12h-3m.366 6.366-2.12-2.12M12 21v-3m-6.366.366 2.12-2.12M3 12h3m-.366-6.366 2.12 2.12"/></svg>
         <span id="convertBtnText">Convert to JPG</span>
       </button>
-
       <div class="progress-container" id="progressContainer"><div class="progress-fill" id="progressFill"></div></div>
-
       <div class="result-card glass-panel" id="resultCard">
         <div class="result-header">
           <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
@@ -132,7 +128,6 @@
           </button>
         </div>
       </div>
-
       <!-- Related SEO Internal Links -->
       <section class="related-tools glass-panel">
         <h3>Related Free Tools</h3>
@@ -141,7 +136,6 @@
         <a href="/png-to-jpg">Convert PNG to JPG</a>
         <a href="/compress-image">Compress Image Files</a>
       </section>
-
       <article class="seo-article glass-panel">
         <h2>Restore Compatibility with WebP to JPG</h2>
         <p>WebP is Google's next-generation image format, heavily used across the internet to save bandwidth. Unfortunately, many older applications, desktop software, and CMS platforms do not yet recognize <code>.webp</code> files. Converting them back to JPG ensures 100% compatibility across all digital devices and platforms.</p>
@@ -163,12 +157,9 @@
           </div>
         </div>
       </article>
-
     </main>
   </div>
-
   <canvas id="canvas"></canvas>
-
   <footer>
     <div class="footer-links">
        <a href="/privacy-policy">Privacy Policy</a>
@@ -178,7 +169,6 @@
     </div>
     <div class="footer-copy">Your files never leave your device — 100% client-side rendering.</div>
   </footer>
-
   <script src="/assets/js/app.js"></script>
 </body>
 </html>

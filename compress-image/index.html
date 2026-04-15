@@ -3,24 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <title>Compress Image Size | Resize JPG, PNG & WEBP Online</title>
   <meta name="description" content="Reduce image file sizes instantly without noticeable quality loss. Bulk compress JPG, PNG, and WebP using advanced browser compression." />
   <link rel="canonical" href="https://image-converter-rho-six.vercel.app/compress-image/" />
-  
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js" defer></script>
-  
   <link rel="stylesheet" href="/assets/css/style.css" />
-  
   <!-- Vercel Web Analytics -->
   <script>
     window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
   </script>
   <script defer src="/_vercel/insights/script.js"></script>
-
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -59,12 +54,21 @@
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta name="twitter:image" content="https://image-converter-rho-six.vercel.app/assets/images/og-banner.png" />
+
+  <!-- Standard SEO / Social Meta Tags -->
+  <meta name="author" content="Image Converter" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://image-converter-rho-six.vercel.app/compress-image/" />
+  <meta property="og:title" content="Compress Image Size | Resize JPG, PNG & WEBP Online" />
+  <meta property="og:description" content="Reduce image file sizes instantly without noticeable quality loss. Bulk compress JPG, PNG, and WebP using advanced browser compression." />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Compress Image Size | Resize JPG, PNG & WEBP Online" />
+  <meta name="twitter:description" content="Reduce image file sizes instantly without noticeable quality loss. Bulk compress JPG, PNG, and WebP using advanced browser compression." />
 </head>
 <body data-target-mime="image/jpeg" data-mode="compress">
   <div class="mesh-glow mesh-1"></div>
   <div class="mesh-glow mesh-2"></div>
   <div id="toastContainer"></div>
-
   <header>
     <a href="/" class="logo-link">
       <div class="logo">
@@ -79,18 +83,14 @@
       <a href="/blog">Blog</a>
     </nav>
   </header>
-
   <div class="page-container">
     <main>
       <h1 style="text-align:center; font-size: 28px; margin: 10px 0 20px; background: linear-gradient(135deg, #818cf8, #d8b4fe); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Free Image Compressor Online</h1>
-
-
       <div class="format-tabs glass-panel" id="formatTabs">
         <button class="tab active" data-target="image/jpeg">To JPG</button>
         <button class="tab" data-target="image/png">To PNG</button>
         <button class="tab" data-target="image/webp">To WEBP</button>
       </div>
-
       <div class="drop-zone glass-panel" id="dropZone">
         <div class="icon">
            <!-- Compression icon -->
@@ -102,14 +102,12 @@
         </div>
         <input type="file" id="fileInput" accept="image/*" multiple />
       </div>
-
       <div class="trust-badge">
         <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
         </svg>
         100% secure — images never leave your device
       </div>
-
       <style>
       .preset-pill { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: var(--text-main, #e2e8f0); padding: 6px 12px; border-radius: 20px; font-size: 13px; cursor: pointer; transition: 0.2s; }
       [data-theme="light"] .preset-pill { background: rgba(0,0,0,0.05); border-color: rgba(0,0,0,0.1); color: #334155; }
@@ -120,7 +118,6 @@
         <label style="font-weight:600; color:var(--text-main, #e2e8f0); font-size:14px; margin-bottom:5px;">
           Target Maximum File Size
         </label>
-        
         <div class="size-presets" id="sizePresets" style="display:flex; flex-wrap:wrap; gap:8px;">
           <button class="preset-pill" data-size="50">50 KB</button>
           <button class="preset-pill" data-size="100">100 KB</button>
@@ -129,7 +126,6 @@
           <button class="preset-pill" data-size="1024">1 MB</button>
           <button class="preset-pill" data-size="custom">Custom</button>
         </div>
-        
         <div id="customSizeWrapper" style="display:none; margin-top:10px;">
           <div style="display:flex; gap:10px; align-items:center;">
              <input type="number" id="customSizeInput" min="1" placeholder="e.g. 150" style="flex:1; padding:10px; border-radius:6px; border:1px solid #334155; background:var(--bg-card, #1e293b); color:inherit;" />
@@ -139,22 +135,16 @@
              </select>
           </div>
         </div>
-        
         <p style="font-size:12px; color:var(--text-muted, #94a3b8); margin:5px 0 0;">
            The compressor will iteratively adjust format optimizations and intelligently scale down dimensions to strictly meet your target size.
         </p>
       </div>
-
-
       <div class="file-gallery" id="fileGallery"></div>
-
       <button class="btn-convert" id="convertBtn">
         <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M12 12v9"/><path d="M8 17l4 4 4-4"/></svg>
         <span id="convertBtnText">Compress Images</span>
       </button>
-      
       <div class="progress-container" id="progressContainer"><div class="progress-fill" id="progressFill"></div></div>
-
       <div class="result-card glass-panel" id="resultCard">
         <div class="result-header">Compressed successfully!</div>
         <div class="stats"><span id="batchCountText"></span><span id="batchSizeOrig"></span><span id="batchSizeNew"></span></div>
@@ -168,7 +158,6 @@
           </button>
         </div>
       </div>
-
       <!-- Related SEO Internal Links -->
       <section class="related-tools glass-panel">
         <h3>Related Free Tools</h3>
@@ -177,17 +166,13 @@
         <a href="/png-to-jpg">Convert PNG to JPG</a>
         <a href="/webp-to-jpg">Convert WebP to JPG</a>
       </section>
-
       <article class="seo-article glass-panel">
         <h2>Reduce Image File Size Online Securely</h2>
         <p>Bloated, large image files drastically slow down website loading times, which results in poor SEO rankings and lost visitors. Furthermore, unoptimized files quickly consume excessive storage on mobile devices and make emailing photos frustrating. Our free image compressor provides an instant, easy way to resize and shrink your JPG, PNG, WEBP, and HEIC files to manageable sizes.</p>
-        
         <h3>How does the compression work?</h3>
         <p>This tool utilizes aggressive browser-level serialization, dynamically stripping invisible EXIF metadata (such as camera location data, device type, and exposure settings), and reducing embedded color profiles. It then applies an intelligent ~70% lossy compression ratio which creates massively smaller files with virtually zero human-detectable difference in visual quality. The result is a web-ready image that looks identical but weighs a fraction of the original size.</p>
-
         <h3>Fast, Private, and Client-Side</h3>
         <p>We believe in absolute privacy. Unlike traditional cloud compressors that require you to upload your personal or proprietary business images, our app uses advanced HTML5 technology to compress files locally on your own hardware. Your data never touches our servers. This ensures a 100% secure environment that operates instantly, without waiting for uploads or downloads to complete.</p>
-        
         <div class="faq-section">
           <h3>Frequently Asked Questions</h3>
           <div class="faq-item">
@@ -204,10 +189,7 @@
           </div>
         </div>
       </article>
-
-
     </main>
-
   </div>
   <canvas id="canvas"></canvas>
   <footer>

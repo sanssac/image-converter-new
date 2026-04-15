@@ -3,37 +3,24 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
   <!-- SEO Meta Tags -->
   <title>Free Online Image Converter | Fast, Secure, 100% Client-Side</title>
   <meta name="description" content="Quickly convert WEBP, HEIC, PNG, JPG, and 1500+ formats online. Free, unmetered, absolutely private batch processing. Your files never leave your device." />
   <meta name="keywords" content="image converter, batch image processing, convert webp to jpg, convert heic to jpg, image to png, secure image conversion, free browser image tool" />
-  <meta name="author" content="Image Converter" />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://image-converter-rho-six.vercel.app/" />
-  
   <!-- Open Graph / Social Media -->
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="Free Online Image Converter | Secure & Fast" />
-  <meta property="og:description" content="Convert WEBP, HEIC, PNG, JPG locally in your browser. No server uploads means absolute privacy." />
-  <meta property="og:url" content="https://image-converter-rho-six.vercel.app/" />
-  
   <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Free Online Image Converter" />
-  <meta name="twitter:description" content="Convert your images locally with absolute privacy. No file limits, fast batch processing." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js" defer></script>
   <link rel="stylesheet" href="/assets/css/style.css" />
-  
   <!-- Vercel Web Analytics -->
   <script>
     window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
   </script>
   <script defer src="/_vercel/insights/script.js"></script>
-  
   <!-- Analytics & AdSense Placeholders -->
   <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
   <script> window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-XXXXXXXXXX'); </script>
@@ -81,12 +68,21 @@
   <link rel="alternate" hreflang="es" href="https://image-converter-rho-six.vercel.app/es/" />
   <link rel="alternate" hreflang="fr" href="https://image-converter-rho-six.vercel.app/fr/" />
   <link rel="alternate" hreflang="de" href="https://image-converter-rho-six.vercel.app/de/" />
+
+  <!-- Standard SEO / Social Meta Tags -->
+  <meta name="author" content="Image Converter" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://image-converter-rho-six.vercel.app/" />
+  <meta property="og:title" content="Free Online Image Converter | Fast, Secure, 100% Client-Side" />
+  <meta property="og:description" content="Quickly convert WEBP, HEIC, PNG, JPG, and 1500+ formats online. Free, unmetered, absolutely private batch processing. Your files never leave your device." />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Free Online Image Converter | Fast, Secure, 100% Client-Side" />
+  <meta name="twitter:description" content="Quickly convert WEBP, HEIC, PNG, JPG, and 1500+ formats online. Free, unmetered, absolutely private batch processing. Your files never leave your device." />
 </head>
 <body>
   <div class="mesh-glow mesh-1"></div>
   <div class="mesh-glow mesh-2"></div>
   <div id="toastContainer"></div>
-
   <header>
     <a href="/" class="logo-link">
       <div class="logo">
@@ -101,19 +97,15 @@
       <a href="/blog">Blog</a>
     </nav>
   </header>
-
   <div class="page-container">
     <main>
     <h1 style="text-align:center; font-size: 28px; margin: 10px 0 20px; background: linear-gradient(135deg, #818cf8, #d8b4fe); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Kostenloser Bildkonverter (JPG, PNG, WebP)</h1>
-
-
     <!-- Format Tabs -->
     <div class="format-tabs glass-panel" id="formatTabs">
       <button class="tab active" data-target="image/jpeg">To JPG</button>
       <button class="tab" data-target="image/png">To PNG</button>
       <button class="tab" data-target="image/webp">To WEBP</button>
     </div>
-
     <!-- Drop Zone -->
     <div class="drop-zone glass-panel" id="dropZone">
       <div class="icon">
@@ -132,17 +124,14 @@
       </div>
       <input type="file" id="fileInput" accept="image/*,.heic" multiple />
     </div>
-
     <div class="trust-badge">
       <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
       </svg>
       100% secure — images never leave your device
     </div>
-
     <!-- File Gallery -->
     <div class="file-gallery" id="fileGallery"></div>
-
     <!-- Convert Button -->
     <button class="btn-convert" id="convertBtn">
       <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -150,12 +139,10 @@
       </svg>
       <span id="convertBtnText">Convert Images</span>
     </button>
-    
     <!-- Progress Bar -->
     <div class="progress-container" id="progressContainer">
       <div class="progress-fill" id="progressFill"></div>
     </div>
-
     <!-- Result -->
     <div class="result-card glass-panel" id="resultCard">
       <div class="result-header">
@@ -187,7 +174,6 @@
         </button>
       </div>
     </div>
-
     <!-- Related SEO Internal Links -->
     <section class="related-tools glass-panel">
       <h3>Related Free Tools</h3>
@@ -196,14 +182,12 @@
       <a href="/png-to-jpg">Convert PNG to JPG</a>
       <a href="/compress-image">Compress Image Files</a>
     </section>
-
     <!-- SEO Article and FAQ -->
     <article class="seo-article glass-panel">
       <h2>Fast & Secure Batch Image Conversion</h2>
       <p>Welcome to the ultimate <strong>free image converter online</strong>. In today's digital landscape, optimizing your images is crucial for website performance, storage efficiency, and quality retention. Whether you're a web developer looking to convert heavy JPGs into next-generation WebP files, a photographer adjusting RAW or HEIC files to standard JPEGs, or simply someone trying to reduce file sizes, our tool provides unparalleled speed and precision.</p>
       <p>Unlike other cloud-based services that force you to wait in line, put you behind paywalls, or secretly compress your photos, our advanced converter uses HTML5 client-side technology. This means your files are processed directly on your computer or mobile device. Not a single byte of your data is transmitted over the internet or saved to external servers. It is the perfect solution for handling sensitive documents, private family photos, or proprietary corporate assets.</p>
       <p>Experience blazing fast, absolutely private, and unmetered batch conversion. We support everything from PNG, JPG, and WEBP, to specialized formats like HEIC. Simply drag and drop your files into our converter, choose your desired output, and instantly download the optimized results in seconds.</p>
-
       <div class="faq-section">
         <h3>Frequently Asked Questions</h3>
         <div class="faq-item">
@@ -220,14 +204,9 @@
         </div>
       </div>
     </article>
-
     </main>
-
-
   </div>
-
   <canvas id="canvas"></canvas>
-
   <footer>
     <div class="footer-links">
        <a href="/privacy-policy">Privacy Policy</a>
@@ -240,7 +219,6 @@
        Your files never leave your device — 100% client-side rendering.
     </div>
   </footer>
-
   <script src="/assets/js/app.js"></script>
 </body>
 </html>
