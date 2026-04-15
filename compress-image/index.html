@@ -86,7 +86,9 @@
 
 
       <div class="format-tabs glass-panel" id="formatTabs">
-        <button class="tab active" data-target="image/jpeg">Optimizing Sizes</button>
+        <button class="tab active" data-target="image/jpeg">To JPG</button>
+        <button class="tab" data-target="image/png">To PNG</button>
+        <button class="tab" data-target="image/webp">To WEBP</button>
       </div>
 
       <div class="drop-zone glass-panel" id="dropZone">
@@ -97,17 +99,8 @@
         <h2>Drop bloated images here</h2>
         <div class="cloud-row">
           <button class="btn-cloud" id="btnLocal"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg> Select Files</button>
-          <button class="btn-cloud" id="btnUrl"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Fetch URL</button>
         </div>
         <input type="file" id="fileInput" accept="image/*" multiple />
-
-        <div class="url-modal" id="urlModal">
-          <input type="url" id="urlInput" placeholder="https://example.com/image.jpg" />
-          <div class="url-actions">
-            <button class="btn-cancel" id="btnUrlCancel">Cancel</button>
-            <button class="btn-fetch" id="btnUrlFetch">Compress from URL</button>
-          </div>
-        </div>
       </div>
 
       <div class="trust-badge">
@@ -117,13 +110,39 @@
         100% secure — images never leave your device
       </div>
 
+      <style>
+      .preset-pill { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: var(--text-main, #e2e8f0); padding: 6px 12px; border-radius: 20px; font-size: 13px; cursor: pointer; transition: 0.2s; }
+      [data-theme="light"] .preset-pill { background: rgba(0,0,0,0.05); border-color: rgba(0,0,0,0.1); color: #334155; }
+      .preset-pill:hover { background: rgba(129,140,248,0.2); border-color: #818cf8; }
+      .preset-pill.active { background: #818cf8 !important; color: #fff !important; border-color: #818cf8 !important; }
+      </style>
       <div class="settings-panel glass-panel" id="settingsPanel" style="margin-bottom:20px; padding:20px; display:flex; flex-direction:column; gap:10px;">
-        <label for="qualitySlider" style="display:flex; justify-content:space-between; font-weight:600; color:var(--text-main, #e2e8f0); font-size:14px;">
-          <span>Compression Quality</span>
-          <strong id="qualityVal" style="color:#a855f7;">70%</strong>
+        <label style="font-weight:600; color:var(--text-main, #e2e8f0); font-size:14px; margin-bottom:5px;">
+          Target Maximum File Size
         </label>
-        <input type="range" id="qualitySlider" min="10" max="100" value="70" style="width:100%; accent-color:#818cf8; cursor:pointer;" />
-        <p style="font-size:12px; color:var(--text-muted, #94a3b8); margin:0;">Lower quality yields vastly smaller file sizes. 70% is optimal for Web.</p>
+        
+        <div class="size-presets" id="sizePresets" style="display:flex; flex-wrap:wrap; gap:8px;">
+          <button class="preset-pill" data-size="50">50 KB</button>
+          <button class="preset-pill" data-size="100">100 KB</button>
+          <button class="preset-pill" data-size="200">200 KB</button>
+          <button class="preset-pill active" data-size="500">500 KB</button>
+          <button class="preset-pill" data-size="1024">1 MB</button>
+          <button class="preset-pill" data-size="custom">Custom</button>
+        </div>
+        
+        <div id="customSizeWrapper" style="display:none; margin-top:10px;">
+          <div style="display:flex; gap:10px; align-items:center;">
+             <input type="number" id="customSizeInput" min="1" placeholder="e.g. 150" style="flex:1; padding:10px; border-radius:6px; border:1px solid #334155; background:var(--bg-card, #1e293b); color:inherit;" />
+             <select id="customSizeUnit" style="padding:10px; border-radius:6px; border:1px solid #334155; background:var(--bg-card, #1e293b); color:inherit;">
+               <option value="KB">KB</option>
+               <option value="MB">MB</option>
+             </select>
+          </div>
+        </div>
+        
+        <p style="font-size:12px; color:var(--text-muted, #94a3b8); margin:5px 0 0;">
+           The compressor will iteratively adjust format optimizations and intelligently scale down dimensions to strictly meet your target size.
+        </p>
       </div>
 
 
@@ -141,6 +160,12 @@
         <div class="stats"><span id="batchCountText"></span><span id="batchSizeOrig"></span><span id="batchSizeNew"></span></div>
         <div class="action-row">
           <button class="btn-download" id="downloadBtn" style="flex:1"><span id="downloadText">Download Compressed</span></button>
+          <button class="btn-copy" id="copyBtn" title="Copy to Clipboard" aria-label="Copy Base64">
+            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+            </svg>
+          </button>
         </div>
       </div>
 

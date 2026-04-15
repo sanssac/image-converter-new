@@ -100,12 +100,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   resultCard.appendChild(clearBtn);
 
-  const urlModal = document.getElementById('urlModal');
-  const urlInput = document.getElementById('urlInput');
-  const btnUrl = document.getElementById('btnUrl');
-  const btnUrlCancel = document.getElementById('btnUrlCancel');
-  const btnUrlFetch = document.getElementById('btnUrlFetch');
-  
   // Settings logic (Tabs)
   let selectedMime = document.body.dataset.targetMime || 'image/jpeg';
   const tabs = document.querySelectorAll('.format-tabs .tab');
@@ -128,11 +122,27 @@ document.addEventListener('DOMContentLoaded', () => {
   const batchSizeOrig  = document.getElementById('batchSizeOrig');
   const batchSizeNew   = document.getElementById('batchSizeNew');
 
-  const qualitySlider = document.getElementById('qualitySlider');
-  if (qualitySlider) {
-    const qualityVal = document.getElementById('qualityVal');
-    qualitySlider.addEventListener('input', (e) => {
-      if (qualityVal) qualityVal.textContent = `${e.target.value}%`;
+  const sizePresets = document.querySelectorAll('.preset-pill');
+  const customSizeWrapper = document.getElementById('customSizeWrapper');
+  const customSizeInput = document.getElementById('customSizeInput');
+  const customSizeUnit = document.getElementById('customSizeUnit');
+  // Default to 500 KB limit if in compress mode
+  let targetSizeValue = 500; 
+  
+  if (sizePresets.length > 0) {
+    sizePresets.forEach(pill => {
+      pill.addEventListener('click', (e) => {
+        sizePresets.forEach(p => p.classList.remove('active'));
+        e.target.classList.add('active');
+        const val = e.target.getAttribute('data-size');
+        if (val === 'custom') {
+          customSizeWrapper.style.display = 'block';
+          targetSizeValue = 'custom';
+        } else {
+          customSizeWrapper.style.display = 'none';
+          targetSizeValue = parseInt(val, 10);
+        }
+      });
     });
   }
 
@@ -146,38 +156,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const i = Math.floor(Math.log(b) / Math.log(k));
     return (b / k ** i).toFixed(1) + ' ' + units[i];
   }
-
-  if (btnUrl) btnUrl.addEventListener('click', (e) => { e.stopPropagation(); urlModal.classList.add('visible'); urlInput.focus(); });
-  if (btnUrlCancel) btnUrlCancel.addEventListener('click', (e) => { e.stopPropagation(); urlModal.classList.remove('visible'); });
-  if (urlModal) urlModal.addEventListener('click', (e) => e.stopPropagation());
-  
-  if (btnUrlFetch) btnUrlFetch.addEventListener('click', async (e) => {
-    e.stopPropagation();
-    const url = urlInput.value.trim();
-    if (!url) return;
-    btnUrlFetch.textContent = 'Fetching...';
-    try {
-      let res;
-      try {
-        res = await fetch(url);
-        if (!res.ok) throw new Error('Fetch failed');
-      } catch(e) {
-        // Fallback to anonymous proxy logic
-        res = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`);
-        if (!res.ok) throw new Error('Proxy Fetch failed');
-      }
-      const blob = await res.blob();
-      const fname = url.split('/').pop().split('?')[0] || 'downloaded-image';
-      const file = new File([blob], fname, { type: blob.type });
-      handleFiles([file]);
-      urlModal.classList.remove('visible');
-      urlInput.value = '';
-      showToast('Image fetched successfully!', 'success');
-    } catch (err) {
-      showToast('CORS Block: Even the proxy failed to fetch the file.', 'error');
-    }
-    btnUrlFetch.textContent = 'Fetch Image';
-  });
 
   const btnLocal = document.getElementById('btnLocal');
   if (btnLocal) btnLocal.addEventListener('click', (e) => { e.stopPropagation(); fileInput.click(); });
@@ -299,14 +277,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const targetExt = targetExtMap[targetMime] || 'jpg';
     
     isCompression = document.body.dataset.mode === 'compress';
-    let quality = isCompression ? 0.7 : 0.92;
-    const qualitySlider = document.getElementById('qualitySlider');
-    if (qualitySlider) {
-      quality = parseInt(qualitySlider.value, 10) / 100;
-      // Persist the slider text explicitly
-      const qualityVal = document.getElementById('qualityVal');
-      if (qualityVal) qualityVal.textContent = `${qualitySlider.value}%`;
-    }
 
     convertedFiles = [];
     let totalOrigSize = 0;
@@ -322,6 +292,18 @@ document.addEventListener('DOMContentLoaded', () => {
          await new Promise(resolve => setTimeout(resolve, 15)); // Yield to main thread for UI animations
          totalOrigSize += q.file.size;
          const objUrl = URL.createObjectURL(q.file);
+         
+         const getBlob = (imgObj, w, h, outMime, outQuality) => new Promise(res => {
+             canvas.width = w; canvas.height = h;
+             const ctx = canvas.getContext('2d');
+             if (outMime === 'image/jpeg') {
+                 ctx.fillStyle = '#ffffff';
+                 ctx.fillRect(0, 0, w, h);
+             }
+             ctx.drawImage(imgObj, 0, 0, w, h);
+             canvas.toBlob(b => res(b), outMime, outMime !== 'image/png' ? outQuality : undefined);
+         });
+
          const blob = await new Promise((resolve) => {
            const img = new Image();
            img.onerror = () => {
@@ -329,23 +311,72 @@ document.addEventListener('DOMContentLoaded', () => {
              resolve({ error: true });
            };
            img.onload = async () => {
-             let width = img.naturalWidth;
-             let height = img.naturalHeight;
-
-             canvas.width = width;
-             canvas.height = height;
-             const ctx = canvas.getContext('2d');
+             let baseW = img.naturalWidth;
+             let baseH = img.naturalHeight;
              
-             if (targetMime === 'image/jpeg') {
-               ctx.fillStyle = '#ffffff';
-               ctx.fillRect(0, 0, width, height);
-             }
-             
-             ctx.drawImage(img, 0, 0, width, height);
-             canvas.toBlob((b) => {
+             if (!isCompression || !document.querySelector('.size-presets')) {
+               // Normal conversion path
+               const b = await getBlob(img, baseW, baseH, targetMime, 0.92);
                URL.revokeObjectURL(objUrl);
                resolve(b);
-             }, targetMime, targetMime !== 'image/png' ? quality : undefined);
+               return;
+             }
+
+             // --- Target Size Compression Logic ---
+             let targetBytes = targetSizeValue;
+             if (targetSizeValue === 'custom') {
+                 const customVal = parseFloat(customSizeInput.value) || 500;
+                 targetBytes = customSizeUnit.value === 'MB' ? customVal * 1024 * 1024 : customVal * 1024;
+             } else {
+                 targetBytes = targetSizeValue * 1024;
+             }
+             
+             let bestBlob = null;
+             
+             if (targetMime === 'image/png') {
+                 // PNG is lossless HTML-wise. To compress, we must scale dimensions.
+                 let scale = 1.0;
+                 while (scale >= 0.1) {
+                     const b = await getBlob(img, baseW * scale, baseH * scale, targetMime, 1);
+                     if (!bestBlob || b.size <= targetBytes) bestBlob = b;
+                     if (b.size <= targetBytes) break;
+                     scale *= 0.8;
+                 }
+             } else {
+                 // JPEG/WEBP Quality Binary Search
+                 let finalBlob = await getBlob(img, baseW, baseH, targetMime, 0.9);
+                 if (finalBlob.size <= targetBytes) {
+                     bestBlob = finalBlob;
+                 } else {
+                     let minQ = 0.01;
+                     let maxQ = 0.9;
+                     let q = 0.45;
+                     for (let attempt = 0; attempt < 6; attempt++) {
+                         let tempBlob = await getBlob(img, baseW, baseH, targetMime, q);
+                         if (tempBlob.size <= targetBytes) {
+                             bestBlob = tempBlob;
+                             minQ = q; // Can we do higher quality?
+                         } else {
+                             maxQ = q; // Need lower quality
+                         }
+                         q = (minQ + maxQ) / 2;
+                     }
+                     
+                     // If still null (meaning even Q=0.01 is too large), engage dim scaling
+                     if (!bestBlob) {
+                         let scale = 0.85;
+                         while (scale >= 0.1) {
+                             const scaledBlob = await getBlob(img, baseW * scale, baseH * scale, targetMime, 0.1);
+                             bestBlob = scaledBlob; // guarantee we return something
+                             if (scaledBlob.size <= targetBytes) break;
+                             scale *= 0.8;
+                         }
+                     }
+                 }
+             }
+             
+             URL.revokeObjectURL(objUrl);
+             resolve(bestBlob);
            };
            img.src = objUrl;
          });
