@@ -133,13 +133,14 @@ document.addEventListener('DOMContentLoaded', () => {
     sizePresets.forEach(pill => {
       pill.addEventListener('click', (e) => {
         sizePresets.forEach(p => p.classList.remove('active'));
-        e.target.classList.add('active');
-        const val = e.target.getAttribute('data-size');
+        const pillElem = e.currentTarget;
+        pillElem.classList.add('active');
+        const val = pillElem.getAttribute('data-size');
         if (val === 'custom') {
-          customSizeWrapper.style.display = 'block';
+          if (customSizeWrapper) customSizeWrapper.style.display = 'block';
           targetSizeValue = 'custom';
         } else {
-          customSizeWrapper.style.display = 'none';
+          if (customSizeWrapper) customSizeWrapper.style.display = 'none';
           targetSizeValue = parseInt(val, 10);
         }
       });
