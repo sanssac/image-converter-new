@@ -54,6 +54,44 @@ document.addEventListener('DOMContentLoaded', () => {
       document.body.dataset.theme = 'light';
       toggleBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>`;
     }
+
+    // ── Language Switcher ─────────────────
+    const langs = [
+      { code: 'en', label: 'English', flag: '🇬🇧', path: '/' },
+      { code: 'zh', label: '中文', flag: '🇨🇳', path: '/zh/' },
+      { code: 'hi', label: 'हिन्दी', flag: '🇮🇳', path: '/hi/' },
+      { code: 'es', label: 'Español', flag: '🇪🇸', path: '/es/' },
+      { code: 'fr', label: 'Français', flag: '🇫🇷', path: '/fr/' },
+      { code: 'de', label: 'Deutsch', flag: '🇩🇪', path: '/de/' },
+    ];
+    const pagePath = window.location.pathname;
+    const curLang = langs.find(l => l.path !== '/' && pagePath.startsWith(l.path)) || langs[0];
+
+    const langWrap = document.createElement('div');
+    langWrap.className = 'lang-switcher';
+    langWrap.innerHTML = `
+      <button class="lang-btn" aria-label="Select language" aria-expanded="false">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        <span>${curLang.flag} ${curLang.code.toUpperCase()}</span>
+        <svg class="lang-chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="lang-menu">
+        ${langs.map(l => `<a href="${l.path}" class="lang-opt${l.code === curLang.code ? ' active' : ''}" hreflang="${l.code}">${l.flag} ${l.label}</a>`).join('')}
+      </div>
+    `;
+    headerElem.appendChild(langWrap);
+
+    const langBtn = langWrap.querySelector('.lang-btn');
+    const langMenu = langWrap.querySelector('.lang-menu');
+    langBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = langMenu.classList.toggle('open');
+      langBtn.setAttribute('aria-expanded', isOpen);
+    });
+    document.addEventListener('click', () => {
+      langMenu.classList.remove('open');
+      langBtn.setAttribute('aria-expanded', 'false');
+    });
   }
 
   // ── Active Nav Link Highlight ─────────
