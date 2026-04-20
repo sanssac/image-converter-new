@@ -57,15 +57,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ── Language Switcher ─────────────────
     const langs = [
-      { code: 'en', label: 'English', flag: '🇬🇧', path: '/' },
-      { code: 'zh', label: '中文', flag: '🇨🇳', path: '/zh/' },
-      { code: 'hi', label: 'हिन्दी', flag: '🇮🇳', path: '/hi/' },
-      { code: 'es', label: 'Español', flag: '🇪🇸', path: '/es/' },
-      { code: 'fr', label: 'Français', flag: '🇫🇷', path: '/fr/' },
-      { code: 'de', label: 'Deutsch', flag: '🇩🇪', path: '/de/' },
+      { code: 'en', label: 'English', flag: '🇬🇧', prefix: '' },
+      { code: 'zh', label: '中文', flag: '🇨🇳', prefix: '/zh' },
+      { code: 'hi', label: 'हिन्दी', flag: '🇮🇳', prefix: '/hi' },
+      { code: 'es', label: 'Español', flag: '🇪🇸', prefix: '/es' },
+      { code: 'fr', label: 'Français', flag: '🇫🇷', prefix: '/fr' },
     ];
     const pagePath = window.location.pathname;
-    const curLang = langs.find(l => l.path !== '/' && pagePath.startsWith(l.path)) || langs[0];
+    // Detect current language from URL
+    const curLang = langs.find(l => l.prefix && pagePath.startsWith(l.prefix + '/')) || langs[0];
+    // Extract tool slug (e.g. "/jpg-to-png/") by stripping the locale prefix
+    const toolSlug = curLang.prefix ? pagePath.replace(curLang.prefix, '') : pagePath;
+    // Build correct target URLs for each language
+    function getLangUrl(lang) {
+      // If it's the homepage ("/", "/hi/", "/es/", etc.), just go to locale root
+      const slug = toolSlug === '/' ? '/' : toolSlug;
+      return lang.prefix + slug;
+    }
 
     const langWrap = document.createElement('div');
     langWrap.className = 'lang-switcher';
@@ -76,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <svg class="lang-chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
       </button>
       <div class="lang-menu">
-        ${langs.map(l => `<a href="${l.path}" class="lang-opt${l.code === curLang.code ? ' active' : ''}" hreflang="${l.code}">${l.flag} ${l.label}</a>`).join('')}
+        ${langs.map(l => `<a href="${getLangUrl(l)}" class="lang-opt${l.code === curLang.code ? ' active' : ''}" hreflang="${l.code}">${l.flag} ${l.label}</a>`).join('')}
       </div>
     `;
     headerElem.appendChild(langWrap);
@@ -311,18 +319,28 @@ document.addEventListener('DOMContentLoaded', () => {
     progressContainer.classList.add('visible');
     progressFill.style.width = '0%';
     
-    const targetMime = selectedMime; 
-    const targetExtMap = { 'image/jpeg':'jpg', 'image/png':'png', 'image/webp':'webp' };
-    const targetExt = targetExtMap[targetMime] || 'jpg';
-    
     isCompression = document.body.dataset.mode === 'compress';
 
     convertedFiles = [];
     let totalOrigSize = 0;
     let totalNewSize = 0;
+    let lastTargetExt = 'jpg';
 
     for (let i = 0; i < queuedFiles.length; i++) {
       let q = queuedFiles[i];
+
+      // In compress mode, keep original format; in convert mode, use tab selection
+      let targetMime = selectedMime;
+      if (isCompression) {
+        const origType = q.file.type;
+        if (origType === 'image/png') targetMime = 'image/png';
+        else if (origType === 'image/webp') targetMime = 'image/webp';
+        else targetMime = 'image/jpeg'; // default for jpg/heic/unknown
+      }
+      const targetExtMap = { 'image/jpeg':'jpg', 'image/png':'png', 'image/webp':'webp' };
+      const targetExt = targetExtMap[targetMime] || 'jpg';
+      lastTargetExt = targetExt;
+
       if (q.result) {
          convertedFiles.push({ name: `${q.file.name.replace(/\.[^.]+$/, '')}.${targetExt}`, blob: q.result });
          totalOrigSize += q.file.size;
@@ -353,7 +371,7 @@ document.addEventListener('DOMContentLoaded', () => {
              let baseW = img.naturalWidth;
              let baseH = img.naturalHeight;
              
-             if (!isCompression || !document.querySelector('.size-presets')) {
+             if (!isCompression || !document.querySelector('.size-presets, .preset-pill')) {
                // Normal conversion path
                const b = await getBlob(img, baseW, baseH, targetMime, 0.92);
                URL.revokeObjectURL(objUrl);
@@ -446,7 +464,7 @@ document.addEventListener('DOMContentLoaded', () => {
     batchSizeNew.innerHTML = `Processed: <strong style="color:#d8b4fe">${fmtBytes(totalNewSize)}</strong> <span class="${pillClass}">${pillText}</span>`;
     
     progressLabel.textContent = '';
-    downloadText.textContent = convertedFiles.length > 1 ? 'Download ZIP' : `Download ${targetExt.toUpperCase()}`;
+    downloadText.textContent = convertedFiles.length > 1 ? 'Download ZIP' : `Download ${lastTargetExt.toUpperCase()}`;
     if (copyBtn) copyBtn.style.display = convertedFiles.length === 1 ? 'flex' : 'none';
 
     // Before/After visual comparison injected natively for Compress Mode single files
