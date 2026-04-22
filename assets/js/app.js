@@ -64,51 +64,56 @@ document.addEventListener('DOMContentLoaded', () => {
       toggleBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>`;
     }
 
-    // ── Language Switcher ─────────────────
-    const langs = [
-      { code: 'en', label: 'English', flag: '🇬🇧', prefix: '' },
-      { code: 'zh', label: '中文', flag: '🇨🇳', prefix: '/zh' },
-      { code: 'hi', label: 'हिन्दी', flag: '🇮🇳', prefix: '/hi' },
-      { code: 'es', label: 'Español', flag: '🇪🇸', prefix: '/es' },
-      { code: 'fr', label: 'Français', flag: '🇫🇷', prefix: '/fr' },
-    ];
-    const pagePath = window.location.pathname;
-    // Detect current language from URL
-    const curLang = langs.find(l => l.prefix && pagePath.startsWith(l.prefix + '/')) || langs[0];
-    // Extract tool slug (e.g. "/jpg-to-png/") by stripping the locale prefix
-    const toolSlug = curLang.prefix ? pagePath.replace(curLang.prefix, '') : pagePath;
-    // Build correct target URLs for each language
-    function getLangUrl(lang) {
-      // If it's the homepage ("/", "/hi/", "/es/", etc.), just go to locale root
-      const slug = toolSlug === '/' ? '/' : toolSlug;
-      return lang.prefix + slug;
+    // ── Language Switcher Component ──────
+    const navContainer = document.querySelector('header nav');
+    if (navContainer && !document.querySelector('.lang-switcher')) {
+      const currentDocLang = document.documentElement.lang || 'en';
+      const langNames = { en: 'English', es: 'Español', fr: 'Français', zh: '中文', hi: 'हिन्दी' };
+      const currentLangName = langNames[currentDocLang] || 'English';
+
+      const switcherDiv = document.createElement('div');
+      switcherDiv.className = 'lang-switcher';
+      
+      const path = window.location.pathname; 
+      let pathWithoutLang = path;
+      if(path.match(/^\/(es|fr|zh|hi)(\/|$)/)) {
+        pathWithoutLang = path.replace(/^\/(es|fr|zh|hi)/, '') || '/';
+      }
+
+      switcherDiv.innerHTML = `
+        <button class="lang-btn" aria-expanded="false" aria-haspopup="true">
+          <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          <span>${currentLangName}</span>
+          <svg class="lang-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="lang-menu">
+          ${Object.entries(langNames).map(([code, name]) => {
+             let newPath = code === 'en' ? pathWithoutLang : `/${code}${pathWithoutLang === '/' ? '/' : pathWithoutLang}`;
+             newPath = newPath.replace(/\/\//g, '/'); // fix double slashes
+             return `<a href="${newPath}" class="lang-opt ${code === currentDocLang ? 'active' : ''}">${name}</a>`;
+          }).join('')}
+        </div>
+      `;
+      navContainer.appendChild(switcherDiv);
+      
+      const langBtn = switcherDiv.querySelector('.lang-btn');
+      const langMenu = switcherDiv.querySelector('.lang-menu');
+      
+      langBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const isExpanded = langBtn.getAttribute('aria-expanded') === 'true';
+        langBtn.setAttribute('aria-expanded', !isExpanded);
+        langMenu.classList.toggle('open');
+      });
+      
+      document.addEventListener('click', (e) => {
+        if(!switcherDiv.contains(e.target)) {
+           langBtn.setAttribute('aria-expanded', 'false');
+           langMenu.classList.remove('open');
+        }
+      });
     }
-
-    const langWrap = document.createElement('div');
-    langWrap.className = 'lang-switcher';
-    langWrap.innerHTML = `
-      <button class="lang-btn" aria-label="Select language" aria-expanded="false">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-        <span>${curLang.flag} ${curLang.code.toUpperCase()}</span>
-        <svg class="lang-chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
-      </button>
-      <div class="lang-menu">
-        ${langs.map(l => `<a href="${getLangUrl(l)}" class="lang-opt${l.code === curLang.code ? ' active' : ''}" hreflang="${l.code}">${l.flag} ${l.label}</a>`).join('')}
-      </div>
-    `;
-    headerElem.appendChild(langWrap);
-
-    const langBtn = langWrap.querySelector('.lang-btn');
-    const langMenu = langWrap.querySelector('.lang-menu');
-    langBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const isOpen = langMenu.classList.toggle('open');
-      langBtn.setAttribute('aria-expanded', isOpen);
-    });
-    document.addEventListener('click', () => {
-      langMenu.classList.remove('open');
-      langBtn.setAttribute('aria-expanded', 'false');
-    });
   }
 
   // ── Active Nav Link Highlight ─────────
@@ -170,55 +175,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const t = i18nStrings[lang] || i18nStrings.en;
   clearBtn.appendChild(document.createTextNode(' ' + t.convertMore));
 
-  // ── Language Switcher Component ──────
-  const navContainer = document.querySelector('header nav');
-  if (navContainer && !document.querySelector('.lang-switcher')) {
-    const langNames = { en: 'English', es: 'Español', fr: 'Français', zh: '中文', hi: 'हिन्दी' };
-    const currentLangName = langNames[lang] || 'English';
-
-    const switcherDiv = document.createElement('div');
-    switcherDiv.className = 'lang-switcher';
-    
-    const path = window.location.pathname; 
-    let pathWithoutLang = path;
-    if(path.match(/^\/(es|fr|zh|hi)(\/|$)/)) {
-      pathWithoutLang = path.replace(/^\/(es|fr|zh|hi)/, '') || '/';
-    }
-
-    switcherDiv.innerHTML = `
-      <button class="lang-btn" aria-expanded="false" aria-haspopup="true">
-        <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-        <span>${currentLangName}</span>
-        <svg class="lang-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-      </button>
-      <div class="lang-menu">
-        ${Object.entries(langNames).map(([code, name]) => {
-           let newPath = code === 'en' ? pathWithoutLang : \`/\${code}\${pathWithoutLang === '/' ? '/' : pathWithoutLang}\`;
-           newPath = newPath.replace(/\\/\\//g, '/'); // fix double slashes
-           return \`<a href="\${newPath}" class="lang-opt \${code === lang ? 'active' : ''}">\${name}</a>\`;
-        }).join('')}
-      </div>
-    `;
-    navContainer.appendChild(switcherDiv);
-    
-    const langBtn = switcherDiv.querySelector('.lang-btn');
-    const langMenu = switcherDiv.querySelector('.lang-menu');
-    
-    langBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      const isExpanded = langBtn.getAttribute('aria-expanded') === 'true';
-      langBtn.setAttribute('aria-expanded', !isExpanded);
-      langMenu.classList.toggle('open');
-    });
-    
-    document.addEventListener('click', (e) => {
-      if(!switcherDiv.contains(e.target)) {
-         langBtn.setAttribute('aria-expanded', 'false');
-         langMenu.classList.remove('open');
-      }
-    });
-  }
+  // Language Switcher Component has been moved up to run on all pages
   const tabs = document.querySelectorAll('.format-tabs .tab');
   if (tabs.length > 0) {
     // If tabs exist, preselect based on dataset
