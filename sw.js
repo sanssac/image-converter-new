@@ -29,9 +29,11 @@ self.addEventListener('fetch', (event) => {
           return networkResponse;
         });
       }).catch(() => {
-        if (!cachedResponse && event.request.mode === 'navigate') {
+        if (cachedResponse) return cachedResponse;
+        if (event.request.mode === 'navigate') {
           return caches.match('/');
         }
+        return new Response('Offline', { status: 503, statusText: 'Service Unavailable' });
       });
       return cachedResponse || fetchPromise;
     })

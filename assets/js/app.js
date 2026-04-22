@@ -1,10 +1,19 @@
+// ── HTML Escape Helper ────────────────
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
 // ── Toast System ──────────────────────
 function showToast(message, type = 'info') {
   const container = document.getElementById('toastContainer');
   if (!container) return;
   const el = document.createElement('div');
   el.className = `toast ${type}`;
-  el.innerHTML = `<span>${message}</span>`;
+  const span = document.createElement('span');
+  span.textContent = message;
+  el.appendChild(span);
   container.appendChild(el);
   setTimeout(() => {
     el.style.animation = 'toastFadeOut 0.3s forwards';
@@ -129,7 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const clearBtn = document.createElement('button');
   clearBtn.id = 'clearBtn';
   clearBtn.className = 'btn-clear';
-  clearBtn.innerHTML = `<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.5"/></svg> Convert More Images`;
+  clearBtn.innerHTML = `<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.5"/></svg>`;
   clearBtn.addEventListener('click', () => {
     queuedFiles.forEach(q => { if (q.thumbUrl) URL.revokeObjectURL(q.thumbUrl); });
     queuedFiles = [];
@@ -140,7 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
     progressContainer.classList.remove('visible');
     progressLabel.textContent = '';
     convertBtn.disabled = false;
-    convertBtnText.textContent = isCompression ? 'Compress Images' : 'Convert Images';
+    convertBtnText.textContent = isCompression ? t.compressImages : t.convertImages;
     renderGallery();
     dropZone.scrollIntoView({ behavior: 'smooth', block: 'center' });
   });
@@ -148,6 +157,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Settings logic (Tabs)
   let selectedMime = document.body.dataset.targetMime || 'image/jpeg';
+
+  // ── i18n for dynamic UI strings ─────
+  const lang = document.documentElement.lang || 'en';
+  const i18nStrings = {
+    en:  { converting: 'Converting', of: 'of', filesSelected: 'file(s) selected - Drop more?', convertMore: 'Convert More Images', compressImages: 'Compress Images', convertImages: 'Convert Images', success: 'Success!', filesProcessed: 'file(s) processed', original: 'Original', processed: 'Processed', smaller: 'smaller', larger: 'larger', downloadZip: 'Download ZIP', download: 'Download', zipping: 'Zipping', copiedClipboard: 'Image copied to clipboard!', copyBlocked: 'Browser blocked clipboard copy.', copyNotSupported: 'Clipboard copy not supported on this browser.', heicNotLoaded: 'HEIC library not loaded yet.', heicFailed: 'Failed to process HEIC', zipNotLoaded: 'JSZip library has not loaded yet.' },
+    es:  { converting: 'Convirtiendo', of: 'de', filesSelected: 'archivo(s) — ¿más?', convertMore: 'Convertir más', compressImages: 'Comprimir imagen', convertImages: 'Convertir', success: '¡Éxito!', filesProcessed: 'archivo(s)', original: 'Original', processed: 'Procesado', smaller: 'más pequeño', larger: 'más grande', downloadZip: 'Descargar ZIP', download: 'Descargar', zipping: 'Comprimiendo', copiedClipboard: '¡Imagen copiada!', copyBlocked: 'Copia bloqueada por el navegador.', copyNotSupported: 'Copia no soportada.', heicNotLoaded: 'Librería HEIC no cargada.', heicFailed: 'Error HEIC', zipNotLoaded: 'JSZip no cargado.' },
+    fr:  { converting: 'Conversion', of: 'de', filesSelected: 'fichier(s) — plus ?', convertMore: 'Convertir plus', compressImages: 'Compresser', convertImages: 'Convertir', success: 'Succès !', filesProcessed: 'fichier(s)', original: 'Original', processed: 'Traité', smaller: 'plus petit', larger: 'plus grand', downloadZip: 'Télécharger ZIP', download: 'Télécharger', zipping: 'Compression', copiedClipboard: 'Image copiée !', copyBlocked: 'Copie bloquée.', copyNotSupported: 'Copie non supportée.', heicNotLoaded: 'Bibliothèque HEIC non chargée.', heicFailed: 'Erreur HEIC', zipNotLoaded: 'JSZip non chargé.' },
+    zh:  { converting: '转换中', of: '/', filesSelected: '文件已选 — 添加更多?', convertMore: '转换更多', compressImages: '压缩图片', convertImages: '转换', success: '成功！', filesProcessed: '个文件', original: '原始', processed: '处理后', smaller: '更小', larger: '更大', downloadZip: '下载 ZIP', download: '下载', zipping: '压缩中', copiedClipboard: '已复制到剪贴板！', copyBlocked: '浏览器阻止了复制。', copyNotSupported: '浏览器不支持复制。', heicNotLoaded: 'HEIC 库未加载。', heicFailed: 'HEIC 转换失败', zipNotLoaded: 'JSZip 未加载。' },
+    hi:  { converting: 'कनवर्ट हो रहा है', of: 'में से', filesSelected: 'फाइल चुनी — और जोड़ें?', convertMore: 'और कनवर्ट करें', compressImages: 'कंप्रेस करें', convertImages: 'कनवर्ट करें', success: 'सफल!', filesProcessed: 'फाइल', original: 'मूल', processed: 'प्रोसेस्ड', smaller: 'छोटा', larger: 'बड़ा', downloadZip: 'ZIP डाउनलोड', download: 'डाउनलोड', zipping: 'ज़िप हो रहा', copiedClipboard: 'कॉपी हो गया!', copyBlocked: 'ब्राउज़र ने कॉपी ब्लॉक किया।', copyNotSupported: 'कॉपी सपोर्ट नहीं है।', heicNotLoaded: 'HEIC लाइब्रेरी लोड नहीं हुई।', heicFailed: 'HEIC एरर', zipNotLoaded: 'JSZip लोड नहीं हुआ।' },
+  };
+  const t = i18nStrings[lang] || i18nStrings.en;
+  clearBtn.appendChild(document.createTextNode(' ' + t.convertMore));
   const tabs = document.querySelectorAll('.format-tabs .tab');
   if (tabs.length > 0) {
     // If tabs exist, preselect based on dataset
@@ -168,7 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const batchSizeOrig  = document.getElementById('batchSizeOrig');
   const batchSizeNew   = document.getElementById('batchSizeNew');
 
-  const sizePresets = document.querySelectorAll('.preset-pill');
+  const sizePresets = document.querySelectorAll('.preset-pill, .preset');
   const customSizeWrapper = document.getElementById('customSizeWrapper');
   const customSizeInput = document.getElementById('customSizeInput');
   const customSizeUnit = document.getElementById('customSizeUnit');
@@ -198,9 +219,9 @@ document.addEventListener('DOMContentLoaded', () => {
   let isCompression = false; // hoisted so download handler can read it 
 
   function fmtBytes(b) {
-    if (!b) return '0 B';
+    if (!b || b < 0) return '0 B';
     const k = 1024, units = ['B','KB','MB','GB'];
-    const i = Math.floor(Math.log(b) / Math.log(k));
+    const i = Math.min(Math.floor(Math.log(b) / Math.log(k)), units.length - 1);
     return (b / k ** i).toFixed(1) + ' ' + units[i];
   }
 
@@ -231,7 +252,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const queueId = Math.random().toString(36).substr(2, 9);
       if (ext === 'heic' || ext === 'heif') {
          if (typeof heic2any === 'undefined') {
-           showToast('HEIC library not loaded yet.', 'error');
+           showToast(t.heicNotLoaded, 'error');
            continue;
          }
          try {
@@ -249,7 +270,7 @@ document.addEventListener('DOMContentLoaded', () => {
            await new Promise(resolve => setTimeout(resolve, 50));
            continue;
          } catch (e) {
-           showToast(`Failed to process HEIC: ${f.name}`, 'error');
+           showToast(t.heicFailed + ': ' + f.name, 'error');
            queuedFiles = queuedFiles.filter(q => q.id !== queueId);
            continue;
          }
@@ -264,12 +285,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  window.removeFile = function(id) {
+  function removeFile(id) {
     const qItem = queuedFiles.find(q => q.id === id);
     if (qItem && qItem.thumbUrl) URL.revokeObjectURL(qItem.thumbUrl);
     queuedFiles = queuedFiles.filter(q => q.id !== id);
     renderGallery();
   }
+
+  // Event delegation for remove buttons (avoids global function + inline onclick)
+  fileGallery.addEventListener('click', (e) => {
+    const removeBtn = e.target.closest('.btn-remove');
+    if (removeBtn && removeBtn.dataset.fileId) {
+      removeFile(removeBtn.dataset.fileId);
+    }
+  });
 
   function renderGallery() {
     if (queuedFiles.length === 0) {
@@ -278,7 +307,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (dropZoneH2) dropZoneH2.textContent = defaultDropText;
       return;
     }
-    if (dropZoneH2) dropZoneH2.textContent = `${queuedFiles.length} file(s) selected - Drop more?`;
+    if (dropZoneH2) dropZoneH2.textContent = `${queuedFiles.length} ${t.filesSelected}`;
     
     fileGallery.innerHTML = '';
     queuedFiles.forEach((q, index) => {
@@ -292,14 +321,17 @@ document.addEventListener('DOMContentLoaded', () => {
           ? `<div class="skeleton-loader"></div>`
           : `<img src="${url}" />`;
           
+      const safeName = escapeHtml(q.file.name);
+      const metaText = q.processing ? 'Decoding HEIC...' : fmtBytes(q.file.size);
+      const resultText = q.result ? '→ ' + (q.result.error ? '<span style="color:#ef4444">Failed</span>' : fmtBytes(q.result.size)) : '';
       div.innerHTML = `
         <div class="thumb">${thumbElement}</div>
         <div class="info">
-          <div class="name" title="${q.file.name}">${q.file.name}</div>
-          <div class="meta">${q.processing ? 'Decoding HEIC...' : fmtBytes(q.file.size)} ${q.result ? '→ ' + (q.result.error ? '<span style="color:#ef4444">Failed</span>' : fmtBytes(q.result.size)) : ''}</div>
+          <div class="name" title="${safeName}">${safeName}</div>
+          <div class="meta">${metaText} ${resultText}</div>
         </div>
         <div class="status">Done</div>
-        <button class="btn-remove remove" aria-label="Remove file" onclick="removeFile('${q.id}')" ${q.processing ? 'disabled' : ''}>
+        <button class="btn-remove remove" aria-label="Remove file" data-file-id="${q.id}" ${q.processing ? 'disabled' : ''}>
            <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
       `;
@@ -315,11 +347,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   convertBtn.addEventListener('click', async () => {
     convertBtn.disabled = true;
-    convertBtnText.textContent = 'Converting...';
+    convertBtnText.textContent = `${t.converting}...`;
     progressContainer.classList.add('visible');
     progressFill.style.width = '0%';
     
-    isCompression = document.body.dataset.mode === 'compress';
+    isCompression = document.body.dataset.mode === 'compress' || document.body.dataset.compressMode === 'true';
 
     convertedFiles = [];
     let totalOrigSize = 0;
@@ -371,7 +403,7 @@ document.addEventListener('DOMContentLoaded', () => {
              let baseW = img.naturalWidth;
              let baseH = img.naturalHeight;
              
-             if (!isCompression || !document.querySelector('.size-presets, .preset-pill')) {
+             if (!isCompression || !document.querySelector('.size-presets, .preset-pill, .preset')) {
                // Normal conversion path
                const b = await getBlob(img, baseW, baseH, targetMime, 0.92);
                URL.revokeObjectURL(objUrl);
@@ -380,25 +412,29 @@ document.addEventListener('DOMContentLoaded', () => {
              }
 
              // --- Target Size Compression Logic ---
-             let targetBytes = targetSizeValue;
-             if (targetSizeValue === 'custom') {
-                 const customVal = parseFloat(customSizeInput.value) || 500;
-                 targetBytes = customSizeUnit.value === 'MB' ? customVal * 1024 * 1024 : customVal * 1024;
-             } else {
-                 targetBytes = targetSizeValue * 1024;
-             }
+              let targetBytes = targetSizeValue;
+              if (targetSizeValue === 'custom') {
+                  const customVal = parseFloat(customSizeInput ? customSizeInput.value : 500) || 500;
+                  targetBytes = (customSizeUnit && customSizeUnit.value === 'MB') ? customVal * 1024 * 1024 : customVal * 1024;
+              } else if (targetSizeValue >= 10000) {
+                  // Localized pages store data-size in bytes directly
+                  targetBytes = targetSizeValue;
+              } else {
+                  // EN compress page stores data-size in KB
+                  targetBytes = targetSizeValue * 1024;
+              }
              
              let bestBlob = null;
-             
              if (targetMime === 'image/png') {
-                 // PNG is lossless HTML-wise. To compress, we must scale dimensions.
-                 let scale = 1.0;
-                 while (scale >= 0.1) {
-                     const b = await getBlob(img, baseW * scale, baseH * scale, targetMime, 1);
-                     if (!bestBlob || b.size <= targetBytes) bestBlob = b;
-                     if (b.size <= targetBytes) break;
-                     scale *= 0.8;
-                 }
+                  // PNG is lossless HTML-wise. To compress, we must scale dimensions.
+                  let scale = 1.0;
+                  let lastPngBlob = null;
+                  while (scale >= 0.1) {
+                      lastPngBlob = await getBlob(img, baseW * scale, baseH * scale, targetMime, 1);
+                      if (lastPngBlob.size <= targetBytes) { bestBlob = lastPngBlob; break; }
+                      scale *= 0.8;
+                  }
+                  if (!bestBlob) bestBlob = lastPngBlob; // best effort: smallest tried
              } else {
                  // JPEG/WEBP Quality Binary Search
                  let finalBlob = await getBlob(img, baseW, baseH, targetMime, 0.9);
@@ -450,21 +486,21 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       
       progressFill.style.width = `${((i + 1) / queuedFiles.length) * 100}%`;
-      progressLabel.textContent = `Converting ${i + 1} of ${queuedFiles.length}...`;
+      progressLabel.textContent = `${t.converting} ${i + 1} ${t.of} ${queuedFiles.length}...`;
     }
 
-    convertBtnText.textContent = isCompression ? 'Compress Images' : 'Convert Images';
+    convertBtnText.textContent = isCompression ? t.compressImages : t.convertImages;
 
-    batchCountText.innerHTML = `<strong>${convertedFiles.length}</strong> file(s) processed`;
-    batchSizeOrig.innerHTML = `Original: <strong>${fmtBytes(totalOrigSize)}</strong>`;
+    batchCountText.innerHTML = `<strong>${convertedFiles.length}</strong> ${t.filesProcessed}`;
+    batchSizeOrig.innerHTML = `${t.original}: <strong>${fmtBytes(totalOrigSize)}</strong>`;
 
     const savingsPct = totalOrigSize > 0 ? Math.round((1 - totalNewSize / totalOrigSize) * 100) : 0;
     const pillClass = savingsPct >= 0 ? 'savings-pill' : 'savings-pill worse';
-    const pillText = savingsPct >= 0 ? `↓ ${savingsPct}% smaller` : `↑ ${Math.abs(savingsPct)}% larger`;
-    batchSizeNew.innerHTML = `Processed: <strong style="color:#d8b4fe">${fmtBytes(totalNewSize)}</strong> <span class="${pillClass}">${pillText}</span>`;
+    const pillText = savingsPct >= 0 ? `↓ ${savingsPct}% ${t.smaller}` : `↑ ${Math.abs(savingsPct)}% ${t.larger}`;
+    batchSizeNew.innerHTML = `${t.processed}: <strong style="color:#d8b4fe">${fmtBytes(totalNewSize)}</strong> <span class="${pillClass}">${pillText}</span>`;
     
     progressLabel.textContent = '';
-    downloadText.textContent = convertedFiles.length > 1 ? 'Download ZIP' : `Download ${lastTargetExt.toUpperCase()}`;
+    downloadText.textContent = convertedFiles.length > 1 ? t.downloadZip : `${t.download} ${lastTargetExt.toUpperCase()}`;
     if (copyBtn) copyBtn.style.display = convertedFiles.length === 1 ? 'flex' : 'none';
 
     // Before/After visual comparison injected natively for Compress Mode single files
@@ -498,7 +534,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     resultCard.classList.add('visible');
-    showToast('Success!', 'success');
+    showToast(t.success, 'success');
     setTimeout(() => progressContainer.classList.remove('visible'), 1000);
   });
 
@@ -509,13 +545,13 @@ document.addEventListener('DOMContentLoaded', () => {
           const item = new ClipboardItem({ [convertedFiles[0].blob.type]: convertedFiles[0].blob });
           navigator.clipboard.write([item]).then(() => {
             copyBtn.classList.add('success');
-            showToast('Image copied to clipboard!', 'success');
+            showToast(t.copiedClipboard, 'success');
             setTimeout(() => copyBtn.classList.remove('success'), 2000);
           }).catch(err => {
-            showToast('Browser blocked asynchronous copy logic.', 'error');
+            showToast(t.copyBlocked, 'error');
           });
         } catch (err) {
-          showToast('Clipboard Copy not definitively supported on this browser.', 'error');
+          showToast(t.copyNotSupported, 'error');
         }
       });
   }
@@ -533,15 +569,15 @@ document.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => { URL.revokeObjectURL(url); document.body.removeChild(a); }, 500);
     } else {
       if (typeof JSZip === 'undefined') {
-        showToast("JSZip library has not loaded yet.", "error"); return;
+        showToast(t.zipNotLoaded, "error"); return;
       }
-      downloadText.textContent = 'Zipping 0%...';
+      downloadText.textContent = `${t.zipping} 0%...`;
       const zip = new JSZip();
       convertedFiles.forEach(cf => zip.file(cf.name, cf.blob));
       const zipBlob = await zip.generateAsync({ type: 'blob' }, (metadata) => {
-         downloadText.textContent = `Zipping ${Math.round(metadata.percent)}%...`;
+         downloadText.textContent = `${t.zipping} ${Math.round(metadata.percent)}%...`;
       });
-      downloadText.textContent = 'Download ZIP';
+      downloadText.textContent = t.downloadZip;
       const url = URL.createObjectURL(zipBlob);
       const a = document.createElement('a');
       a.href = url;

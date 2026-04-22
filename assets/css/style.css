@@ -55,7 +55,7 @@ header .logo {
 header .site-title { font-size: 18px; font-weight: 700; margin:0;}
 header .site-title span {
   background: linear-gradient(135deg, #818cf8, #d8b4fe);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
 }
 header nav {
   margin-left: auto; display: flex; gap: 16px; font-size: 13px; font-weight: 500;
@@ -108,7 +108,7 @@ main {
   padding: 30px; font-size: 15px; line-height: 1.6; color: #cbd5e1;
 }
 .seo-article h1, .seo-article h2, .seo-article h3 { color: white; margin: 24px 0 12px; }
-.seo-article h1 { font-size: 26px; margin-top: 0; background: linear-gradient(135deg, #818cf8, #d8b4fe); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.seo-article h1 { font-size: 26px; margin-top: 0; background: linear-gradient(135deg, #818cf8, #d8b4fe); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
 .seo-article h2 { font-size: 20px; font-weight: 600; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 8px;}
 .seo-article p { margin-bottom: 16px; }
 .seo-article a { color: #818cf8; text-decoration: none; }
@@ -387,7 +387,6 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 [data-theme="light"] .lang-opt { color: #334155; }
 [data-theme="light"] .lang-opt:hover { background: rgba(99,102,241,0.1); color: #1e1b4b; }
 [data-theme="light"] .lang-opt.active { background: rgba(99,102,241,0.15); color: #6366f1; }
-
 /* ── Mobile Touch Overrides ─────────── */
 @media (hover: none) {
   .file-item:hover { transform: none; border-color: rgba(255,255,255,0.08); }
@@ -474,3 +473,36 @@ header nav a.nav-active::after {
   #toastContainer { bottom: auto; top: 16px; right: 12px; left: 12px; }
   .toast { font-size: 12px; padding: 10px 14px; }
 }
+
+/* -- Compress Settings Panel -- */
+.compress-settings { padding: 20px; margin-bottom: 8px; }
+.compress-settings h3 { font-size: 14px; font-weight: 600; margin-bottom: 12px; color: #e2e8f0; }
+[data-theme="light"] .compress-settings h3 { color: #0f172a; }
+
+/* -- Size Preset Buttons (shared across EN + localized compress pages) -- */
+.preset-pill, .preset {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #e2e8f0;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: 0.2s;
+}
+[data-theme="light"] .preset-pill, [data-theme="light"] .preset {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.1);
+  color: #334155;
+}
+.preset-pill:hover, .preset:hover {
+  background: rgba(129, 140, 248, 0.2);
+  border-color: #818cf8;
+}
+.preset-pill.active, .preset.active {
+  background: #818cf8;
+  color: #fff;
+  border-color: #818cf8;
+}
+.size-presets { display: flex; flex-wrap: wrap; gap: 8px; }
