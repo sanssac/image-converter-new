@@ -237,12 +237,34 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnLocal = document.getElementById('btnLocal');
   if (btnLocal) btnLocal.addEventListener('click', (e) => { e.stopPropagation(); fileInput.click(); });
 
-  dropZone.addEventListener('click', () => fileInput.click());
-  dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('dragging'); });
-  dropZone.addEventListener('dragleave', (e) => { if (!dropZone.contains(e.relatedTarget)) dropZone.classList.remove('dragging'); });
-  dropZone.addEventListener('drop', (e) => {
-    e.preventDefault(); dropZone.classList.remove('dragging');
+  document.body.addEventListener('dragover', (e) => { 
+    e.preventDefault(); 
+    if (dropZone) dropZone.classList.add('dragging'); 
+  });
+  document.body.addEventListener('dragleave', (e) => { 
+    if (!e.relatedTarget && dropZone) dropZone.classList.remove('dragging'); 
+  });
+  document.body.addEventListener('drop', (e) => {
+    e.preventDefault(); 
+    if (dropZone) dropZone.classList.remove('dragging');
     if (e.dataTransfer.files.length) handleFiles(e.dataTransfer.files);
+  });
+  
+  // Keyboard Shortcuts
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && convertBtn && !convertBtn.disabled && queuedFiles.length > 0 && !queuedFiles.some(q => q.processing) && !queuedFiles.every(q => q.result !== null)) {
+      convertBtn.click();
+    }
+    if (e.key === 'Escape' && queuedFiles.length > 0) {
+      const existingClearBtn = document.getElementById('clearBtn');
+      if (existingClearBtn && resultCard.classList.contains('visible')) {
+        existingClearBtn.click();
+      } else {
+        queuedFiles.forEach(q => { if (q.thumbUrl) URL.revokeObjectURL(q.thumbUrl); });
+        queuedFiles = [];
+        renderGallery();
+      }
+    }
   });
   fileInput.addEventListener('change', (e) => {
     if (e.target.files.length) handleFiles(e.target.files);
@@ -394,11 +416,15 @@ document.addEventListener('DOMContentLoaded', () => {
          const getBlob = (imgObj, w, h, outMime, outQuality) => new Promise(res => {
              canvas.width = w; canvas.height = h;
              const ctx = canvas.getContext('2d');
+             if (document.body.dataset.mode === 'bw') {
+                 ctx.filter = 'grayscale(100%)';
+             }
              if (outMime === 'image/jpeg') {
                  ctx.fillStyle = '#ffffff';
                  ctx.fillRect(0, 0, w, h);
              }
              ctx.drawImage(imgObj, 0, 0, w, h);
+             ctx.filter = 'none'; // reset filter
              canvas.toBlob(b => res(b), outMime, outMime !== 'image/png' ? outQuality : undefined);
          });
 
@@ -548,6 +574,11 @@ document.addEventListener('DOMContentLoaded', () => {
     resultCard.classList.add('visible');
     showToast(t.success, 'success');
     setTimeout(() => progressContainer.classList.remove('visible'), 1000);
+    
+    // Auto-download if only 1 file
+    if (convertedFiles.length === 1) {
+       setTimeout(() => { if (downloadBtn) downloadBtn.click(); }, 600);
+    }
   });
 
   if (copyBtn) {
