@@ -219,6 +219,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
     });
+  } else if (document.body.hasAttribute('data-target-size')) {
+    targetSizeValue = parseInt(document.body.getAttribute('data-target-size'), 10);
   }
 
   let queuedFiles = [];
@@ -410,7 +412,10 @@ document.addEventListener('DOMContentLoaded', () => {
              let baseW = img.naturalWidth;
              let baseH = img.naturalHeight;
              
-             if (!isCompression || !document.querySelector('.size-presets, .preset-pill, .preset')) {
+             const hasSizePresets = document.querySelector('.size-presets, .preset-pill, .preset') !== null;
+             const hasBodyTargetSize = document.body.hasAttribute('data-target-size');
+             
+             if (!isCompression || (!hasSizePresets && !hasBodyTargetSize)) {
                // Normal conversion path
                const b = await getBlob(img, baseW, baseH, targetMime, 0.92);
                URL.revokeObjectURL(objUrl);
