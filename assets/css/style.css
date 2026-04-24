@@ -91,6 +91,39 @@ header nav a:hover { color: white; }
 .lang-opt:hover { background: rgba(99,102,241,0.15); color: white; }
 .lang-opt.active { background: rgba(99,102,241,0.2); color: #d8b4fe; }
 
+/* ── Mega Menu ─────────────── */
+.mega-menu-wrapper { position: relative; display: flex; align-items: center; margin-right: auto; }
+.mega-btn {
+  display: flex; align-items: center; gap: 6px;
+  background: transparent; border: 1px solid transparent;
+  border-radius: 8px; padding: 6px 10px;
+  color: inherit; font-family: inherit; font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: 0.2s;
+}
+.mega-btn:hover { background: rgba(255,255,255,0.05); color: white; }
+.mega-btn .mega-chev { transition: transform 0.2s; }
+.mega-btn[aria-expanded="true"] .mega-chev { transform: rotate(180deg); }
+
+.mega-dropdown {
+  display: none; position: absolute; top: calc(100% + 15px); left: 0;
+  background: rgba(24, 24, 27, 0.95); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 20px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.5); z-index: 100;
+  min-width: 450px;
+}
+.mega-dropdown.open { display: block; animation: slideUpFade 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+.mega-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.mega-column h4 { font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: #94a3b8; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 6px; }
+.mega-link {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 10px; border-radius: 8px; margin-left:-10px;
+  text-decoration: none; color: #cbd5e1;
+  font-size: 13px; font-weight: 500; transition: 0.15s;
+  white-space: nowrap;
+}
+.mega-link svg { width: 14px; height: 14px; }
+.mega-link:hover { background: rgba(99,102,241,0.15); color: white; transform: translateX(2px); }
+
 /* ── Page Layout ────────────────────── */
 .page-container {
   display: flex; gap: 24px; width: 100%; max-width: 1040px;
@@ -387,6 +420,13 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 [data-theme="light"] .lang-opt { color: #334155; }
 [data-theme="light"] .lang-opt:hover { background: rgba(99,102,241,0.1); color: #1e1b4b; }
 [data-theme="light"] .lang-opt.active { background: rgba(99,102,241,0.15); color: #6366f1; }
+
+[data-theme="light"] .mega-btn:hover { background: rgba(0,0,0,0.05); color: #0f172a; }
+[data-theme="light"] .mega-dropdown { background: rgba(255,255,255,0.97); border-color: rgba(0,0,0,0.1); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+[data-theme="light"] .mega-column h4 { color: #64748b; border-bottom-color: rgba(0,0,0,0.05); }
+[data-theme="light"] .mega-link { color: #475569; }
+[data-theme="light"] .mega-link:hover { background: rgba(99,102,241,0.08); color: #4f46e5; }
+
 /* ── Mobile Touch Overrides ─────────── */
 @media (hover: none) {
   .file-item:hover { transform: none; border-color: rgba(255,255,255,0.08); }
@@ -458,6 +498,9 @@ header nav a.nav-active::after {
   header nav a { padding: 4px 8px; background: rgba(255,255,255,0.04); border-radius: 8px; border: 1px solid rgba(255,255,255,0.06); }
   header nav a.nav-active { background: rgba(99,102,241,0.12); border-color: rgba(99,102,241,0.3); color: #c4b5fd; }
   header nav a.nav-active::after { display: none; }
+  .mega-menu-wrapper { margin-right: 0; width: 100%; justify-content: center; }
+  .mega-dropdown { position: fixed; top: 110px; left: 16px; right: 16px; min-width: 0; width: calc(100% - 32px); max-height: calc(100vh - 140px); overflow-y: auto; border-radius: 16px; padding: 16px; }
+  .mega-grid { grid-template-columns: 1fr; gap: 16px; }
 }
 
 /* -- UX #9: Drop zone + layout mobile padding -- */

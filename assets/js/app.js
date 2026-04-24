@@ -64,10 +64,67 @@ document.addEventListener('DOMContentLoaded', () => {
       toggleBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>`;
     }
 
-    // ── Language Switcher Component ──────
+    // ── Navigation & Tools Mega Menu ──────
     const navContainer = document.querySelector('header nav');
+    const currentDocLang = document.documentElement.lang || 'en';
+
+    if (navContainer && !document.querySelector('.mega-menu-wrapper')) {
+      const megaWrapper = document.createElement('div');
+      megaWrapper.className = 'mega-menu-wrapper';
+      const langPrefix = currentDocLang === 'en' ? '' : `/${currentDocLang}`;
+
+      megaWrapper.innerHTML = `
+        <button class="mega-btn" aria-expanded="false">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          All Tools
+          <svg class="mega-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="mega-dropdown">
+          <div class="mega-grid">
+            <div class="mega-column">
+              <h4>Convert</h4>
+              <a href="${langPrefix}/" class="mega-link">Multi-Format Converter</a>
+              <a href="${langPrefix}/jpg-to-png" class="mega-link">JPG to PNG</a>
+              <a href="${langPrefix}/png-to-jpg" class="mega-link">PNG to JPG</a>
+              <a href="${langPrefix}/webp-to-jpg" class="mega-link">WebP to JPG</a>
+              <a href="${langPrefix}/svg-to-png" class="mega-link">SVG to PNG</a>
+              <a href="${langPrefix}/heic-to-jpg" class="mega-link">HEIC to JPG</a>
+            </div>
+            <div class="mega-column">
+              <h4>Compress</h4>
+              <a href="${langPrefix}/compress-image" class="mega-link">Smart Compress</a>
+              <a href="${langPrefix}/compress-image-to-50kb" class="mega-link">Compress to 50KB</a>
+              <a href="${langPrefix}/compress-image-to-100kb" class="mega-link">Compress to 100KB</a>
+            </div>
+            <div class="mega-column">
+              <h4>Effects</h4>
+              <a href="${langPrefix}/photo-to-black-and-white" class="mega-link">Black & White Filter</a>
+            </div>
+          </div>
+        </div>
+      `;
+      navContainer.insertBefore(megaWrapper, navContainer.firstChild);
+
+      const megaBtn = megaWrapper.querySelector('.mega-btn');
+      const megaDropdown = megaWrapper.querySelector('.mega-dropdown');
+
+      megaBtn.addEventListener('click', (e) => {
+        e.preventDefault(); e.stopPropagation();
+        const isExpanded = megaBtn.getAttribute('aria-expanded') === 'true';
+        megaBtn.setAttribute('aria-expanded', !isExpanded);
+        megaDropdown.classList.toggle('open');
+      });
+
+      document.addEventListener('click', (e) => {
+        if(!megaWrapper.contains(e.target)) {
+           megaBtn.setAttribute('aria-expanded', 'false');
+           megaDropdown.classList.remove('open');
+        }
+      });
+    }
+
+    // ── Language Switcher Component ──────
     if (navContainer && !document.querySelector('.lang-switcher')) {
-      const currentDocLang = document.documentElement.lang || 'en';
       const langNames = { en: 'English', es: 'Español', fr: 'Français', zh: '中文', hi: 'हिन्दी' };
       const currentLangName = langNames[currentDocLang] || 'English';
 
