@@ -1,4 +1,4 @@
-const CACHE_NAME = 'image_converter_cache_v3';
+const CACHE_NAME = 'image_converter_cache_v4';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
@@ -17,26 +17,27 @@ self.addEventListener('install', (event) => {
   );
 });
 
+// Network-first strategy: always try fresh content, fall back to cache only when offline
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
   if (!event.request.url.startsWith(self.location.origin)) return;
 
   event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      const fetchPromise = fetch(event.request).then((networkResponse) => {
-        return caches.open(CACHE_NAME).then((cache) => {
-          cache.put(event.request, networkResponse.clone());
-          return networkResponse;
+    fetch(event.request)
+      .then((networkResponse) => {
+        const responseClone = networkResponse.clone();
+        caches.open(CACHE_NAME).then((cache) => {
+          cache.put(event.request, responseClone);
         });
-      }).catch(() => {
-        if (cachedResponse) return cachedResponse;
-        if (event.request.mode === 'navigate') {
-          return caches.match('/');
-        }
-        return new Response('Offline', { status: 503, statusText: 'Service Unavailable' });
-      });
-      return cachedResponse || fetchPromise;
-    })
+        return networkResponse;
+      })
+      .catch(() => {
+        return caches.match(event.request).then((cachedResponse) => {
+          if (cachedResponse) return cachedResponse;
+          if (event.request.mode === 'navigate') return caches.match('/');
+          return new Response('Offline', { status: 503, statusText: 'Service Unavailable' });
+        });
+      })
   );
 });
 
