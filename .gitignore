@@ -28,3 +28,7 @@ desktop.ini
 
 # Vercel local dev
 .vercel/
+
+# npm
+node_modules/
+npm-debug.log*

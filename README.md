@@ -104,3 +104,9 @@ python scripts/sync_components.py
    ```
 2. Update Google Search Console with your real domain
 3. Submit `sitemap.xml` to Google Search Console
+
+---
+
+## 📄 License
+
+This project is open-source and available under the [MIT License](LICENSE).
