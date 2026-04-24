@@ -82,27 +82,30 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="mega-dropdown">
           <div class="mega-grid">
             <div class="mega-column">
-              <h4>Convert</h4>
-              <a href="${langPrefix}/" class="mega-link">Multi-Format Converter</a>
-              <a href="${langPrefix}/jpg-to-png" class="mega-link">JPG to PNG</a>
-              <a href="${langPrefix}/png-to-jpg" class="mega-link">PNG to JPG</a>
-              <a href="${langPrefix}/webp-to-jpg" class="mega-link">WebP to JPG</a>
-              <a href="${langPrefix}/svg-to-png" class="mega-link">SVG to PNG</a>
-              <a href="${langPrefix}/svg-to-jpg" class="mega-link">SVG to JPG</a>
-              <a href="${langPrefix}/heic-to-jpg" class="mega-link">HEIC to JPG</a>
-              <a href="${langPrefix}/jpg-to-avif" class="mega-link">JPG to AVIF</a>
-              <a href="${langPrefix}/png-to-avif" class="mega-link">PNG to AVIF</a>
-              <a href="${langPrefix}/png-to-ico" class="mega-link">PNG to ICO</a>
+              <h4>Popular Converters</h4>
+              <a href="${langPrefix}/" class="mega-link"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>Multi-Format Converter</a>
+              <a href="${langPrefix}/jpg-to-png" class="mega-link"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>JPG to PNG</a>
+              <a href="${langPrefix}/png-to-jpg" class="mega-link"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>PNG to JPG</a>
+              <a href="${langPrefix}/webp-to-jpg" class="mega-link"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>WebP to JPG</a>
             </div>
             <div class="mega-column">
-              <h4>Compress</h4>
-              <a href="${langPrefix}/compress-image" class="mega-link">Smart Compress</a>
-              <a href="${langPrefix}/compress-image-to-50kb" class="mega-link">Compress to 50KB</a>
-              <a href="${langPrefix}/compress-image-to-100kb" class="mega-link">Compress to 100KB</a>
+              <h4>Advanced Formats</h4>
+              <a href="${langPrefix}/svg-to-png" class="mega-link"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>SVG to PNG</a>
+              <a href="${langPrefix}/svg-to-jpg" class="mega-link"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>SVG to JPG</a>
+              <a href="${langPrefix}/heic-to-jpg" class="mega-link"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>HEIC to JPG</a>
+              <a href="${langPrefix}/png-to-ico" class="mega-link"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><path d="M7 7h10v10H7z"></path></svg>PNG to ICO</a>
             </div>
             <div class="mega-column">
-              <h4>Effects</h4>
-              <a href="${langPrefix}/photo-to-black-and-white" class="mega-link">Black & White Filter</a>
+              <h4>Next-Gen Formats</h4>
+              <a href="${langPrefix}/jpg-to-avif" class="mega-link"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>JPG to AVIF</a>
+              <a href="${langPrefix}/png-to-avif" class="mega-link"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>PNG to AVIF</a>
+            </div>
+            <div class="mega-column">
+              <h4>Compress & Filters</h4>
+              <a href="${langPrefix}/compress-image" class="mega-link"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>Smart Compress</a>
+              <a href="${langPrefix}/compress-image-to-50kb" class="mega-link"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"></path><path d="M12 12v9"></path><path d="M8 17l4 4 4-4"></path></svg>Compress to 50KB</a>
+              <a href="${langPrefix}/compress-image-to-100kb" class="mega-link"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"></path><path d="M12 12v9"></path><path d="M8 17l4 4 4-4"></path></svg>Compress to 100KB</a>
+              <a href="${langPrefix}/photo-to-black-and-white" class="mega-link"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a10 10 0 0 0 0 20z"></path></svg>B&W Filter</a>
             </div>
           </div>
         </div>
