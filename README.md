@@ -20,6 +20,10 @@ image-converter/
 ├── webp-to-png/                # /webp-to-png/ — WebP → PNG converter
 ├── heic-to-jpg/                # /heic-to-jpg/ — HEIC → JPG converter
 ├── jpeg-to-webp/               # /jpeg-to-webp/— JPEG → WebP converter
+├── jpg-to-avif/                # /jpg-to-avif/ — JPG → AVIF converter
+├── png-to-avif/                # /png-to-avif/ — PNG → AVIF converter
+├── png-to-ico/                 # /png-to-ico/  — PNG → ICO converter
+├── svg-to-jpg/                 # /svg-to-jpg/  — SVG → JPG converter
 ├── compress-image/             # /compress-image/ — Image compressor
 │
 ├── ── Content Pages ───────────────────────────────────────

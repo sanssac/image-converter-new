@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Convert PNG to AVIF Online Free | Image Converter</title>
+  <meta name="description" content="Quickly convert PNG images to AVIF with transparent background support. Free, secure, client-side browser conversion." />
+  <meta name="keywords" content="jpg to png, convert jpg to png, png to avif, avif converter, free online image converter" />
+  <link rel="canonical" href="https://image-converter-rho-six.vercel.app/png-to-avif/" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js" defer></script>
+  <link rel="stylesheet" href="/assets/css/style.css?v=20260424" />
+  <!-- Vercel Web Analytics -->
+  <script>
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+  </script>
+  <script defer src="/_vercel/insights/script.js"></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Does converting PNG to AVIF improve quality?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. A PNG cannot recover data previously discarded by PNG compression, but it prevents any further quality loss."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I convert multiple JPGs to PNG at once?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, our converter supports bulk batch conversion. Simply drag and drop multiple JPG files, and download them all as PNGs instantly."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is my data secure?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Absolutely. This tool runs entirely in your browser. We never upload your images to our servers, keeping your data completely private."
+        }
+      }
+    ]
+  }
+  </script>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="manifest" href="/manifest.json" />
+  <meta property="og:image" content="https://image-converter-rho-six.vercel.app/assets/images/og-banner.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:image" content="https://image-converter-rho-six.vercel.app/assets/images/og-banner.png" />
+
+  <!-- Standard SEO / Social Meta Tags -->
+  <meta name="author" content="Image Converter" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://image-converter-rho-six.vercel.app/png-to-avif/" />
+  <meta property="og:title" content="Convert PNG to AVIF Online Free | Image Converter" />
+  <meta property="og:description" content="Quickly convert PNG images to AVIF with transparent background support. Free, secure, client-side browser conversion." />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Convert PNG to AVIF Online Free | Image Converter" />
+  <meta name="twitter:description" content="Quickly convert PNG images to AVIF with transparent background support. Free, secure, client-side browser conversion." />
+  <link rel="alternate" hreflang="x-default" href="https://image-converter-rho-six.vercel.app/png-to-avif/" />
+  <link rel="alternate" hreflang="en" href="https://image-converter-rho-six.vercel.app/png-to-avif/" />
+  <link rel="alternate" hreflang="hi" href="https://image-converter-rho-six.vercel.app/hi/png-to-avif/" />
+  <link rel="alternate" hreflang="es" href="https://image-converter-rho-six.vercel.app/es/png-to-avif/" />
+  <link rel="alternate" hreflang="fr" href="https://image-converter-rho-six.vercel.app/fr/png-to-avif/" />
+  <link rel="alternate" hreflang="zh" href="https://image-converter-rho-six.vercel.app/zh/png-to-avif/" />
+</head>
+<body data-target-mime="image/avif">
+  <div class="mesh-glow mesh-1"></div>
+  <div class="mesh-glow mesh-2"></div>
+  <div id="toastContainer"></div>
+  <header>
+    <a href="/" class="logo-link">
+      <div class="logo">
+        <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+      </div>
+      <div class="site-title">Image <span>Converter</span></div>
+    </a>
+    <nav>
+      <a href="/png-to-avif">PNG to AVIF</a>
+      <a href="/png-to-jpg">PNG to JPG</a>
+      <a href="/compress-image">Compress Image</a>
+      <a href="/blog">Blog</a>
+    </nav>
+  </header>
+  <div class="page-container">
+    <main>
+      <h1 style="text-align:center; font-size: 28px; margin: 10px 0 20px; background: linear-gradient(135deg, #818cf8, #d8b4fe); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">Convert PNG to AVIF Online Free</h1>
+      <!-- Format Tabs Locked to PNG -->
+      <div class="format-tabs glass-panel" id="formatTabs">
+        <button class="tab active" data-target="image/png">Converting to AVIF</button>
+      </div>
+      <div class="drop-zone glass-panel" id="dropZone">
+        <div class="icon">
+          <svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        </div>
+        <h2>Drop PNG images here</h2>
+        <p>Supports formats including JPG, WEBP, HEIC</p>
+        <div class="cloud-row">
+          <button class="btn-cloud" id="btnLocal"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg> Device</button>
+        </div>
+        <input type="file" id="fileInput" accept="image/*,.heic" multiple />
+      </div>
+      <div class="trust-badge">
+        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+        100% secure — images never leave your device
+      </div>
+      <div class="file-gallery" id="fileGallery"></div>
+      <button class="btn-convert" id="convertBtn">
+        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3m6.366-.366-2.12 2.12M21 12h-3m.366 6.366-2.12-2.12M12 21v-3m-6.366.366 2.12-2.12M3 12h3m-.366-6.366 2.12 2.12"/></svg>
+        <span id="convertBtnText">Convert to AVIF</span>
+      </button>
+      <div class="progress-container" id="progressContainer"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="result-card glass-panel" id="resultCard">
+        <div class="result-header">Converted to AVIF successfully!</div>
+        <div class="stats"><span id="batchCountText"></span><span id="batchSizeOrig"></span><span id="batchSizeNew"></span></div>
+        <div class="action-row">
+          <button class="btn-download" id="downloadBtn" style="flex:1"><span id="downloadText">Download AVIF</span></button>
+          <button class="btn-copy" id="copyBtn" title="Copy to Clipboard" aria-label="Copy Base64">
+            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <!-- Related SEO Internal Links -->
+      <section class="related-tools glass-panel">
+        <h3>Related Free Tools</h3>
+        <a href="/">Convert Multiple Formats</a>
+        <a href="/webp-to-jpg">Convert WebP to JPG</a>
+        <a href="/png-to-jpg">Convert PNG to JPG</a>
+        <a href="/compress-image">Compress Image Files</a>
+      </section>
+      <!-- SEO Content -->
+      <article class="seo-article glass-panel">
+        <h2>How to Convert PNG to AVIF Online Securely</h2>
+        <p>Converting a JPEG (JPG) image to a PNG is one of the most common web operations, usually required when you need to preserve intricate details without lossy artifacts, or when you are preparing assets that may eventually require transparent backgrounds.</p>
+        <h3>Why convert PNG to AVIF?</h3>
+        <p>JPG relies on lossy compression. Every time you save a JPG, it loses a fractional amount of quality. PNG, on the other hand, is a lossless format. While it doesn't miraculously restore lost data from your JPG, saving an image as an AVIF prevents any further deterioration. It is also the web standard for images that require transparency, making it a critical format for logos, web UI components, and digital illustrations.</p>
+        <h3>Is this tool safe to use?</h3>
+        <p>Yes. Many online converters force you to upload your personal photos to their servers, where they might be stored and processed via backend APIs. This tool runs <strong>100% inside your browser</strong> using HTML5 technologies. Your image data never leaves your device, guaranteeing absolute privacy. This is particularly important for sensitive documents, personal photographs, and unreleased business assets.</p>
+        <p>If you find that your resulting AVIF file is still too large, you might want to try our <a href="/compress-image">Compress Image</a> tool to safely reduce its footprint while maintaining visual quality.</p>
+        <div class="faq-section">
+          <h3>Frequently Asked Questions</h3>
+          <div class="faq-item">
+            <div class="faq-question">Does converting PNG to AVIF improve quality?</div>
+            <div class="faq-answer">No. A PNG cannot recover data previously discarded by PNG compression, but it prevents any further quality loss.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-question">Can I convert multiple JPGs to PNG at once?</div>
+            <div class="faq-answer">Yes, our converter supports bulk batch conversion. Simply drag and drop multiple JPG files, and download them all as PNGs instantly.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-question">Is my data secure?</div>
+            <div class="faq-answer">Absolutely. This tool runs entirely in your browser. We never upload your images to our servers, keeping your data completely private.</div>
+          </div>
+        </div>
+      </article>
+    </main>
+  </div>
+  <canvas id="canvas"></canvas>
+  <footer>
+    <div class="footer-links">
+       <a href="/privacy-policy">Privacy Policy</a>
+       <a href="/terms">Terms of Service</a>
+       <a href="/about">About Us</a>
+       <a href="/contact">Contact</a>
+    </div>
+    <div class="footer-copy">Your files never leave your device — 100% client-side rendering.</div>
+  </footer>
+  <script src="/assets/js/app.js?v=20260424"></script>
+</body>
+</html>

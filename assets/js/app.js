@@ -88,7 +88,11 @@ document.addEventListener('DOMContentLoaded', () => {
               <a href="${langPrefix}/png-to-jpg" class="mega-link">PNG to JPG</a>
               <a href="${langPrefix}/webp-to-jpg" class="mega-link">WebP to JPG</a>
               <a href="${langPrefix}/svg-to-png" class="mega-link">SVG to PNG</a>
+              <a href="${langPrefix}/svg-to-jpg" class="mega-link">SVG to JPG</a>
               <a href="${langPrefix}/heic-to-jpg" class="mega-link">HEIC to JPG</a>
+              <a href="${langPrefix}/jpg-to-avif" class="mega-link">JPG to AVIF</a>
+              <a href="${langPrefix}/png-to-avif" class="mega-link">PNG to AVIF</a>
+              <a href="${langPrefix}/png-to-ico" class="mega-link">PNG to ICO</a>
             </div>
             <div class="mega-column">
               <h4>Compress</h4>
@@ -457,7 +461,7 @@ document.addEventListener('DOMContentLoaded', () => {
         else if (origType === 'image/webp') targetMime = 'image/webp';
         else targetMime = 'image/jpeg'; // default for jpg/heic/unknown
       }
-      const targetExtMap = { 'image/jpeg':'jpg', 'image/png':'png', 'image/webp':'webp' };
+      const targetExtMap = { 'image/jpeg':'jpg', 'image/png':'png', 'image/webp':'webp', 'image/avif':'avif', 'image/x-icon':'ico' };
       const targetExt = targetExtMap[targetMime] || 'jpg';
       lastTargetExt = targetExt;
 
@@ -471,18 +475,60 @@ document.addEventListener('DOMContentLoaded', () => {
          const objUrl = URL.createObjectURL(q.file);
          
          const getBlob = (imgObj, w, h, outMime, outQuality) => new Promise(res => {
-             canvas.width = w; canvas.height = h;
+             let targetW = w;
+             let targetH = h;
+             if (outMime === 'image/x-icon') {
+                 const size = Math.min(w, h, 256);
+                 targetW = size;
+                 targetH = size;
+             }
+             canvas.width = targetW; canvas.height = targetH;
              const ctx = canvas.getContext('2d');
              if (document.body.dataset.mode === 'bw') {
                  ctx.filter = 'grayscale(100%)';
              }
              if (outMime === 'image/jpeg') {
                  ctx.fillStyle = '#ffffff';
-                 ctx.fillRect(0, 0, w, h);
+                 ctx.fillRect(0, 0, targetW, targetH);
              }
-             ctx.drawImage(imgObj, 0, 0, w, h);
+             if (outMime === 'image/x-icon') {
+                 const minDim = Math.min(imgObj.naturalWidth, imgObj.naturalHeight);
+                 const sx = (imgObj.naturalWidth - minDim) / 2;
+                 const sy = (imgObj.naturalHeight - minDim) / 2;
+                 ctx.drawImage(imgObj, sx, sy, minDim, minDim, 0, 0, targetW, targetH);
+             } else {
+                 ctx.drawImage(imgObj, 0, 0, targetW, targetH);
+             }
              ctx.filter = 'none'; // reset filter
-             canvas.toBlob(b => res(b), outMime, outMime !== 'image/png' ? outQuality : undefined);
+             
+             if (outMime === 'image/x-icon') {
+                 canvas.toBlob(pngBlob => {
+                     if (!pngBlob) { res(null); return; }
+                     pngBlob.arrayBuffer().then(pngBuffer => {
+                         const pngBytes = new Uint8Array(pngBuffer);
+                         const icoBuffer = new ArrayBuffer(22 + pngBytes.length);
+                         const view = new DataView(icoBuffer);
+                         view.setUint16(0, 0, true);
+                         view.setUint16(2, 1, true);
+                         view.setUint16(4, 1, true);
+                         const icoW = targetW >= 256 ? 0 : targetW;
+                         const icoH = targetH >= 256 ? 0 : targetH;
+                         view.setUint8(6, icoW);
+                         view.setUint8(7, icoH);
+                         view.setUint8(8, 0);
+                         view.setUint8(9, 0);
+                         view.setUint16(10, 1, true);
+                         view.setUint16(12, 32, true);
+                         view.setUint32(14, pngBytes.length, true);
+                         view.setUint32(18, 22, true);
+                         const icoBytes = new Uint8Array(icoBuffer);
+                         icoBytes.set(pngBytes, 22);
+                         res(new Blob([icoBytes], { type: 'image/x-icon' }));
+                     });
+                 }, 'image/png');
+             } else {
+                 canvas.toBlob(b => res(b), outMime, outMime !== 'image/png' ? outQuality : undefined);
+             }
          });
 
          const blob = await new Promise((resolve) => {
