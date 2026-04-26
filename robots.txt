@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://image-converter-rho-six.vercel.app/sitemap.xml
+Sitemap: https://imglabconverter.vercel.app/sitemap.xml
