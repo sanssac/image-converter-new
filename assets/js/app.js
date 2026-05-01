@@ -189,6 +189,72 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch(e) {}
   });
 
+  // ── UI Enhancement: Sticky Header Scroll ──
+  const headerEl = document.querySelector('header');
+  if (headerEl) {
+    let lastScroll = 0;
+    window.addEventListener('scroll', () => {
+      const scrollY = window.scrollY;
+      if (scrollY > 40) headerEl.classList.add('scrolled');
+      else headerEl.classList.remove('scrolled');
+      lastScroll = scrollY;
+    }, { passive: true });
+  }
+
+  // ── UI Enhancement: Feature Badges ──
+  const trustBadge = document.querySelector('.trust-badge');
+  if (trustBadge && !document.querySelector('.feature-badges')) {
+    const badgesDiv = document.createElement('div');
+    badgesDiv.className = 'feature-badges';
+    badgesDiv.innerHTML = `
+      <div class="feature-badge"><span class="badge-icon">⚡</span> Lightning Fast <span class="badge-dot"></span></div>
+      <div class="feature-badge"><span class="badge-icon">🔒</span> 100% Private <span class="badge-dot"></span></div>
+      <div class="feature-badge"><span class="badge-icon">♾️</span> Unlimited Files <span class="badge-dot"></span></div>
+    `;
+    trustBadge.insertAdjacentElement('afterend', badgesDiv);
+  }
+
+  // ── UI Enhancement: FAQ Accordion ──
+  document.querySelectorAll('.faq-item').forEach((item, i) => {
+    const question = item.querySelector('.faq-question');
+    if (!question) return;
+    // Open first item by default
+    if (i === 0) item.classList.add('open');
+    question.addEventListener('click', () => {
+      item.classList.toggle('open');
+    });
+  });
+
+  // ── UI Enhancement: Footer Branding ──
+  const footerEl = document.querySelector('footer');
+  if (footerEl && !footerEl.querySelector('.footer-brand')) {
+    const brand = document.createElement('div');
+    brand.className = 'footer-brand';
+    brand.innerHTML = `
+      <div class="footer-logo"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+      <div class="footer-name">Image <span>Converter</span></div>
+    `;
+    footerEl.insertBefore(brand, footerEl.firstChild);
+  }
+
+  // ── UI Enhancement: Scroll Reveal ──
+  document.querySelectorAll('.related-tools, .seo-article').forEach(el => {
+    el.classList.add('scroll-reveal');
+  });
+  if ('IntersectionObserver' in window) {
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.scroll-reveal').forEach(el => revealObserver.observe(el));
+  } else {
+    document.querySelectorAll('.scroll-reveal').forEach(el => el.classList.add('in-view'));
+  }
+
   if (!dropZone || !convertBtn) return; // Not a converter page
   
   const dropZoneH2 = dropZone.querySelector('h2');
