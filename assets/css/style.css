@@ -118,7 +118,7 @@ header nav a:hover { color: white; }
   border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 22px 18px;
   box-shadow: 0 25px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(99,102,241,0.06), inset 0 1px 0 rgba(255,255,255,0.06);
   z-index: 9999;
-  width: 860px; max-width: calc(100vw - 40px);
+  width: 860px; max-width: calc(100vw - 40px); overflow: hidden;
 }
 .mega-dropdown::before {
   content: ''; position: absolute; top: 0; left: 28px; right: 28px; height: 1px;
@@ -131,7 +131,7 @@ header nav a:hover { color: white; }
 }
 .mega-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
 .mega-column {
-  padding: 0 8px; position: relative;
+  padding: 0 8px; position: relative; min-width: 0;
   animation: megaColFade 0.35s ease backwards;
 }
 .mega-column:nth-child(2) { animation-delay: 0.05s; }
@@ -146,7 +146,7 @@ header nav a:hover { color: white; }
   font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: #818cf8;
   margin-bottom: 14px; padding-bottom: 10px; display: flex; align-items: center; gap: 6px;
   border-bottom: 1px solid rgba(99,102,241,0.12);
-  font-weight: 700;
+  font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .mega-column h4 .col-icon {
   width: 16px; height: 16px; opacity: 0.6;
@@ -156,7 +156,7 @@ header nav a:hover { color: white; }
   padding: 6px 6px; border-radius: 10px; margin: 1px 0;
   text-decoration: none; color: #94a3b8;
   font-size: 12px; font-weight: 500; transition: all 0.2s ease;
-  position: relative;
+  position: relative; width: 100%; min-width: 0;
 }
 .mega-link .mega-icon-wrap {
   width: 26px; height: 26px; border-radius: 6px; flex-shrink: 0;
