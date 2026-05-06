@@ -22,7 +22,7 @@ all_tools = [
 ]
 
 languages = ["de", "es", "fr", "hi", "zh"]
-base_url = "https://imglabconverter.vercel.app"
+base_url = "https://www.imglabconverter.com"
 
 with open(sitemap_path, 'r', encoding='utf-8') as f:
     sitemap_content = f.read()

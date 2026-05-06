@@ -3,7 +3,7 @@ import glob
 
 base_dir = r"c:\image converter new"
 old_domain = "image-converter-rho-six.vercel.app"
-new_domain = "imglabconverter.vercel.app"
+new_domain = "www.imglabconverter.com"
 
 # We want to check all html files, the sitemap, robots.txt, etc.
 # Basically everything text-based.

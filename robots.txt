@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://imglabconverter.vercel.app/sitemap.xml
+Sitemap: https://www.imglabconverter.com/sitemap.xml
