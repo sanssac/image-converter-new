@@ -79,7 +79,12 @@ document.addEventListener('DOMContentLoaded', () => {
           All Tools
           <svg class="mega-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
         </button>
-        <div class="mega-dropdown">
+      `;
+      navContainer.insertBefore(megaWrapper, navContainer.firstChild);
+
+      const megaDropdown = document.createElement('div');
+      megaDropdown.className = 'mega-dropdown';
+      megaDropdown.innerHTML = `
           <div class="mega-grid">
             <div class="mega-column">
               <h4>Popular Converters</h4>
@@ -163,12 +168,10 @@ document.addEventListener('DOMContentLoaded', () => {
               </a>
             </div>
           </div>
-        </div>
       `;
-      navContainer.insertBefore(megaWrapper, navContainer.firstChild);
+      document.body.appendChild(megaDropdown);
 
       const megaBtn = megaWrapper.querySelector('.mega-btn');
-      const megaDropdown = megaWrapper.querySelector('.mega-dropdown');
 
       megaBtn.addEventListener('click', (e) => {
         e.preventDefault(); e.stopPropagation();
@@ -178,7 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       document.addEventListener('click', (e) => {
-        if(!megaWrapper.contains(e.target)) {
+        if(!megaWrapper.contains(e.target) && !megaDropdown.contains(e.target)) {
            megaBtn.setAttribute('aria-expanded', 'false');
            megaDropdown.classList.remove('open');
         }
