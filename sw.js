@@ -1,11 +1,11 @@
-const CACHE_NAME = 'image_converter_cache_v7';
+const CACHE_NAME = 'image_converter_cache_202605061345';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
   '/favicon.svg',
   '/manifest.json',
   '/assets/css/style.css',
-  '/assets/js/app.js'
+  '/assets/js/main.js'
 ];
 
 self.addEventListener('install', (event) => {

@@ -1,3 +1,4 @@
+/* --- assets/css/base.css --- */
 /* ── Reset & Base ─────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -32,6 +33,9 @@ body {
   border-radius: 20px;
 }
 
+
+
+/* --- assets/css/layout.css --- */
 /* ── Header ─────────────────────────── */
 header {
   width: 100%;
@@ -70,6 +74,20 @@ header nav {
 header nav a { color: #94a3b8; text-decoration: none; transition: 0.2s; }
 header nav a:hover { color: white; }
 
+/* ── Page Layout ────────────────────── */
+.page-container {
+  display: flex; gap: 24px; width: 100%; max-width: 1040px;
+  padding: 24px; margin: 0 auto; z-index: 1; flex: 1;
+}
+main {
+  width: 100%; max-width: 640px;
+  display: flex; flex-direction: column; gap: 24px;
+  margin: 0 auto;
+}
+
+
+
+/* --- assets/css/components.css --- */
 /* ── Language Switcher ─────────────── */
 .lang-switcher { position: relative; margin-left: 4px; }
 .lang-btn {
@@ -190,18 +208,6 @@ header nav a:hover { color: white; }
 }
 .mega-badge.popular { background: rgba(99,102,241,0.15); color: #a78bfa; border: 1px solid rgba(99,102,241,0.2); }
 .mega-badge.new-tool { background: rgba(34,197,94,0.12); color: #4ade80; border: 1px solid rgba(34,197,94,0.2); }
-
-/* ── Page Layout ────────────────────── */
-.page-container {
-  display: flex; gap: 24px; width: 100%; max-width: 1040px;
-  padding: 24px; margin: 0 auto; z-index: 1; flex: 1;
-}
-main {
-  width: 100%; max-width: 640px;
-  display: flex; flex-direction: column; gap: 24px;
-  margin: 0 auto;
-}
-
 
 /* ── SEO Typography & Articles ──────── */
 .seo-article {
@@ -410,6 +416,146 @@ footer {
 .footer-links a:hover { color: #818cf8; }
 .footer-copy { font-size: 12px; color: #64748b; }
 
+/* -- Compress Settings Panel -- */
+.compress-settings { padding: 20px; margin-bottom: 8px; }
+.compress-settings h3 { font-size: 14px; font-weight: 600; margin-bottom: 12px; color: #e2e8f0; }
+[data-theme="light"] .compress-settings h3 { color: #0f172a; }
+
+/* -- Size Preset Buttons (shared across EN + localized compress pages) -- */
+.preset-pill, .preset {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #e2e8f0;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: 0.2s;
+}
+[data-theme="light"] .preset-pill, [data-theme="light"] .preset {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.1);
+  color: #334155;
+}
+.preset-pill:hover, .preset:hover {
+  background: rgba(129, 140, 248, 0.2);
+  border-color: #818cf8;
+}
+.preset-pill.active, .preset.active {
+  background: #818cf8;
+  color: #fff;
+  border-color: #818cf8;
+}
+.size-presets { display: flex; flex-wrap: wrap; gap: 8px; }
+/* ── UI Improvement #2: Feature Badges ── */
+.feature-badges {
+  display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+  margin: -8px auto 8px; padding: 0 16px;
+}
+.feature-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: #cbd5e1; letter-spacing: 0.01em;
+  animation: badgeFadeIn 0.5s ease backwards;
+}
+.feature-badge:nth-child(2) { animation-delay: 0.1s; }
+.feature-badge:nth-child(3) { animation-delay: 0.2s; }
+.feature-badge .badge-icon { font-size: 14px; }
+.feature-badge .badge-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: linear-gradient(135deg, #818cf8, #a855f7);
+  box-shadow: 0 0 8px rgba(129,140,248,0.4);
+  animation: dotPulse 2s infinite;
+}
+@keyframes badgeFadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes dotPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+[data-theme="light"] .feature-badge { background: rgba(0,0,0,0.02); border-color: rgba(0,0,0,0.08); color: #475569; }
+
+/* ── UI Improvement #3: FAQ Accordion ── */
+.faq-question {
+  cursor: pointer; display: flex; align-items: center; justify-content: space-between;
+  padding: 4px 0; user-select: none; transition: color 0.2s;
+}
+.faq-question:hover { color: #d8b4fe; }
+[data-theme="light"] .faq-question:hover { color: #6366f1; }
+.faq-question::after {
+  content: ''; width: 8px; height: 8px; flex-shrink: 0;
+  border-right: 2px solid #94a3b8; border-bottom: 2px solid #94a3b8;
+  transform: rotate(45deg); transition: transform 0.3s ease;
+  margin-left: 12px;
+}
+.faq-item.open .faq-question::after { transform: rotate(-135deg); }
+.faq-answer {
+  max-height: 0; overflow: hidden; opacity: 0;
+  transition: max-height 0.35s ease, opacity 0.25s ease, padding 0.3s ease;
+  padding-top: 0;
+}
+.faq-item.open .faq-answer {
+  max-height: 200px; opacity: 1; padding-top: 8px;
+}
+
+/* ── UI Improvement #4: Related Tools Cards ── */
+.related-tools a {
+  position: relative; padding-left: 16px;
+  border-left: 3px solid rgba(99,102,241,0.4);
+  transition: all 0.25s ease;
+}
+.related-tools a:hover {
+  border-left-color: #818cf8;
+  box-shadow: 0 4px 20px rgba(99,102,241,0.12);
+  transform: translateY(-2px);
+}
+.related-tools a::after {
+  content: '→'; position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+  opacity: 0; transition: opacity 0.2s, transform 0.2s; color: #818cf8; font-weight: 700;
+}
+.related-tools a:hover::after { opacity: 1; transform: translateY(-50%) translateX(3px); }
+[data-theme="light"] .related-tools a { border-left: 3px solid rgba(99,102,241,0.25); }
+[data-theme="light"] .related-tools a:hover { border-left-color: #6366f1; box-shadow: 0 4px 20px rgba(99,102,241,0.08); }
+
+/* ── UI Improvement #5: Enhanced Footer ── */
+footer {
+  border-top: none;
+  position: relative;
+}
+footer::before {
+  content: ''; position: absolute; top: 0; left: 10%; right: 10%; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(129,140,248,0.35), rgba(168,85,247,0.35), transparent);
+}
+.footer-brand {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 4px;
+}
+.footer-brand .footer-logo {
+  width: 28px; height: 28px; border-radius: 8px;
+  background: linear-gradient(135deg, #6366f1, #a855f7);
+  display: flex; align-items: center; justify-content: center;
+}
+.footer-brand .footer-name { font-size: 14px; font-weight: 700; color: #e2e8f0; }
+.footer-brand .footer-name span {
+  background: linear-gradient(135deg, #818cf8, #d8b4fe);
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
+[data-theme="light"] .footer-brand .footer-name { color: #0f172a; }
+[data-theme="light"] footer::before { background: linear-gradient(90deg, transparent, rgba(99,102,241,0.25), rgba(168,85,247,0.25), transparent); }
+/* ── UI Improvement #8: Format Tab Refinements ── */
+.format-tabs .tab {
+  position: relative;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.15);
+  letter-spacing: 0.02em;
+}
+.format-tabs .tab.active {
+  box-shadow: 0 4px 12px rgba(99,102,241,0.2), inset 0 1px 0 rgba(255,255,255,0.05);
+}
+[data-theme="light"] .format-tabs .tab { box-shadow: inset 0 1px 2px rgba(0,0,0,0.05); }
+[data-theme="light"] .format-tabs .tab.active { box-shadow: 0 4px 12px rgba(99,102,241,0.12), inset 0 1px 0 rgba(255,255,255,0.8); }
+
+
+
+/* --- assets/css/utilities.css --- */
+
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
 #canvas { display: none; }
@@ -603,139 +749,12 @@ header nav a.nav-active::after {
   #toastContainer { bottom: auto; top: 16px; right: 12px; left: 12px; }
   .toast { font-size: 12px; padding: 10px 14px; }
 }
-
-/* -- Compress Settings Panel -- */
-.compress-settings { padding: 20px; margin-bottom: 8px; }
-.compress-settings h3 { font-size: 14px; font-weight: 600; margin-bottom: 12px; color: #e2e8f0; }
-[data-theme="light"] .compress-settings h3 { color: #0f172a; }
-
-/* -- Size Preset Buttons (shared across EN + localized compress pages) -- */
-.preset-pill, .preset {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #e2e8f0;
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 13px;
-  font-family: inherit;
-  cursor: pointer;
-  transition: 0.2s;
-}
-[data-theme="light"] .preset-pill, [data-theme="light"] .preset {
-  background: rgba(0, 0, 0, 0.05);
-  border-color: rgba(0, 0, 0, 0.1);
-  color: #334155;
-}
-.preset-pill:hover, .preset:hover {
-  background: rgba(129, 140, 248, 0.2);
-  border-color: #818cf8;
-}
-.preset-pill.active, .preset.active {
-  background: #818cf8;
-  color: #fff;
-  border-color: #818cf8;
-}
-.size-presets { display: flex; flex-wrap: wrap; gap: 8px; }
-
 /* ── UI Improvement #1: Sticky Header Light Mode ── */
 [data-theme="light"] header.scrolled {
   background: rgba(255,255,255,0.92); backdrop-filter: blur(20px);
   box-shadow: 0 4px 30px rgba(0,0,0,0.08), 0 1px 0 rgba(99,102,241,0.06);
   border-bottom-color: rgba(99,102,241,0.1);
 }
-
-/* ── UI Improvement #2: Feature Badges ── */
-.feature-badges {
-  display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
-  margin: -8px auto 8px; padding: 0 16px;
-}
-.feature-badge {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600;
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.08);
-  color: #cbd5e1; letter-spacing: 0.01em;
-  animation: badgeFadeIn 0.5s ease backwards;
-}
-.feature-badge:nth-child(2) { animation-delay: 0.1s; }
-.feature-badge:nth-child(3) { animation-delay: 0.2s; }
-.feature-badge .badge-icon { font-size: 14px; }
-.feature-badge .badge-dot {
-  width: 6px; height: 6px; border-radius: 50%;
-  background: linear-gradient(135deg, #818cf8, #a855f7);
-  box-shadow: 0 0 8px rgba(129,140,248,0.4);
-  animation: dotPulse 2s infinite;
-}
-@keyframes badgeFadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes dotPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
-[data-theme="light"] .feature-badge { background: rgba(0,0,0,0.02); border-color: rgba(0,0,0,0.08); color: #475569; }
-
-/* ── UI Improvement #3: FAQ Accordion ── */
-.faq-question {
-  cursor: pointer; display: flex; align-items: center; justify-content: space-between;
-  padding: 4px 0; user-select: none; transition: color 0.2s;
-}
-.faq-question:hover { color: #d8b4fe; }
-[data-theme="light"] .faq-question:hover { color: #6366f1; }
-.faq-question::after {
-  content: ''; width: 8px; height: 8px; flex-shrink: 0;
-  border-right: 2px solid #94a3b8; border-bottom: 2px solid #94a3b8;
-  transform: rotate(45deg); transition: transform 0.3s ease;
-  margin-left: 12px;
-}
-.faq-item.open .faq-question::after { transform: rotate(-135deg); }
-.faq-answer {
-  max-height: 0; overflow: hidden; opacity: 0;
-  transition: max-height 0.35s ease, opacity 0.25s ease, padding 0.3s ease;
-  padding-top: 0;
-}
-.faq-item.open .faq-answer {
-  max-height: 200px; opacity: 1; padding-top: 8px;
-}
-
-/* ── UI Improvement #4: Related Tools Cards ── */
-.related-tools a {
-  position: relative; padding-left: 16px;
-  border-left: 3px solid rgba(99,102,241,0.4);
-  transition: all 0.25s ease;
-}
-.related-tools a:hover {
-  border-left-color: #818cf8;
-  box-shadow: 0 4px 20px rgba(99,102,241,0.12);
-  transform: translateY(-2px);
-}
-.related-tools a::after {
-  content: '→'; position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
-  opacity: 0; transition: opacity 0.2s, transform 0.2s; color: #818cf8; font-weight: 700;
-}
-.related-tools a:hover::after { opacity: 1; transform: translateY(-50%) translateX(3px); }
-[data-theme="light"] .related-tools a { border-left: 3px solid rgba(99,102,241,0.25); }
-[data-theme="light"] .related-tools a:hover { border-left-color: #6366f1; box-shadow: 0 4px 20px rgba(99,102,241,0.08); }
-
-/* ── UI Improvement #5: Enhanced Footer ── */
-footer {
-  border-top: none;
-  position: relative;
-}
-footer::before {
-  content: ''; position: absolute; top: 0; left: 10%; right: 10%; height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(129,140,248,0.35), rgba(168,85,247,0.35), transparent);
-}
-.footer-brand {
-  display: flex; align-items: center; gap: 8px; margin-bottom: 4px;
-}
-.footer-brand .footer-logo {
-  width: 28px; height: 28px; border-radius: 8px;
-  background: linear-gradient(135deg, #6366f1, #a855f7);
-  display: flex; align-items: center; justify-content: center;
-}
-.footer-brand .footer-name { font-size: 14px; font-weight: 700; color: #e2e8f0; }
-.footer-brand .footer-name span {
-  background: linear-gradient(135deg, #818cf8, #d8b4fe);
-  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
-}
-[data-theme="light"] .footer-brand .footer-name { color: #0f172a; }
-[data-theme="light"] footer::before { background: linear-gradient(90deg, transparent, rgba(99,102,241,0.25), rgba(168,85,247,0.25), transparent); }
 
 /* ── UI Improvement #6: Drop Zone Enhanced Drag ── */
 @keyframes borderGlow {
@@ -758,15 +777,4 @@ footer::before {
   opacity: 1; transform: translateY(0);
 }
 
-/* ── UI Improvement #8: Format Tab Refinements ── */
-.format-tabs .tab {
-  position: relative;
-  box-shadow: inset 0 1px 2px rgba(0,0,0,0.15);
-  letter-spacing: 0.02em;
-}
-.format-tabs .tab.active {
-  box-shadow: 0 4px 12px rgba(99,102,241,0.2), inset 0 1px 0 rgba(255,255,255,0.05);
-}
-[data-theme="light"] .format-tabs .tab { box-shadow: inset 0 1px 2px rgba(0,0,0,0.05); }
-[data-theme="light"] .format-tabs .tab.active { box-shadow: 0 4px 12px rgba(99,102,241,0.12), inset 0 1px 0 rgba(255,255,255,0.8); }
 

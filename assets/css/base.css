@@ -1,0 +1,34 @@
+/* ── Reset & Base ─────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+  background: #09090b;
+  color: #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* ── Ambient Mesh Glows ─────────────── */
+.mesh-glow {
+  position: fixed; border-radius: 50%; filter: blur(120px); opacity: 0.5; z-index: -1;
+  animation: drift 20s infinite alternate ease-in-out; pointer-events: none;
+}
+.mesh-1 { width: 50vw; height: 50vw; background: #6366f1; top: -10vw; left: -10vw; mix-blend-mode: screen; }
+.mesh-2 { width: 45vw; height: 45vw; background: #a855f7; bottom: -10vw; right: -10vw; mix-blend-mode: screen; animation-delay: -10s; }
+@keyframes drift { 0% { transform: scale(1) translate(0, 0); } 100% { transform: scale(1.1) translate(5vw, 5vw); } }
+
+/* ── Glassmorphism Helper ───────────── */
+.glass-panel {
+  background: rgba(24, 24, 27, 0.45);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+  border-radius: 20px;
+}
+
