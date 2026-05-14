@@ -8,7 +8,7 @@
   <meta name="description" content="Securely add text watermarks or logo overlays to hundreds of photos at once. Runs entirely offline in your browser for absolute privacy." />
   <meta name="keywords" content="image converter, batch image processing, convert webp to jpg, convert heic to jpg, image to png, secure image conversion, free browser image tool" />
   <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://www.imglabconverter.com/" />
+  <link rel="canonical" href="https://www.imglabconverter.com/watermark-image/" />
   <!-- Open Graph / Social Media -->
   <!-- Twitter -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -75,8 +75,8 @@
   <meta name="twitter:title" content="Batch Add Watermark to Photos | Free Offline Image Watermark Tool" />
   <meta name="twitter:description" content="Securely add text watermarks or logo overlays to hundreds of photos at once. Runs entirely offline in your browser for absolute privacy." />
 
-  <link rel="alternate" hreflang="x-default" href="https://www.imglabconverter.com/" />
-  <link rel="alternate" hreflang="en" href="https://www.imglabconverter.com/" />
+  <link rel="alternate" hreflang="x-default" href="https://www.imglabconverter.com/watermark-image/" />
+  <link rel="alternate" hreflang="en" href="https://www.imglabconverter.com/watermark-image/" />
   <link rel="alternate" hreflang="de" href="https://www.imglabconverter.com/de/watermark-image/" />
   <link rel="alternate" hreflang="es" href="https://www.imglabconverter.com/es/watermark-image/" />
   <link rel="alternate" hreflang="fr" href="https://www.imglabconverter.com/fr/watermark-image/" />
@@ -127,7 +127,7 @@
   </header>
   <div class="page-container">
     <main>
-    <h1 style="text-align:center; font-size: 28px; margin: 10px 0 20px; background: linear-gradient(135deg, #818cf8, #d8b4fe); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">Free Image Converter Online (JPG, PNG, WebP)</h1>
+    <h1 style="text-align:center; font-size: 28px; margin: 10px 0 20px; background: linear-gradient(135deg, #818cf8, #d8b4fe); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">Add Watermark to Photos — Free Batch Watermark Tool</h1>
     <!-- Format Tabs -->
     <div class="format-tabs glass-panel" id="formatTabs">
       <button class="tab active" data-target="image/jpeg">To JPG</button>
@@ -157,6 +157,32 @@
         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
       </svg>
       100% secure — images never leave your device
+    </div>
+    <!-- Custom Tool UI -->
+    <div id="watermarkControls" style="margin-top:20px; margin-bottom:20px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:16px;">
+       <h4 style="font-size:14px; margin-bottom:12px; color:#e2e8f0;">Watermark Settings</h4>
+       <div style="display:flex; flex-direction:column; gap:12px;">
+         <div>
+           <label style="font-size:11px; color:#94a3b8; display:block; margin-bottom:4px;">Watermark Text (Leave empty for none)</label>
+           <input type="text" id="watermarkText" placeholder="© 2024 Your Name" style="width:100%; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:8px; color:white; font-family:inherit; outline:none;" />
+         </div>
+         <div style="display:flex; gap:12px;">
+           <div style="flex:1;">
+             <label style="font-size:11px; color:#94a3b8; display:block; margin-bottom:4px;">Text Size (px)</label>
+             <input type="number" id="watermarkSize" value="32" style="width:100%; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:8px; color:white; font-family:inherit; outline:none;" />
+           </div>
+           <div style="flex:1;">
+             <label style="font-size:11px; color:#94a3b8; display:block; margin-bottom:4px;">Position</label>
+             <select id="watermarkPos" style="width:100%; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:8px; color:white; font-family:inherit; outline:none; appearance:none;">
+                <option value="bottom-right">Bottom Right</option>
+                <option value="bottom-left">Bottom Left</option>
+                <option value="top-right">Top Right</option>
+                <option value="top-left">Top Left</option>
+                <option value="center">Center</option>
+             </select>
+           </div>
+         </div>
+       </div>
     </div>
     <!-- File Gallery -->
     <div class="file-gallery" id="fileGallery"></div>

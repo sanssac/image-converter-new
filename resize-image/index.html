@@ -8,7 +8,7 @@
   <meta name="description" content="Instantly resize images for social media, websites, or custom dimensions. Free bulk image resizer that runs 100% locally in your browser." />
   <meta name="keywords" content="image converter, batch image processing, convert webp to jpg, convert heic to jpg, image to png, secure image conversion, free browser image tool" />
   <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="https://www.imglabconverter.com/" />
+  <link rel="canonical" href="https://www.imglabconverter.com/resize-image/" />
   <!-- Open Graph / Social Media -->
   <!-- Twitter -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -75,8 +75,8 @@
   <meta name="twitter:title" content="Bulk Image Resizer Online | Fast, Free & Private" />
   <meta name="twitter:description" content="Instantly resize images for social media, websites, or custom dimensions. Free bulk image resizer that runs 100% locally in your browser." />
 
-  <link rel="alternate" hreflang="x-default" href="https://www.imglabconverter.com/" />
-  <link rel="alternate" hreflang="en" href="https://www.imglabconverter.com/" />
+  <link rel="alternate" hreflang="x-default" href="https://www.imglabconverter.com/resize-image/" />
+  <link rel="alternate" hreflang="en" href="https://www.imglabconverter.com/resize-image/" />
   <link rel="alternate" hreflang="de" href="https://www.imglabconverter.com/de/resize-image/" />
   <link rel="alternate" hreflang="es" href="https://www.imglabconverter.com/es/resize-image/" />
   <link rel="alternate" hreflang="fr" href="https://www.imglabconverter.com/fr/resize-image/" />
@@ -135,7 +135,7 @@
   </header>
   <div class="page-container">
     <main>
-    <h1 style="text-align:center; font-size: 28px; margin: 10px 0 20px; background: linear-gradient(135deg, #818cf8, #d8b4fe); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">Free Image Converter Online (JPG, PNG, WebP)</h1>
+    <h1 style="text-align:center; font-size: 28px; margin: 10px 0 20px; background: linear-gradient(135deg, #818cf8, #d8b4fe); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">Bulk Image Resizer — Resize Photos Online Free</h1>
     <!-- Format Tabs -->
     <div class="format-tabs glass-panel" id="formatTabs">
       <button class="tab active" data-target="image/jpeg">To JPG</button>
@@ -165,6 +165,25 @@
         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
       </svg>
       100% secure — images never leave your device
+    </div>
+    <!-- Custom Tool UI -->
+    <div id="resizeControls" style="margin-top:20px; margin-bottom:20px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:16px;">
+       <h4 style="font-size:14px; margin-bottom:12px; color:#e2e8f0;">Target Dimensions</h4>
+       <div style="display:flex; gap:12px; align-items:center;">
+         <div style="flex:1;">
+           <label style="font-size:11px; color:#94a3b8; display:block; margin-bottom:4px;">Width (px)</label>
+           <input type="number" id="resizeWidth" placeholder="e.g. 1080" style="width:100%; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:8px; color:white; font-family:inherit; outline:none;" />
+         </div>
+         <div style="color:#64748b; font-size:14px; margin-top:16px;">&times;</div>
+         <div style="flex:1;">
+           <label style="font-size:11px; color:#94a3b8; display:block; margin-bottom:4px;">Height (px)</label>
+           <input type="number" id="resizeHeight" placeholder="e.g. 1080" style="width:100%; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:8px; color:white; font-family:inherit; outline:none;" />
+         </div>
+       </div>
+       <div style="margin-top:12px; font-size:11px; color:#a78bfa; display:flex; align-items:center; gap:6px;">
+         <input type="checkbox" id="maintainRatio" checked style="accent-color:#818cf8;"/>
+         <label for="maintainRatio">Maintain aspect ratio (enter one value to auto-calculate the other)</label>
+       </div>
     </div>
     <!-- File Gallery -->
     <div class="file-gallery" id="fileGallery"></div>
