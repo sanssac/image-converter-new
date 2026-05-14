@@ -148,23 +148,26 @@ document.addEventListener('DOMContentLoaded', () => {
               </a>
             </div>
             <div class="mega-column">
-              <h4>Compress & Filters</h4>
+              <h4>Tools & Filters</h4>
+              <a href="${langPrefix}/resize-image" class="mega-link">
+                <div class="mega-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
+                <div class="mega-link-text"><span class="mega-link-name">Resize Image</span><span class="mega-link-desc">Change dimensions</span></div>
+                <span class="mega-badge new-tool">New</span>
+              </a>
+              <a href="${langPrefix}/watermark-image" class="mega-link">
+                <div class="mega-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
+                <div class="mega-link-text"><span class="mega-link-name">Watermark</span><span class="mega-link-desc">Add text overlays</span></div>
+                <span class="mega-badge new-tool">New</span>
+              </a>
+              <a href="${langPrefix}/jpg-to-pdf" class="mega-link">
+                <div class="mega-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>
+                <div class="mega-link-text"><span class="mega-link-name">JPG to PDF</span><span class="mega-link-desc">Document compiler</span></div>
+                <span class="mega-badge new-tool">New</span>
+              </a>
               <a href="${langPrefix}/compress-image" class="mega-link">
                 <div class="mega-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
-                <div class="mega-link-text"><span class="mega-link-name">Smart Compress</span><span class="mega-link-desc">Auto quality optimizer</span></div>
+                <div class="mega-link-text"><span class="mega-link-name">Compress</span><span class="mega-link-desc">Auto quality optimizer</span></div>
                 <span class="mega-badge popular">Popular</span>
-              </a>
-              <a href="${langPrefix}/compress-image-to-50kb" class="mega-link">
-                <div class="mega-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M12 12v9"/><path d="M8 17l4 4 4-4"/></svg></div>
-                <div class="mega-link-text"><span class="mega-link-name">To 50KB</span><span class="mega-link-desc">For forms & uploads</span></div>
-              </a>
-              <a href="${langPrefix}/compress-image-to-100kb" class="mega-link">
-                <div class="mega-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M12 12v9"/><path d="M8 17l4 4 4-4"/></svg></div>
-                <div class="mega-link-text"><span class="mega-link-name">To 100KB</span><span class="mega-link-desc">Web-optimized size</span></div>
-              </a>
-              <a href="${langPrefix}/photo-to-black-and-white" class="mega-link">
-                <div class="mega-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 0 0 20z"/></svg></div>
-                <div class="mega-link-text"><span class="mega-link-name">B&W Filter</span><span class="mega-link-desc">Grayscale conversion</span></div>
               </a>
             </div>
           </div>
@@ -427,14 +430,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.body.addEventListener('dragover', (e) => { 
     e.preventDefault(); 
-    if (dropZone) dropZone.classList.add('dragging'); 
+    if (dropZone) { dropZone.classList.add('dragging'); dropZone.classList.add('drag-over'); }
   });
   document.body.addEventListener('dragleave', (e) => { 
-    if (!e.relatedTarget && dropZone) dropZone.classList.remove('dragging'); 
+    if (!e.relatedTarget && dropZone) { dropZone.classList.remove('dragging'); dropZone.classList.remove('drag-over'); }
   });
   document.body.addEventListener('drop', (e) => {
     e.preventDefault(); 
-    if (dropZone) dropZone.classList.remove('dragging');
+    if (dropZone) { dropZone.classList.remove('dragging'); dropZone.classList.remove('drag-over'); }
     if (e.dataTransfer.files.length) handleFiles(e.dataTransfer.files);
   });
   
@@ -463,9 +466,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const wasEmpty = queuedFiles.length === 0;
     progressContainer.classList.remove('visible');
     resultCard.classList.remove('visible');
+    resultCard.classList.remove('success-anim');
   
     for (let f of files) {
       const ext = f.name.split('.').pop().toLowerCase();
+      
+      if (!f.type.startsWith('image/') && !['heic', 'heif', 'ico', 'svg'].includes(ext)) {
+         showToast(t.error || 'Invalid file type: ' + f.name, 'error');
+         continue;
+      }
       
       let fileToQueue = f;
       const queueId = Math.random().toString(36).substr(2, 9);
@@ -566,7 +575,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   convertBtn.addEventListener('click', async () => {
     convertBtn.disabled = true;
-    convertBtnText.textContent = `${t.converting}...`;
+    convertBtnText.innerHTML = `<span class="spinner" style="margin-right:6px; vertical-align:middle;"></span>${t.converting}...`;
     progressContainer.classList.add('visible');
     progressFill.style.width = '0%';
     
@@ -628,6 +637,48 @@ document.addEventListener('DOMContentLoaded', () => {
              }
              ctx.filter = 'none'; // reset filter
              
+             if (document.body.dataset.mode === 'watermark') {
+                 const wText = document.getElementById('watermarkText') ? document.getElementById('watermarkText').value.trim() : '';
+                 if (wText) {
+                     const wSize = parseInt(document.getElementById('watermarkSize').value, 10) || 32;
+                     const wPos = document.getElementById('watermarkPos') ? document.getElementById('watermarkPos').value : 'bottom-right';
+                     
+                     ctx.font = `bold ${wSize}px sans-serif`;
+                     ctx.fillStyle = 'rgba(255, 255, 255, 0.6)'; // semi-transparent white
+                     const padding = 20;
+                     const metrics = ctx.measureText(wText);
+                     const textWidth = metrics.width;
+                     
+                     let wx = padding, wy = padding + wSize;
+                     if (wPos === 'bottom-right') {
+                         wx = targetW - textWidth - padding;
+                         wy = targetH - padding;
+                     } else if (wPos === 'bottom-left') {
+                         wx = padding;
+                         wy = targetH - padding;
+                     } else if (wPos === 'top-right') {
+                         wx = targetW - textWidth - padding;
+                         wy = padding + wSize;
+                     } else if (wPos === 'center') {
+                         wx = (targetW - textWidth) / 2;
+                         wy = (targetH + wSize) / 2;
+                     }
+                     
+                     // Text shadow for contrast
+                     ctx.shadowColor = "rgba(0,0,0,0.8)";
+                     ctx.shadowBlur = 6;
+                     ctx.shadowOffsetX = 2;
+                     ctx.shadowOffsetY = 2;
+                     
+                     ctx.fillText(wText, wx, wy);
+                     
+                     // Reset shadow
+                     ctx.shadowBlur = 0;
+                     ctx.shadowOffsetX = 0;
+                     ctx.shadowOffsetY = 0;
+                 }
+             }
+             
              if (outMime === 'image/x-icon') {
                  canvas.toBlob(pngBlob => {
                      if (!pngBlob) { res(null); return; }
@@ -671,6 +722,37 @@ document.addEventListener('DOMContentLoaded', () => {
              const hasSizePresets = document.querySelector('.size-presets, .preset-pill, .preset') !== null;
              const hasBodyTargetSize = document.body.hasAttribute('data-target-size');
              
+             if (document.body.dataset.mode === 'resize') {
+                 const rWInput = document.getElementById('resizeWidth');
+                 const rHInput = document.getElementById('resizeHeight');
+                 const maintain = document.getElementById('maintainRatio') ? document.getElementById('maintainRatio').checked : true;
+                 
+                 let newW = parseFloat(rWInput.value) || 0;
+                 let newH = parseFloat(rHInput.value) || 0;
+                 
+                 if (!newW && !newH) {
+                     newW = baseW; newH = baseH;
+                 } else if (maintain) {
+                     if (newW && !newH) newH = Math.round(baseH * (newW / baseW));
+                     else if (newH && !newW) newW = Math.round(baseW * (newH / baseH));
+                     else {
+                         // both defined but maintain ratio is checked.
+                         // we'll fit within the box.
+                         const ratio = Math.min(newW / baseW, newH / baseH);
+                         newW = Math.round(baseW * ratio);
+                         newH = Math.round(baseH * ratio);
+                     }
+                 } else {
+                     if (!newW) newW = baseW;
+                     if (!newH) newH = baseH;
+                 }
+                 
+                 const b = await getBlob(img, newW, newH, targetMime, 0.95);
+                 URL.revokeObjectURL(objUrl);
+                 resolve(b);
+                 return;
+             }
+
              if (!isCompression || (!hasSizePresets && !hasBodyTargetSize)) {
                // Normal conversion path
                const b = await getBlob(img, baseW, baseH, targetMime, 0.92);
@@ -768,8 +850,14 @@ document.addEventListener('DOMContentLoaded', () => {
     batchSizeNew.innerHTML = `${t.processed}: <strong style="color:#d8b4fe">${fmtBytes(totalNewSize)}</strong> <span class="${pillClass}">${pillText}</span>`;
     
     progressLabel.textContent = '';
-    downloadText.textContent = convertedFiles.length > 1 ? t.downloadZip : `${t.download} ${lastTargetExt.toUpperCase()}`;
-    if (copyBtn) copyBtn.style.display = convertedFiles.length === 1 ? 'flex' : 'none';
+    
+    if (document.body.dataset.mode === 'pdf') {
+        downloadText.textContent = 'Download PDF Document';
+        if (copyBtn) copyBtn.style.display = 'none';
+    } else {
+        downloadText.textContent = convertedFiles.length > 1 ? t.downloadZip : `${t.download} ${lastTargetExt.toUpperCase()}`;
+        if (copyBtn) copyBtn.style.display = convertedFiles.length === 1 ? 'flex' : 'none';
+    }
 
     // Before/After visual comparison injected natively for Compress Mode single files
     if (isCompression && convertedFiles.length === 1 && queuedFiles[0] && queuedFiles[0].file) {
@@ -802,6 +890,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     resultCard.classList.add('visible');
+    resultCard.classList.add('success-anim');
     showToast(t.success, 'success');
     setTimeout(() => progressContainer.classList.remove('visible'), 1000);
     
@@ -818,8 +907,13 @@ document.addEventListener('DOMContentLoaded', () => {
           const item = new ClipboardItem({ [convertedFiles[0].blob.type]: convertedFiles[0].blob });
           navigator.clipboard.write([item]).then(() => {
             copyBtn.classList.add('success');
+            const origIcon = copyBtn.innerHTML;
+            copyBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>';
             showToast(t.copiedClipboard, 'success');
-            setTimeout(() => copyBtn.classList.remove('success'), 2000);
+            setTimeout(() => { 
+                copyBtn.classList.remove('success'); 
+                copyBtn.innerHTML = origIcon;
+            }, 2000);
           }).catch(err => {
             showToast(t.copyBlocked, 'error');
           });
@@ -831,6 +925,48 @@ document.addEventListener('DOMContentLoaded', () => {
 
   downloadBtn.addEventListener('click', async () => {
     if (convertedFiles.length === 0) return;
+
+    if (document.body.dataset.mode === 'pdf') {
+        if (typeof window.jspdf === 'undefined') {
+            showToast('PDF Library not loaded. Please refresh.', 'error');
+            return;
+        }
+        downloadText.textContent = 'Building PDF...';
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF({ format: 'a4', unit: 'mm' });
+        
+        for (let i = 0; i < convertedFiles.length; i++) {
+            if (i > 0) doc.addPage();
+            const base64data = await new Promise(resolve => {
+                const reader = new FileReader();
+                reader.onloadend = () => resolve(reader.result);
+                reader.readAsDataURL(convertedFiles[i].blob);
+            });
+            const imgProps = doc.getImageProperties(base64data);
+            const pdfWidth = doc.internal.pageSize.getWidth();
+            let pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+            
+            // If image is taller than A4 page, scale to fit height instead
+            const pageHeight = doc.internal.pageSize.getHeight();
+            let x = 0;
+            let y = 0;
+            let finalW = pdfWidth;
+            let finalH = pdfHeight;
+            
+            if (pdfHeight > pageHeight) {
+                finalH = pageHeight;
+                finalW = (imgProps.width * pageHeight) / imgProps.height;
+                x = (pdfWidth - finalW) / 2; // center horizontally
+            } else {
+                y = (pageHeight - pdfHeight) / 2; // center vertically
+            }
+            
+            doc.addImage(base64data, 'JPEG', x, y, finalW, finalH);
+        }
+        doc.save('Converted_Images.pdf');
+        downloadText.textContent = 'Download PDF Document';
+        return;
+    }
 
     if (convertedFiles.length === 1) {
       const url = URL.createObjectURL(convertedFiles[0].blob);
