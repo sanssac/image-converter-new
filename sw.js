@@ -1,11 +1,11 @@
-const CACHE_NAME = 'image_converter_cache_v7';
+const CACHE_NAME = 'image_converter_cache_v8';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
   '/favicon.svg',
   '/manifest.json',
   '/assets/css/style.css',
-  '/assets/js/app.js'
+  '/assets/js/main.js'
 ];
 
 self.addEventListener('install', (event) => {
@@ -21,7 +21,8 @@ self.addEventListener('install', (event) => {
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
   if (!event.request.url.startsWith(self.location.origin)) return;
-
+  if (event.request.url.includes('.xml')) return; // Bypass for sitemap.xml
+  
   event.respondWith(
     fetch(event.request)
       .then((networkResponse) => {
