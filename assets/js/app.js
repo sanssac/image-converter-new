@@ -1,9 +1,36 @@
-import { showToast } from '../ui/toast.js';
-import { escapeHtml } from '../utils/helpers.js';
-import { fmtBytes } from '../utils/formatters.js';
-import { getTranslations } from '../config/translations.js';
+// ── HTML Escape Helper ────────────────
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
 
-export function initConverter() {
+// ── Toast System ──────────────────────
+function showToast(message, type = 'info') {
+  const container = document.getElementById('toastContainer');
+  if (!container) return;
+  const el = document.createElement('div');
+  el.className = `toast ${type}`;
+  const span = document.createElement('span');
+  span.textContent = message;
+  el.appendChild(span);
+  container.appendChild(el);
+  setTimeout(() => {
+    el.style.animation = 'toastFadeOut 0.3s forwards';
+    setTimeout(() => el.remove(), 300);
+  }, 3000);
+}
+
+// ── PWA Service Worker ────────────────
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch(err => {
+      console.log('SW registration failed: ', err);
+    });
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
   const dropZone    = document.getElementById('dropZone');
   const fileInput   = document.getElementById('fileInput');
   const fileGallery = document.getElementById('fileGallery');
@@ -14,6 +41,277 @@ export function initConverter() {
   const copyBtn     = document.getElementById('copyBtn');
   const downloadText= document.getElementById('downloadText');
   const canvas      = document.getElementById('canvas');
+  
+  // ── Theme Manager ─────────────────────
+  const headerElem = document.querySelector('header');
+  if (headerElem) {
+    const toggleBtn = document.createElement('button');
+    toggleBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`;
+    toggleBtn.style = "background:none; border:none; color:inherit; cursor:pointer; margin-left:12px; display:flex; align-items:center; transition:0.2s;";
+    headerElem.appendChild(toggleBtn);
+    
+    toggleBtn.addEventListener('click', () => {
+      const newTheme = document.body.dataset.theme === 'light' ? 'dark' : 'light';
+      document.body.dataset.theme = newTheme;
+      localStorage.setItem('theme', newTheme);
+      toggleBtn.innerHTML = newTheme === 'light' 
+        ? `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>`
+        : `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`;
+    });
+    
+    if (localStorage.getItem('theme') === 'light') {
+      document.body.dataset.theme = 'light';
+      toggleBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>`;
+    }
+
+    // ── Navigation & Tools Mega Menu ──────
+    const navContainer = document.querySelector('header nav');
+    const currentDocLang = document.documentElement.lang || 'en';
+
+    if (navContainer && !document.querySelector('.mega-menu-wrapper')) {
+      const megaWrapper = document.createElement('div');
+      megaWrapper.className = 'mega-menu-wrapper';
+      const langPrefix = currentDocLang === 'en' ? '' : `/${currentDocLang}`;
+
+      megaWrapper.innerHTML = `
+        <button class="mega-btn" aria-expanded="false">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          All Tools
+          <svg class="mega-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+      `;
+      navContainer.insertBefore(megaWrapper, navContainer.firstChild);
+
+      const megaDropdown = document.createElement('div');
+      megaDropdown.className = 'mega-dropdown';
+      megaDropdown.innerHTML = `
+          <div class="mega-grid">
+            <div class="mega-column">
+              <h4>Popular Converters</h4>
+              <a href="${langPrefix}/" class="mega-link">
+                <div class="mega-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+                <div class="mega-link-text"><span class="mega-link-name">Multi-Format</span><span class="mega-link-desc">Any format to any format</span></div>
+                <span class="mega-badge popular">Popular</span>
+              </a>
+              <a href="${langPrefix}/jpg-to-png" class="mega-link">
+                <div class="mega-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+                <div class="mega-link-text"><span class="mega-link-name">JPG → PNG</span><span class="mega-link-desc">Lossless with transparency</span></div>
+              </a>
+              <a href="${langPrefix}/png-to-jpg" class="mega-link">
+                <div class="mega-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+                <div class="mega-link-text"><span class="mega-link-name">PNG → JPG</span><span class="mega-link-desc">Smaller file size</span></div>
+              </a>
+              <a href="${langPrefix}/webp-to-jpg" class="mega-link">
+                <div class="mega-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+                <div class="mega-link-text"><span class="mega-link-name">WebP → JPG</span><span class="mega-link-desc">Universal compatibility</span></div>
+              </a>
+              <a href="${langPrefix}/jpeg-to-webp" class="mega-link">
+                <div class="mega-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+                <div class="mega-link-text"><span class="mega-link-name">JPEG → WebP</span><span class="mega-link-desc">Modern web format</span></div>
+              </a>
+            </div>
+            <div class="mega-column">
+              <h4>Advanced Formats</h4>
+              <a href="${langPrefix}/svg-to-png" class="mega-link">
+                <div class="mega-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg></div>
+                <div class="mega-link-text"><span class="mega-link-name">SVG → PNG</span><span class="mega-link-desc">Rasterize vectors</span></div>
+              </a>
+              <a href="${langPrefix}/svg-to-jpg" class="mega-link">
+                <div class="mega-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg></div>
+                <div class="mega-link-text"><span class="mega-link-name">SVG → JPG</span><span class="mega-link-desc">Vector to photo format</span></div>
+              </a>
+              <a href="${langPrefix}/heic-to-jpg" class="mega-link">
+                <div class="mega-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+                <div class="mega-link-text"><span class="mega-link-name">HEIC → JPG</span><span class="mega-link-desc">iPhone photos support</span></div>
+                <span class="mega-badge popular">Popular</span>
+              </a>
+              <a href="${langPrefix}/png-to-ico" class="mega-link">
+                <div class="mega-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 7h10v10H7z"/></svg></div>
+                <div class="mega-link-text"><span class="mega-link-name">PNG → ICO</span><span class="mega-link-desc">Favicon generator</span></div>
+              </a>
+              <a href="${langPrefix}/webp-to-png" class="mega-link">
+                <div class="mega-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+                <div class="mega-link-text"><span class="mega-link-name">WebP → PNG</span><span class="mega-link-desc">Lossless from WebP</span></div>
+              </a>
+            </div>
+            <div class="mega-column">
+              <h4>Next-Gen Formats</h4>
+              <a href="${langPrefix}/jpg-to-avif" class="mega-link">
+                <div class="mega-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></div>
+                <div class="mega-link-text"><span class="mega-link-name">JPG → AVIF</span><span class="mega-link-desc">Ultra-small files</span></div>
+                <span class="mega-badge new-tool">New</span>
+              </a>
+              <a href="${langPrefix}/png-to-avif" class="mega-link">
+                <div class="mega-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></div>
+                <div class="mega-link-text"><span class="mega-link-name">PNG → AVIF</span><span class="mega-link-desc">Next-gen compression</span></div>
+                <span class="mega-badge new-tool">New</span>
+              </a>
+            </div>
+            <div class="mega-column">
+              <h4>Compress & Filters</h4>
+              <a href="${langPrefix}/compress-image" class="mega-link">
+                <div class="mega-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+                <div class="mega-link-text"><span class="mega-link-name">Smart Compress</span><span class="mega-link-desc">Auto quality optimizer</span></div>
+                <span class="mega-badge popular">Popular</span>
+              </a>
+              <a href="${langPrefix}/compress-image-to-50kb" class="mega-link">
+                <div class="mega-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M12 12v9"/><path d="M8 17l4 4 4-4"/></svg></div>
+                <div class="mega-link-text"><span class="mega-link-name">To 50KB</span><span class="mega-link-desc">For forms & uploads</span></div>
+              </a>
+              <a href="${langPrefix}/compress-image-to-100kb" class="mega-link">
+                <div class="mega-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M12 12v9"/><path d="M8 17l4 4 4-4"/></svg></div>
+                <div class="mega-link-text"><span class="mega-link-name">To 100KB</span><span class="mega-link-desc">Web-optimized size</span></div>
+              </a>
+              <a href="${langPrefix}/photo-to-black-and-white" class="mega-link">
+                <div class="mega-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 0 0 20z"/></svg></div>
+                <div class="mega-link-text"><span class="mega-link-name">B&W Filter</span><span class="mega-link-desc">Grayscale conversion</span></div>
+              </a>
+            </div>
+          </div>
+      `;
+      document.body.appendChild(megaDropdown);
+
+      const megaBtn = megaWrapper.querySelector('.mega-btn');
+
+      megaBtn.addEventListener('click', (e) => {
+        e.preventDefault(); e.stopPropagation();
+        const isExpanded = megaBtn.getAttribute('aria-expanded') === 'true';
+        megaBtn.setAttribute('aria-expanded', !isExpanded);
+        megaDropdown.classList.toggle('open');
+      });
+
+      document.addEventListener('click', (e) => {
+        if(!megaWrapper.contains(e.target) && !megaDropdown.contains(e.target)) {
+           megaBtn.setAttribute('aria-expanded', 'false');
+           megaDropdown.classList.remove('open');
+        }
+      });
+    }
+
+    // ── Language Switcher Component ──────
+    if (navContainer && !document.querySelector('.lang-switcher')) {
+      const langNames = { en: 'English', es: 'Español', fr: 'Français', zh: '中文', hi: 'हिन्दी' };
+      const currentLangName = langNames[currentDocLang] || 'English';
+
+      const switcherDiv = document.createElement('div');
+      switcherDiv.className = 'lang-switcher';
+      
+      const path = window.location.pathname; 
+      let pathWithoutLang = path;
+      if(path.match(/^\/(es|fr|zh|hi)(\/|$)/)) {
+        pathWithoutLang = path.replace(/^\/(es|fr|zh|hi)/, '') || '/';
+      }
+
+      switcherDiv.innerHTML = `
+        <button class="lang-btn" aria-expanded="false" aria-haspopup="true">
+          <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          <span>${currentLangName}</span>
+          <svg class="lang-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="lang-menu">
+          ${Object.entries(langNames).map(([code, name]) => {
+             let newPath = code === 'en' ? pathWithoutLang : `/${code}${pathWithoutLang === '/' ? '/' : pathWithoutLang}`;
+             newPath = newPath.replace(/\/\//g, '/'); // fix double slashes
+             return `<a href="${newPath}" class="lang-opt ${code === currentDocLang ? 'active' : ''}">${name}</a>`;
+          }).join('')}
+        </div>
+      `;
+      navContainer.appendChild(switcherDiv);
+      
+      const langBtn = switcherDiv.querySelector('.lang-btn');
+      const langMenu = switcherDiv.querySelector('.lang-menu');
+      
+      langBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const isExpanded = langBtn.getAttribute('aria-expanded') === 'true';
+        langBtn.setAttribute('aria-expanded', !isExpanded);
+        langMenu.classList.toggle('open');
+      });
+      
+      document.addEventListener('click', (e) => {
+        if(!switcherDiv.contains(e.target)) {
+           langBtn.setAttribute('aria-expanded', 'false');
+           langMenu.classList.remove('open');
+        }
+      });
+    }
+  }
+
+  // ── Active Nav Link Highlight ─────────
+  const currentPath = window.location.pathname.replace(/\/$/, '') || '/';
+  document.querySelectorAll('header nav a').forEach(link => {
+    try {
+      const linkPath = new URL(link.href, window.location.origin).pathname.replace(/\/$/, '') || '/';
+      if (linkPath === currentPath) link.classList.add('nav-active');
+    } catch(e) {}
+  });
+
+  // ── UI Enhancement: Sticky Header Scroll ──
+  const headerEl = document.querySelector('header');
+  if (headerEl) {
+    let lastScroll = 0;
+    window.addEventListener('scroll', () => {
+      const scrollY = window.scrollY;
+      if (scrollY > 40) headerEl.classList.add('scrolled');
+      else headerEl.classList.remove('scrolled');
+      lastScroll = scrollY;
+    }, { passive: true });
+  }
+
+  // ── UI Enhancement: Feature Badges ──
+  const trustBadge = document.querySelector('.trust-badge');
+  if (trustBadge && !document.querySelector('.feature-badges')) {
+    const badgesDiv = document.createElement('div');
+    badgesDiv.className = 'feature-badges';
+    badgesDiv.innerHTML = `
+      <div class="feature-badge"><span class="badge-icon">⚡</span> Lightning Fast <span class="badge-dot"></span></div>
+      <div class="feature-badge"><span class="badge-icon">🔒</span> 100% Private <span class="badge-dot"></span></div>
+      <div class="feature-badge"><span class="badge-icon">♾️</span> Unlimited Files <span class="badge-dot"></span></div>
+    `;
+    trustBadge.insertAdjacentElement('afterend', badgesDiv);
+  }
+
+  // ── UI Enhancement: FAQ Accordion ──
+  document.querySelectorAll('.faq-item').forEach((item, i) => {
+    const question = item.querySelector('.faq-question');
+    if (!question) return;
+    // Open first item by default
+    if (i === 0) item.classList.add('open');
+    question.addEventListener('click', () => {
+      item.classList.toggle('open');
+    });
+  });
+
+  // ── UI Enhancement: Footer Branding ──
+  const footerEl = document.querySelector('footer');
+  if (footerEl && !footerEl.querySelector('.footer-brand')) {
+    const brand = document.createElement('div');
+    brand.className = 'footer-brand';
+    brand.innerHTML = `
+      <div class="footer-logo"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+      <div class="footer-name">Image <span>Converter</span></div>
+    `;
+    footerEl.insertBefore(brand, footerEl.firstChild);
+  }
+
+  // ── UI Enhancement: Scroll Reveal ──
+  document.querySelectorAll('.related-tools, .seo-article').forEach(el => {
+    el.classList.add('scroll-reveal');
+  });
+  if ('IntersectionObserver' in window) {
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.scroll-reveal').forEach(el => revealObserver.observe(el));
+  } else {
+    document.querySelectorAll('.scroll-reveal').forEach(el => el.classList.add('in-view'));
+  }
 
   if (!dropZone || !convertBtn) return; // Not a converter page
   
@@ -29,15 +327,11 @@ export function initConverter() {
   progressLabel.className = 'progress-label';
   progressContainer.insertAdjacentElement('afterend', progressLabel);
 
-  const t = getTranslations();
-
   // Inject clear button into result card once
   const clearBtn = document.createElement('button');
   clearBtn.id = 'clearBtn';
   clearBtn.className = 'btn-clear';
   clearBtn.innerHTML = `<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.5"/></svg>`;
-  clearBtn.appendChild(document.createTextNode(' ' + t.convertMore));
-
   clearBtn.addEventListener('click', () => {
     queuedFiles.forEach(q => { if (q.thumbUrl) URL.revokeObjectURL(q.thumbUrl); });
     queuedFiles = [];
@@ -57,6 +351,19 @@ export function initConverter() {
   // Settings logic (Tabs)
   let selectedMime = document.body.dataset.targetMime || 'image/jpeg';
 
+  // ── i18n for dynamic UI strings ─────
+  const lang = document.documentElement.lang || 'en';
+  const i18nStrings = {
+    en:  { converting: 'Converting', of: 'of', filesSelected: 'file(s) selected - Drop more?', convertMore: 'Convert More Images', compressImages: 'Compress Images', convertImages: 'Convert Images', success: 'Success!', filesProcessed: 'file(s) processed', original: 'Original', processed: 'Processed', smaller: 'smaller', larger: 'larger', downloadZip: 'Download ZIP', download: 'Download', zipping: 'Zipping', copiedClipboard: 'Image copied to clipboard!', copyBlocked: 'Browser blocked clipboard copy.', copyNotSupported: 'Clipboard copy not supported on this browser.', heicNotLoaded: 'HEIC library not loaded yet.', heicFailed: 'Failed to process HEIC', zipNotLoaded: 'JSZip library has not loaded yet.' },
+    es:  { converting: 'Convirtiendo', of: 'de', filesSelected: 'archivo(s) — ¿más?', convertMore: 'Convertir más', compressImages: 'Comprimir imagen', convertImages: 'Convertir', success: '¡Éxito!', filesProcessed: 'archivo(s)', original: 'Original', processed: 'Procesado', smaller: 'más pequeño', larger: 'más grande', downloadZip: 'Descargar ZIP', download: 'Descargar', zipping: 'Comprimiendo', copiedClipboard: '¡Imagen copiada!', copyBlocked: 'Copia bloqueada por el navegador.', copyNotSupported: 'Copia no soportada.', heicNotLoaded: 'Librería HEIC no cargada.', heicFailed: 'Error HEIC', zipNotLoaded: 'JSZip no cargado.' },
+    fr:  { converting: 'Conversion', of: 'de', filesSelected: 'fichier(s) — plus ?', convertMore: 'Convertir plus', compressImages: 'Compresser', convertImages: 'Convertir', success: 'Succès !', filesProcessed: 'fichier(s)', original: 'Original', processed: 'Traité', smaller: 'plus petit', larger: 'plus grand', downloadZip: 'Télécharger ZIP', download: 'Télécharger', zipping: 'Compression', copiedClipboard: 'Image copiée !', copyBlocked: 'Copie bloquée.', copyNotSupported: 'Copie non supportée.', heicNotLoaded: 'Bibliothèque HEIC non chargée.', heicFailed: 'Erreur HEIC', zipNotLoaded: 'JSZip non chargé.' },
+    zh:  { converting: '转换中', of: '/', filesSelected: '文件已选 — 添加更多?', convertMore: '转换更多', compressImages: '压缩图片', convertImages: '转换', success: '成功！', filesProcessed: '个文件', original: '原始', processed: '处理后', smaller: '更小', larger: '更大', downloadZip: '下载 ZIP', download: '下载', zipping: '压缩中', copiedClipboard: '已复制到剪贴板！', copyBlocked: '浏览器阻止了复制。', copyNotSupported: '浏览器不支持复制。', heicNotLoaded: 'HEIC 库未加载。', heicFailed: 'HEIC 转换失败', zipNotLoaded: 'JSZip 未加载。' },
+    hi:  { converting: 'कनवर्ट हो रहा है', of: 'में से', filesSelected: 'फाइल चुनी — और जोड़ें?', convertMore: 'और कनवर्ट करें', compressImages: 'कंप्रेस करें', convertImages: 'कनवर्ट करें', success: 'सफल!', filesProcessed: 'फाइल', original: 'मूल', processed: 'प्रोसेस्ड', smaller: 'छोटा', larger: 'बड़ा', downloadZip: 'ZIP डाउनलोड', download: 'डाउनलोड', zipping: 'ज़िप हो रहा', copiedClipboard: 'कॉपी हो गया!', copyBlocked: 'ब्राउज़र ने कॉपी ब्लॉक किया।', copyNotSupported: 'कॉपी सपोर्ट नहीं है।', heicNotLoaded: 'HEIC लाइब्रेरी लोड नहीं हुई।', heicFailed: 'HEIC एरर', zipNotLoaded: 'JSZip लोड नहीं हुआ।' },
+  };
+  const t = i18nStrings[lang] || i18nStrings.en;
+  clearBtn.appendChild(document.createTextNode(' ' + t.convertMore));
+
+  // Language Switcher Component has been moved up to run on all pages
   const tabs = document.querySelectorAll('.format-tabs .tab');
   if (tabs.length > 0) {
     // If tabs exist, preselect based on dataset
@@ -106,7 +413,14 @@ export function initConverter() {
 
   let queuedFiles = [];
   let convertedFiles = [];
-  let isCompression = document.body.dataset.mode === 'compress' || document.body.dataset.compressMode === 'true'; 
+  let isCompression = false; // hoisted so download handler can read it 
+
+  function fmtBytes(b) {
+    if (!b || b < 0) return '0 B';
+    const k = 1024, units = ['B','KB','MB','GB'];
+    const i = Math.min(Math.floor(Math.log(b) / Math.log(k)), units.length - 1);
+    return (b / k ** i).toFixed(1) + ' ' + units[i];
+  }
 
   const btnLocal = document.getElementById('btnLocal');
   if (btnLocal) btnLocal.addEventListener('click', (e) => { e.stopPropagation(); fileInput.click(); });
@@ -546,4 +860,4 @@ export function initConverter() {
       setTimeout(() => { URL.revokeObjectURL(url); document.body.removeChild(a); }, 500);
     }
   });
-}
+});
