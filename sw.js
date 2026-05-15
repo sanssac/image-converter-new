@@ -20,8 +20,13 @@ self.addEventListener('install', (event) => {
 // Network-first strategy: always try fresh content, fall back to cache only when offline
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
-  if (!event.request.url.startsWith(self.location.origin)) return;
-  if (event.request.url.includes('.xml')) return; // Bypass for sitemap.xml
+  
+  const url = event.request.url;
+  const isOrigin = url.startsWith(self.location.origin);
+  const isCDN = url.includes('cdn.jsdelivr.net') || url.includes('cdnjs.cloudflare.com') || url.includes('fonts.googleapis.com') || url.includes('fonts.gstatic.com');
+  
+  if (!isOrigin && !isCDN) return;
+  if (url.includes('.xml')) return; // Bypass for sitemap.xml
   
   event.respondWith(
     fetch(event.request)
