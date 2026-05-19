@@ -25,10 +25,21 @@ function showToast(message, type = 'info') {
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/sw.js').catch(err => {
-      console.log('SW registration failed: ', err);
+      console.warn('SW registration failed: ', err);
     });
   });
 }
+
+window.addEventListener('unhandledrejection', (event) => {
+  showToast('Unexpected error occurred.', 'error');
+  console.error('Unhandled rejection:', event.reason);
+});
+
+window.addEventListener('error', (event) => {
+  if (event.message === 'ResizeObserver loop limit exceeded') return;
+  showToast('An error occurred during processing.', 'error');
+  console.error('Global error:', event.error || event.message);
+});
 
 document.addEventListener('DOMContentLoaded', () => {
   const dropZone    = document.getElementById('dropZone');
@@ -357,7 +368,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // ── i18n for dynamic UI strings ─────
   const lang = document.documentElement.lang || 'en';
   const i18nStrings = {
-    en:  { converting: 'Converting', of: 'of', filesSelected: 'file(s) selected - Drop more?', convertMore: 'Convert More Images', compressImages: 'Compress Images', convertImages: 'Convert Images', success: 'Success!', filesProcessed: 'file(s) processed', original: 'Original', processed: 'Processed', smaller: 'smaller', larger: 'larger', downloadZip: 'Download ZIP', download: 'Download', zipping: 'Zipping', copiedClipboard: 'Image copied to clipboard!', copyBlocked: 'Browser blocked clipboard copy.', copyNotSupported: 'Clipboard copy not supported on this browser.', heicNotLoaded: 'HEIC library not loaded yet.', heicFailed: 'Failed to process HEIC', zipNotLoaded: 'JSZip library has not loaded yet.' },
+    en:  { converting: 'Converting', of: 'of', filesSelected: 'file(s) selected - Drop more?', convertMore: 'Convert More Images', compressImages: 'Compress Images', convertImages: 'Convert Images', success: 'Success!', filesProcessed: 'file(s) processed', original: 'Original', processed: 'Processed', smaller: 'smaller', larger: 'larger', downloadZip: 'Download ZIP', download: 'Download', zipping: 'Zipping', copiedClipboard: 'Image copied to clipboard!', copyBlocked: 'Browser blocked clipboard copy.', copyNotSupported: 'Clipboard copy not supported on this browser.', heicNotLoaded: 'Loading HEIC library... Please wait.', heicFailed: 'Failed to process HEIC', zipNotLoaded: 'JSZip library has not loaded yet.' },
     es:  { converting: 'Convirtiendo', of: 'de', filesSelected: 'archivo(s) — ¿más?', convertMore: 'Convertir más', compressImages: 'Comprimir imagen', convertImages: 'Convertir', success: '¡Éxito!', filesProcessed: 'archivo(s)', original: 'Original', processed: 'Procesado', smaller: 'más pequeño', larger: 'más grande', downloadZip: 'Descargar ZIP', download: 'Descargar', zipping: 'Comprimiendo', copiedClipboard: '¡Imagen copiada!', copyBlocked: 'Copia bloqueada por el navegador.', copyNotSupported: 'Copia no soportada.', heicNotLoaded: 'Librería HEIC no cargada.', heicFailed: 'Error HEIC', zipNotLoaded: 'JSZip no cargado.' },
     fr:  { converting: 'Conversion', of: 'de', filesSelected: 'fichier(s) — plus ?', convertMore: 'Convertir plus', compressImages: 'Compresser', convertImages: 'Convertir', success: 'Succès !', filesProcessed: 'fichier(s)', original: 'Original', processed: 'Traité', smaller: 'plus petit', larger: 'plus grand', downloadZip: 'Télécharger ZIP', download: 'Télécharger', zipping: 'Compression', copiedClipboard: 'Image copiée !', copyBlocked: 'Copie bloquée.', copyNotSupported: 'Copie non supportée.', heicNotLoaded: 'Bibliothèque HEIC non chargée.', heicFailed: 'Erreur HEIC', zipNotLoaded: 'JSZip non chargé.' },
     zh:  { converting: '转换中', of: '/', filesSelected: '文件已选 — 添加更多?', convertMore: '转换更多', compressImages: '压缩图片', convertImages: '转换', success: '成功！', filesProcessed: '个文件', original: '原始', processed: '处理后', smaller: '更小', larger: '更大', downloadZip: '下载 ZIP', download: '下载', zipping: '压缩中', copiedClipboard: '已复制到剪贴板！', copyBlocked: '浏览器阻止了复制。', copyNotSupported: '浏览器不支持复制。', heicNotLoaded: 'HEIC 库未加载。', heicFailed: 'HEIC 转换失败', zipNotLoaded: 'JSZip 未加载。' },
@@ -865,7 +876,7 @@ document.addEventListener('DOMContentLoaded', () => {
        if (!baContainer) {
          baContainer = document.createElement('div');
          baContainer.id = 'beforeAfterContainer';
-         baContainer.style = "position:relative; width:100%; height:250px; background:rgba(0,0,0,0.2); overflow:hidden; border-radius:10px; margin-top:10px; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05);";
+         baContainer.className = "ba-container";
          resultCard.insertBefore(baContainer, resultCard.querySelector('.action-row'));
        }
        const origUrl = URL.createObjectURL(queuedFiles[0].file);
@@ -874,18 +885,18 @@ document.addEventListener('DOMContentLoaded', () => {
        const oldImgs = baContainer.querySelectorAll('img');
        oldImgs.forEach(img => { if(img.src.startsWith('blob:')) URL.revokeObjectURL(img.src); });
        baContainer.innerHTML = `
-         <img src="${origUrl}" style="position:absolute; width:100%; height:100%; object-fit:contain;" />
-         <div style="position:absolute; top:8px; left:8px; background:rgba(0,0,0,0.6); padding:4px 8px; font-size:11px; border-radius:4px; font-weight:600; color:#fff; z-index:5;">Original</div>
+         <img src="${origUrl}" class="ba-img ba-img-orig" />
+         <div class="ba-label ba-label-orig">Original</div>
          
-         <img id="afterImg" src="${newUrl}" style="position:absolute; width:100%; height:100%; object-fit:contain; clip-path: inset(0 0 0 50%);" />
-         <div style="position:absolute; top:8px; right:8px; background:rgba(168,85,247,0.9); padding:4px 8px; font-size:11px; border-radius:4px; font-weight:600; color:#fff; z-index:5;">Optimized</div>
+         <img id="afterImg" src="${newUrl}" class="ba-img ba-img-new" />
+         <div class="ba-label ba-label-new">Optimized</div>
          
-         <div id="baLine" style="position:absolute; top:0; left:50%; width:2px; height:100%; background:#fff; pointer-events:none; box-shadow:0 0 10px rgba(0,0,0,0.8); z-index:10; display:flex; align-items:center; justify-content:center;">
-           <div style="width:24px; height:24px; border-radius:50%; background:#fff; box-shadow:0 2px 6px rgba(0,0,0,0.3); display:flex; align-items:center; justify-content:center;">
+         <div id="baLine" class="ba-line">
+           <div class="ba-slider-thumb">
              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
            </div>
          </div>
-         <input type="range" class="ba-slider" min="0" max="100" value="50" style="position:absolute; top:0; left:0; width:100%; height:100%; outline:none; margin:0; opacity:0; cursor:ew-resize; z-index:20; touch-action: pan-y;" oninput="document.getElementById('afterImg').style.clipPath = 'inset(0 0 0 ' + this.value + '%)'; document.getElementById('baLine').style.left = this.value + '%';">
+         <input type="range" class="ba-slider" min="0" max="100" value="50" oninput="document.getElementById('afterImg').style.clipPath = 'inset(0 0 0 ' + this.value + '%)'; document.getElementById('baLine').style.left = this.value + '%';">
        `;
     }
 
@@ -977,23 +988,33 @@ document.addEventListener('DOMContentLoaded', () => {
       a.click();
       setTimeout(() => { URL.revokeObjectURL(url); document.body.removeChild(a); }, 500);
     } else {
+      const startZip = async () => {
+        downloadText.textContent = `${t.zipping} 0%...`;
+        const zip = new JSZip();
+        convertedFiles.forEach(cf => zip.file(cf.name, cf.blob));
+        const zipBlob = await zip.generateAsync({ type: 'blob' }, (metadata) => {
+           downloadText.textContent = `${t.zipping} ${Math.round(metadata.percent)}%...`;
+        });
+        downloadText.textContent = t.downloadZip;
+        const url = URL.createObjectURL(zipBlob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = isCompression ? 'Compressed_Images.zip' : 'Converted_Images.zip';
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => { URL.revokeObjectURL(url); document.body.removeChild(a); }, 500);
+      };
+
       if (typeof JSZip === 'undefined') {
-        showToast(t.zipNotLoaded, "error"); return;
+        downloadText.textContent = 'Loading ZIP Library...';
+        const script = document.createElement('script');
+        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';
+        script.onload = () => startZip();
+        script.onerror = () => showToast(t.zipNotLoaded, "error");
+        document.head.appendChild(script);
+      } else {
+        startZip();
       }
-      downloadText.textContent = `${t.zipping} 0%...`;
-      const zip = new JSZip();
-      convertedFiles.forEach(cf => zip.file(cf.name, cf.blob));
-      const zipBlob = await zip.generateAsync({ type: 'blob' }, (metadata) => {
-         downloadText.textContent = `${t.zipping} ${Math.round(metadata.percent)}%...`;
-      });
-      downloadText.textContent = t.downloadZip;
-      const url = URL.createObjectURL(zipBlob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = isCompression ? 'Compressed_Images.zip' : 'Converted_Images.zip';
-      document.body.appendChild(a);
-      a.click();
-      setTimeout(() => { URL.revokeObjectURL(url); document.body.removeChild(a); }, 500);
     }
   });
 });

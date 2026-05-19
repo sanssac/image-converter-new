@@ -1,4 +1,4 @@
-const CACHE_NAME = 'image_converter_cache_v10';
+const CACHE_NAME = 'image_converter_cache_v11';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
@@ -31,6 +31,10 @@ self.addEventListener('fetch', (event) => {
   event.respondWith(
     fetch(event.request)
       .then((networkResponse) => {
+        // Only cache valid responses
+        if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic' && networkResponse.type !== 'cors') {
+           return networkResponse;
+        }
         const responseClone = networkResponse.clone();
         caches.open(CACHE_NAME).then((cache) => {
           cache.put(event.request, responseClone);
@@ -38,9 +42,9 @@ self.addEventListener('fetch', (event) => {
         return networkResponse;
       })
       .catch(() => {
-        return caches.match(event.request).then((cachedResponse) => {
+        return caches.match(event.request, { ignoreSearch: true }).then((cachedResponse) => {
           if (cachedResponse) return cachedResponse;
-          if (event.request.mode === 'navigate') return caches.match('/');
+          if (event.request.mode === 'navigate') return caches.match('/', { ignoreSearch: true });
           return new Response('Offline', { status: 503, statusText: 'Service Unavailable' });
         });
       })

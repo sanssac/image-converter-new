@@ -17,8 +17,8 @@ body {
 
 /* ── UX Micro-Animations ───────────── */
 .drop-zone.drag-over {
-  border-color: #a855f7 !important;
-  background: rgba(168, 85, 247, 0.15) !important;
+  border-color: #a855f7;
+  background: rgba(168, 85, 247, 0.15);
   transform: scale(1.02);
   box-shadow: 0 0 40px rgba(168, 85, 247, 0.2);
 }
@@ -41,7 +41,7 @@ body {
   100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); transform: translateY(0) scale(1); opacity: 1; }
 }
 .result-card.success-anim {
-  animation: successGlow 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards !important;
+  animation: successGlow 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
 
 /* ── Ambient Mesh Glows ─────────────── */
@@ -466,8 +466,8 @@ footer {
 }
 
 .btn-convert:active, .btn-download:active, .btn-copy:active, .btn-cloud:active {
-  transform: scale(0.96) !important;
-  transition: transform 0.1s !important;
+  transform: scale(0.96);
+  transition: transform 0.1s;
 }
 
 @keyframes slideUpFade {
@@ -811,3 +811,13 @@ footer::before {
 [data-theme="light"] .format-tabs .tab { box-shadow: inset 0 1px 2px rgba(0,0,0,0.05); }
 [data-theme="light"] .format-tabs .tab.active { box-shadow: 0 4px 12px rgba(99,102,241,0.12), inset 0 1px 0 rgba(255,255,255,0.8); }
 
+/* ── Before/After Slider ── */
+.ba-container { position:relative; width:100%; height:250px; background:rgba(0,0,0,0.2); overflow:hidden; border-radius:10px; margin-top:10px; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05); }
+.ba-img { position:absolute; width:100%; height:100%; object-fit:contain; }
+.ba-img-new { clip-path: inset(0 0 0 50%); }
+.ba-label { position:absolute; top:8px; padding:4px 8px; font-size:11px; border-radius:4px; font-weight:600; color:#fff; z-index:5; }
+.ba-label-orig { left:8px; background:rgba(0,0,0,0.6); }
+.ba-label-new { right:8px; background:rgba(168,85,247,0.9); }
+.ba-line { position:absolute; top:0; left:50%; width:2px; height:100%; background:#fff; pointer-events:none; box-shadow:0 0 10px rgba(0,0,0,0.8); z-index:10; display:flex; align-items:center; justify-content:center; }
+.ba-slider-thumb { width:24px; height:24px; border-radius:50%; background:#fff; box-shadow:0 2px 6px rgba(0,0,0,0.3); display:flex; align-items:center; justify-content:center; }
+.ba-slider { position:absolute; top:0; left:0; width:100%; height:100%; outline:none; margin:0; opacity:0; cursor:ew-resize; z-index:20; touch-action: pan-y; }
