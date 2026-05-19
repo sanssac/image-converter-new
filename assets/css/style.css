@@ -105,14 +105,14 @@ header nav a:hover { color: white; }
 .lang-switcher { position: relative; margin-left: 4px; }
 .lang-btn {
   display: flex; align-items: center; gap: 6px;
-  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+  background: transparent; border: 1px solid transparent;
   border-radius: 8px; padding: 6px 10px;
-  color: inherit; font-family: inherit; font-size: 12px; font-weight: 500;
+  color: #cbd5e1; font-family: inherit; font-size: 13px; font-weight: 500;
   cursor: pointer; transition: 0.2s;
 }
-.lang-btn:hover { background: rgba(255,255,255,0.1); border-color: rgba(99,102,241,0.5); }
-.lang-btn .lang-chev { transition: transform 0.2s; }
-.lang-btn[aria-expanded="true"] .lang-chev { transform: rotate(180deg); }
+.lang-btn:hover { background: rgba(255,255,255,0.06); color: white; }
+.lang-btn .lang-chev { transition: transform 0.2s; opacity: 0.7; }
+.lang-btn[aria-expanded="true"] .lang-chev { transform: rotate(180deg); opacity: 1; }
 .lang-menu {
   display: none; position: absolute; top: calc(100% + 8px); right: 0;
   background: rgba(24, 24, 27, 0.95); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
@@ -133,13 +133,13 @@ header nav a:hover { color: white; }
 .mega-menu-wrapper { position: relative; display: flex; align-items: center; margin-right: auto; }
 .mega-btn {
   display: flex; align-items: center; gap: 6px;
-  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+  background: transparent; border: 1px solid transparent;
   border-radius: 10px; padding: 7px 14px;
-  color: #cbd5e1; font-family: inherit; font-size: 13px; font-weight: 600;
+  color: #cbd5e1; font-family: inherit; font-size: 14px; font-weight: 600;
   cursor: pointer; transition: all 0.25s ease;
 }
-.mega-btn:hover { background: rgba(99,102,241,0.12); border-color: rgba(99,102,241,0.35); color: white; }
-.mega-btn[aria-expanded="true"] { background: rgba(99,102,241,0.15); border-color: rgba(99,102,241,0.4); color: white; }
+.mega-btn:hover { background: rgba(255,255,255,0.06); color: white; }
+.mega-btn[aria-expanded="true"] { background: rgba(99,102,241,0.15); color: white; }
 .mega-btn .mega-chev { transition: transform 0.25s ease; }
 .mega-btn[aria-expanded="true"] .mega-chev { transform: rotate(180deg); }
 

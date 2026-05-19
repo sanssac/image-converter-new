@@ -3,9 +3,6 @@ import re
 
 # Edit this header HTML, run python sync_components.py, and it updates all 15 sites instantly!
 GLOBAL_NAV = '''    <nav>
-      <a href="/jpg-to-png">JPG to PNG</a>
-      <a href="/png-to-jpg">PNG to JPG</a>
-      <a href="/compress-image">Compress Image</a>
       <a href="/blog">Blog</a>
     </nav>'''
 

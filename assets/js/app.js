@@ -31,13 +31,12 @@ if ('serviceWorker' in navigator) {
 }
 
 window.addEventListener('unhandledrejection', (event) => {
-  showToast('Unexpected error occurred.', 'error');
+  // Log only, don't show toast to user as it's often caused by 3rd party scripts (ads, analytics)
   console.error('Unhandled rejection:', event.reason);
 });
 
 window.addEventListener('error', (event) => {
   if (event.message === 'ResizeObserver loop limit exceeded') return;
-  showToast('An error occurred during processing.', 'error');
   console.error('Global error:', event.error || event.message);
 });
 
@@ -102,7 +101,6 @@ document.addEventListener('DOMContentLoaded', () => {
               <a href="${langPrefix}/" class="mega-link">
                 <div class="mega-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
                 <div class="mega-link-text"><span class="mega-link-name">Multi-Format</span><span class="mega-link-desc">Any format to any format</span></div>
-                <span class="mega-badge popular">Popular</span>
               </a>
               <a href="${langPrefix}/jpg-to-png" class="mega-link">
                 <div class="mega-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
@@ -134,7 +132,6 @@ document.addEventListener('DOMContentLoaded', () => {
               <a href="${langPrefix}/heic-to-jpg" class="mega-link">
                 <div class="mega-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
                 <div class="mega-link-text"><span class="mega-link-name">HEIC → JPG</span><span class="mega-link-desc">iPhone photos support</span></div>
-                <span class="mega-badge popular">Popular</span>
               </a>
               <a href="${langPrefix}/png-to-ico" class="mega-link">
                 <div class="mega-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 7h10v10H7z"/></svg></div>
@@ -150,12 +147,10 @@ document.addEventListener('DOMContentLoaded', () => {
               <a href="${langPrefix}/jpg-to-avif" class="mega-link">
                 <div class="mega-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></div>
                 <div class="mega-link-text"><span class="mega-link-name">JPG → AVIF</span><span class="mega-link-desc">Ultra-small files</span></div>
-                <span class="mega-badge new-tool">New</span>
               </a>
               <a href="${langPrefix}/png-to-avif" class="mega-link">
                 <div class="mega-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></div>
                 <div class="mega-link-text"><span class="mega-link-name">PNG → AVIF</span><span class="mega-link-desc">Next-gen compression</span></div>
-                <span class="mega-badge new-tool">New</span>
               </a>
             </div>
             <div class="mega-column">
@@ -163,22 +158,18 @@ document.addEventListener('DOMContentLoaded', () => {
               <a href="${langPrefix}/resize-image" class="mega-link">
                 <div class="mega-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
                 <div class="mega-link-text"><span class="mega-link-name">Resize Image</span><span class="mega-link-desc">Change dimensions</span></div>
-                <span class="mega-badge new-tool">New</span>
               </a>
               <a href="${langPrefix}/watermark-image" class="mega-link">
                 <div class="mega-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
                 <div class="mega-link-text"><span class="mega-link-name">Watermark</span><span class="mega-link-desc">Add text overlays</span></div>
-                <span class="mega-badge new-tool">New</span>
               </a>
               <a href="${langPrefix}/jpg-to-pdf" class="mega-link">
                 <div class="mega-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>
                 <div class="mega-link-text"><span class="mega-link-name">JPG to PDF</span><span class="mega-link-desc">Document compiler</span></div>
-                <span class="mega-badge new-tool">New</span>
               </a>
               <a href="${langPrefix}/compress-image" class="mega-link">
                 <div class="mega-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
                 <div class="mega-link-text"><span class="mega-link-name">Compress</span><span class="mega-link-desc">Auto quality optimizer</span></div>
-                <span class="mega-badge popular">Popular</span>
               </a>
             </div>
           </div>
