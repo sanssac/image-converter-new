@@ -60,7 +60,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const setTheme = (theme) => {
       document.body.dataset.theme = theme;
-      localStorage.setItem('theme', theme);
+      try {
+        localStorage.setItem('theme', theme);
+      } catch (e) {
+        console.warn('localStorage is blocked or unavailable:', e);
+      }
       if (theme === 'light') {
         if (sunIcon) sunIcon.style.display = 'block';
         if (moonIcon) moonIcon.style.display = 'none';
@@ -70,8 +74,13 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     };
 
-    // Load initial theme
-    const savedTheme = localStorage.getItem('theme') || 'dark';
+    // Load initial theme safely
+    let savedTheme = 'dark';
+    try {
+      savedTheme = localStorage.getItem('theme') || 'dark';
+    } catch (e) {
+      console.warn('localStorage is blocked or unavailable:', e);
+    }
     setTheme(savedTheme);
 
     themeToggle.addEventListener('click', () => {

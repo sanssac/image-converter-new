@@ -310,13 +310,51 @@ def generate_header(current_lang, route):
   </div>'''
     return header_html
 
+def remove_mega_dropdown(html):
+    while True:
+        start_tag = '<div class="mega-dropdown"'
+        start_idx = html.find(start_tag)
+        if start_idx == -1:
+            break
+            
+        tag_close_idx = html.find('>', start_idx)
+        if tag_close_idx == -1:
+            break
+            
+        idx = tag_close_idx + 1
+        depth = 1
+        found = False
+        
+        while depth > 0 and idx < len(html):
+            next_open = html.find('<div', idx)
+            next_close = html.find('</div>', idx)
+            
+            if next_open == -1 and next_close == -1:
+                break
+                
+            if next_open != -1 and (next_close == -1 or next_open < next_close):
+                depth += 1
+                idx = next_open + 4
+            else:
+                depth -= 1
+                idx = next_close + 6
+                if depth == 0:
+                    trailing_ws_len = 0
+                    while idx + trailing_ws_len < len(html) and html[idx + trailing_ws_len] in ' \t\r\n':
+                        trailing_ws_len += 1
+                    html = html[:start_idx] + html[idx + trailing_ws_len:]
+                    found = True
+                    break
+        if not found:
+            break
+    return html
+
 def main():
     base_dir = r"c:\image converter new"
     html_files = glob.glob(os.path.join(base_dir, '**', '*.html'), recursive=True)
     
     count = 0
     for filepath in html_files:
-        # Exclude temporary or virtual env html files if any, but since we are targeting the workspace we process all
         if '.git' in filepath:
             continue
             
@@ -338,7 +376,7 @@ def main():
         header_block = generate_header(lang, route)
         
         # Robust replacement: strip any existing pre-rendered mega-dropdown first
-        content = re.sub(r'<div class="mega-dropdown">.*?</div>', '', content, flags=re.DOTALL)
+        content = remove_mega_dropdown(content)
         
         # Replace the entire <header>...</header> block
         content_new, sub_count = re.subn(r'<header>.*?</header>', header_block, content, flags=re.DOTALL)

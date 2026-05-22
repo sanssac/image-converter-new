@@ -691,7 +691,10 @@ header nav a.nav-active::after {
 /* -- UX #8: Mobile responsive header -- */
 @media (max-width: 640px) {
   header { position: relative; flex-wrap: wrap; padding: 12px 16px; gap: 8px; justify-content: space-between; z-index: 100; }
-  header nav { width: 100%; justify-content: center; gap: 6px; font-size: 12px; flex-wrap: wrap; }
+  header .header-right { display: contents; }
+  header .logo-link { order: 1; }
+  .header-actions { order: 2; margin-left: auto; display: flex; align-items: center; }
+  header nav { order: 3; width: 100%; justify-content: center; gap: 6px; font-size: 12px; flex-wrap: wrap; }
   header nav a { padding: 4px 8px; background: rgba(255,255,255,0.04); border-radius: 8px; border: 1px solid rgba(255,255,255,0.06); }
   header nav a.nav-active { background: rgba(99,102,241,0.12); border-color: rgba(99,102,241,0.3); color: #c4b5fd; }
   header nav a.nav-active::after { display: none; }

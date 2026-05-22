@@ -2,8 +2,8 @@ import os
 import glob
 
 workspace = "c:\\image converter new"
-old_version = "v=20260506"
-new_version = "v=20260507"
+old_version = "v=20260507"
+new_version = "v=20260522"
 
 html_files = glob.glob(os.path.join(workspace, "**", "*.html"), recursive=True)
 
@@ -22,7 +22,7 @@ print(f"Updated {count} files with new version tag: {new_version}")
 
 with open(os.path.join(workspace, 'sw.js'), 'r', encoding='utf-8') as f:
     sw_content = f.read()
-sw_content = sw_content.replace('image_converter_cache_v6', 'image_converter_cache_v7')
+sw_content = sw_content.replace('image_converter_cache_v11', 'image_converter_cache_v12')
 with open(os.path.join(workspace, 'sw.js'), 'w', encoding='utf-8') as f:
     f.write(sw_content)
 print("Updated sw.js")
