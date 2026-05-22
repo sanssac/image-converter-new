@@ -84,9 +84,13 @@ document.addEventListener('DOMContentLoaded', () => {
     setTheme(savedTheme);
 
     themeToggle.addEventListener('click', () => {
+      document.body.classList.add('theme-transitioning');
       const currentTheme = document.body.dataset.theme || 'dark';
       const newTheme = currentTheme === 'light' ? 'dark' : 'light';
       setTheme(newTheme);
+      setTimeout(() => {
+        document.body.classList.remove('theme-transitioning');
+      }, 350);
     });
   }
 
@@ -156,6 +160,70 @@ document.addEventListener('DOMContentLoaded', () => {
       lastScroll = scrollY;
     }, { passive: true });
   }
+
+  // ── Mobile Slide-out Drawer & Hamburger Toggle ──
+  const hamburgerToggle = document.querySelector('.hamburger-toggle');
+  const mobileDrawer = document.getElementById('mobileDrawer');
+  const drawerBackdrop = document.querySelector('.drawer-backdrop');
+  const drawerClose = document.querySelector('.drawer-close');
+
+  if (hamburgerToggle && mobileDrawer && drawerBackdrop) {
+    const openDrawer = () => {
+      mobileDrawer.classList.add('open');
+      drawerBackdrop.classList.add('open');
+      hamburgerToggle.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden'; // Lock background scrolling
+    };
+
+    const closeDrawer = () => {
+      mobileDrawer.classList.remove('open');
+      drawerBackdrop.classList.remove('open');
+      hamburgerToggle.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = ''; // Unlock background scrolling
+    };
+
+    hamburgerToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = mobileDrawer.classList.contains('open');
+      if (isOpen) {
+        closeDrawer();
+      } else {
+        openDrawer();
+      }
+    });
+
+    if (drawerClose) {
+      drawerClose.addEventListener('click', closeDrawer);
+    }
+
+    drawerBackdrop.addEventListener('click', closeDrawer);
+
+    // Close drawer on ESC key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && mobileDrawer.classList.contains('open')) {
+        closeDrawer();
+      }
+    });
+  }
+
+  // ── Drawer Accordion Transition Controls ──
+  const accordionBtns = document.querySelectorAll('.drawer-accordion-btn');
+  accordionBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isExpanded = btn.getAttribute('aria-expanded') === 'true';
+      const content = btn.nextElementSibling;
+      btn.setAttribute('aria-expanded', !isExpanded);
+      
+      if (content) {
+        if (!isExpanded) {
+          content.style.maxHeight = content.scrollHeight + 'px';
+        } else {
+          content.style.maxHeight = '0px';
+        }
+      }
+    });
+  });
 
   // ── UI Enhancement: Feature Badges ──
   const trustBadge = document.querySelector('.trust-badge');

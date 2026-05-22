@@ -256,12 +256,12 @@ def generate_header(current_lang, route):
     header_html = f'''  <header>
     <a href="{logo_href}" class="logo-link">
       <div class="logo">
-        <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"></path><path d="M12 12v9"></path><path d="m8 17 4 4 4-4"></path></svg>
+        <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"></path><path d="M12 12v9"></path><path d="m8 17 4 4 4-4"></path></svg>
       </div>
       <div class="site-title">Image <span>Converter</span></div>
     </a>
     <div class="header-right">
-      <nav>
+      <nav class="desktop-nav">
         <div class="mega-menu-wrapper">
           <button class="mega-btn" aria-expanded="false">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
@@ -285,29 +285,85 @@ def generate_header(current_lang, route):
           <svg class="sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
           <svg class="moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
         </button>
+        <button class="hamburger-toggle" aria-label="Toggle Menu" aria-expanded="false" style="background:none; border:none; color:inherit; cursor:pointer; display:none; align-items:center; justify-content:center; padding:4px;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line class="line-top" x1="4" y1="6" x2="20" y2="6" style="transition: transform 0.25s, y1 0.25s, y2 0.25s; transform-origin: center;"></line>
+            <line class="line-mid" x1="4" y1="12" x2="20" y2="12" style="transition: opacity 0.25s;"></line>
+            <line class="line-bot" x1="4" y1="18" x2="20" y2="18" style="transition: transform 0.25s, y1 0.25s, y2 0.25s; transform-origin: center;"></line>
+          </svg>
+        </button>
       </div>
     </div>
-  </header>
-  <div class="mega-dropdown">
-    <div class="mega-grid">
-      <div class="mega-column">
-        <h4>{trans['popular']}</h4>
+    
+    <div class="mega-dropdown">
+      <div class="mega-grid">
+        <div class="mega-column">
+          <h4>{trans['popular']}</h4>
 {mega_col1}
-      </div>
-      <div class="mega-column">
-        <h4>{trans['advanced']}</h4>
+        </div>
+        <div class="mega-column">
+          <h4>{trans['advanced']}</h4>
 {mega_col2}
-      </div>
-      <div class="mega-column">
-        <h4>{trans['nextgen']}</h4>
+        </div>
+        <div class="mega-column">
+          <h4>{trans['nextgen']}</h4>
 {mega_col3}
-      </div>
-      <div class="mega-column">
-        <h4>{trans['tools']}</h4>
+        </div>
+        <div class="mega-column">
+          <h4>{trans['tools']}</h4>
 {mega_col4}
+        </div>
       </div>
     </div>
-  </div>'''
+
+    <div class="drawer-backdrop"></div>
+    <div class="mobile-drawer" id="mobileDrawer">
+      <div class="drawer-header">
+        <div class="drawer-logo">
+          <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"></path><path d="M12 12v9"></path><path d="m8 17 4 4 4-4"></path></svg>
+          <span>Image Converter</span>
+        </div>
+        <button class="drawer-close" aria-label="Close Menu">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      <div class="drawer-body">
+        <div class="drawer-nav">
+          <div class="drawer-section">
+            <button class="drawer-accordion-btn" aria-expanded="false">
+              <span>{trans['all_tools']}</span>
+              <svg class="accordion-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="drawer-accordion-content">
+              <div class="drawer-mega-links">
+                <h5 class="drawer-cat-title">{trans['popular']}</h5>
+{mega_col1}
+                <h5 class="drawer-cat-title">{trans['advanced']}</h5>
+{mega_col2}
+                <h5 class="drawer-cat-title">{trans['nextgen']}</h5>
+{mega_col3}
+                <h5 class="drawer-cat-title">{trans['tools']}</h5>
+{mega_col4}
+              </div>
+            </div>
+          </div>
+          <div class="drawer-section no-accordion">
+            <a href="/blog" class="drawer-link">{trans['blog']}</a>
+          </div>
+          <div class="drawer-section">
+            <button class="drawer-accordion-btn" aria-expanded="false">
+              <span>{trans['lang_name']}</span>
+              <svg class="accordion-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="drawer-accordion-content">
+              <div class="drawer-lang-options">
+{lang_options}              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>'''
     return header_html
 
 def remove_mega_dropdown(html):
@@ -349,6 +405,48 @@ def remove_mega_dropdown(html):
             break
     return html
 
+def remove_mobile_drawer(html):
+    while True:
+        start_tag = '<div class="mobile-drawer"'
+        start_idx = html.find(start_tag)
+        if start_idx == -1:
+            break
+            
+        tag_close_idx = html.find('>', start_idx)
+        if tag_close_idx == -1:
+            break
+            
+        idx = tag_close_idx + 1
+        depth = 1
+        found = False
+        
+        while depth > 0 and idx < len(html):
+            next_open = html.find('<div', idx)
+            next_close = html.find('</div>', idx)
+            
+            if next_open == -1 and next_close == -1:
+                break
+                
+            if next_open != -1 and (next_close == -1 or next_open < next_close):
+                depth += 1
+                idx = next_open + 4
+            else:
+                depth -= 1
+                idx = next_close + 6
+                if depth == 0:
+                    trailing_ws_len = 0
+                    while idx + trailing_ws_len < len(html) and html[idx + trailing_ws_len] in ' \t\r\n':
+                        trailing_ws_len += 1
+                    html = html[:start_idx] + html[idx + trailing_ws_len:]
+                    found = True
+                    break
+        if not found:
+            break
+    return html
+
+def remove_drawer_backdrop(html):
+    return re.sub(r'<div class="drawer-backdrop"></div>\s*', '', html)
+
 def main():
     base_dir = r"c:\image converter new"
     html_files = glob.glob(os.path.join(base_dir, '**', '*.html'), recursive=True)
@@ -375,8 +473,10 @@ def main():
         # Generate the beautiful, pre-rendered static header HTML block
         header_block = generate_header(lang, route)
         
-        # Robust replacement: strip any existing pre-rendered mega-dropdown first
+        # Robust replacement: strip any existing pre-rendered elements first
         content = remove_mega_dropdown(content)
+        content = remove_mobile_drawer(content)
+        content = remove_drawer_backdrop(content)
         
         # Replace the entire <header>...</header> block
         content_new, sub_count = re.subn(r'<header>.*?</header>', header_block, content, flags=re.DOTALL)
