@@ -3,7 +3,7 @@ import glob
 import re
 
 base_dir = r"c:\image converter new"
-base_url = "https://image-converter-rho-six.vercel.app"
+base_url = "https://www.imglabconverter.com"
 languages = ["de", "es", "fr", "hi", "zh"]
 
 # Get all HTML files

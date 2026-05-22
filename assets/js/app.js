@@ -53,179 +53,63 @@ document.addEventListener('DOMContentLoaded', () => {
   const canvas      = document.getElementById('canvas');
   
   // ── Theme Manager ─────────────────────
-  const headerElem = document.querySelector('header');
-  if (headerElem) {
-    const toggleBtn = document.createElement('button');
-    toggleBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`;
-    toggleBtn.style = "background:none; border:none; color:inherit; cursor:pointer; margin-left:12px; display:flex; align-items:center; transition:0.2s;";
-    headerElem.appendChild(toggleBtn);
-    
-    toggleBtn.addEventListener('click', () => {
-      const newTheme = document.body.dataset.theme === 'light' ? 'dark' : 'light';
-      document.body.dataset.theme = newTheme;
-      localStorage.setItem('theme', newTheme);
-      toggleBtn.innerHTML = newTheme === 'light' 
-        ? `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>`
-        : `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`;
+  const themeToggle = document.querySelector('.theme-toggle');
+  if (themeToggle) {
+    const sunIcon = themeToggle.querySelector('.sun-icon');
+    const moonIcon = themeToggle.querySelector('.moon-icon');
+
+    const setTheme = (theme) => {
+      document.body.dataset.theme = theme;
+      localStorage.setItem('theme', theme);
+      if (theme === 'light') {
+        if (sunIcon) sunIcon.style.display = 'block';
+        if (moonIcon) moonIcon.style.display = 'none';
+      } else {
+        if (sunIcon) sunIcon.style.display = 'none';
+        if (moonIcon) moonIcon.style.display = 'block';
+      }
+    };
+
+    // Load initial theme
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    setTheme(savedTheme);
+
+    themeToggle.addEventListener('click', () => {
+      const currentTheme = document.body.dataset.theme || 'dark';
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      setTheme(newTheme);
     });
-    
-    if (localStorage.getItem('theme') === 'light') {
-      document.body.dataset.theme = 'light';
-      toggleBtn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>`;
-    }
+  }
 
-    // ── Navigation & Tools Mega Menu ──────
-    const navContainer = document.querySelector('header nav');
-    const currentDocLang = document.documentElement.lang || 'en';
-
-    if (navContainer && !document.querySelector('.mega-menu-wrapper')) {
-      const megaWrapper = document.createElement('div');
-      megaWrapper.className = 'mega-menu-wrapper';
-      const langPrefix = currentDocLang === 'en' ? '' : `/${currentDocLang}`;
-
-      megaWrapper.innerHTML = `
-        <button class="mega-btn" aria-expanded="false">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-          All Tools
-          <svg class="mega-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-        </button>
-      `;
-      navContainer.insertBefore(megaWrapper, navContainer.firstChild);
-
-      const megaDropdown = document.createElement('div');
-      megaDropdown.className = 'mega-dropdown';
-      megaDropdown.innerHTML = `
-          <div class="mega-grid">
-            <div class="mega-column">
-              <h4>Popular Converters</h4>
-              <a href="${langPrefix}/" class="mega-link">
-                <div class="mega-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
-                <div class="mega-link-text"><span class="mega-link-name">Multi-Format</span><span class="mega-link-desc">Any format to any format</span></div>
-              </a>
-              <a href="${langPrefix}/jpg-to-png" class="mega-link">
-                <div class="mega-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
-                <div class="mega-link-text"><span class="mega-link-name">JPG → PNG</span><span class="mega-link-desc">Lossless with transparency</span></div>
-              </a>
-              <a href="${langPrefix}/png-to-jpg" class="mega-link">
-                <div class="mega-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
-                <div class="mega-link-text"><span class="mega-link-name">PNG → JPG</span><span class="mega-link-desc">Smaller file size</span></div>
-              </a>
-              <a href="${langPrefix}/webp-to-jpg" class="mega-link">
-                <div class="mega-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
-                <div class="mega-link-text"><span class="mega-link-name">WebP → JPG</span><span class="mega-link-desc">Universal compatibility</span></div>
-              </a>
-              <a href="${langPrefix}/jpeg-to-webp" class="mega-link">
-                <div class="mega-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
-                <div class="mega-link-text"><span class="mega-link-name">JPEG → WebP</span><span class="mega-link-desc">Modern web format</span></div>
-              </a>
-            </div>
-            <div class="mega-column">
-              <h4>Advanced Formats</h4>
-              <a href="${langPrefix}/svg-to-png" class="mega-link">
-                <div class="mega-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg></div>
-                <div class="mega-link-text"><span class="mega-link-name">SVG → PNG</span><span class="mega-link-desc">Rasterize vectors</span></div>
-              </a>
-              <a href="${langPrefix}/svg-to-jpg" class="mega-link">
-                <div class="mega-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg></div>
-                <div class="mega-link-text"><span class="mega-link-name">SVG → JPG</span><span class="mega-link-desc">Vector to photo format</span></div>
-              </a>
-              <a href="${langPrefix}/heic-to-jpg" class="mega-link">
-                <div class="mega-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
-                <div class="mega-link-text"><span class="mega-link-name">HEIC → JPG</span><span class="mega-link-desc">iPhone photos support</span></div>
-              </a>
-              <a href="${langPrefix}/png-to-ico" class="mega-link">
-                <div class="mega-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 7h10v10H7z"/></svg></div>
-                <div class="mega-link-text"><span class="mega-link-name">PNG → ICO</span><span class="mega-link-desc">Favicon generator</span></div>
-              </a>
-              <a href="${langPrefix}/webp-to-png" class="mega-link">
-                <div class="mega-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
-                <div class="mega-link-text"><span class="mega-link-name">WebP → PNG</span><span class="mega-link-desc">Lossless from WebP</span></div>
-              </a>
-            </div>
-            <div class="mega-column">
-              <h4>Next-Gen Formats</h4>
-              <a href="${langPrefix}/jpg-to-avif" class="mega-link">
-                <div class="mega-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></div>
-                <div class="mega-link-text"><span class="mega-link-name">JPG → AVIF</span><span class="mega-link-desc">Ultra-small files</span></div>
-              </a>
-              <a href="${langPrefix}/png-to-avif" class="mega-link">
-                <div class="mega-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></div>
-                <div class="mega-link-text"><span class="mega-link-name">PNG → AVIF</span><span class="mega-link-desc">Next-gen compression</span></div>
-              </a>
-            </div>
-            <div class="mega-column">
-              <h4>Tools & Filters</h4>
-              <a href="${langPrefix}/resize-image" class="mega-link">
-                <div class="mega-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
-                <div class="mega-link-text"><span class="mega-link-name">Resize Image</span><span class="mega-link-desc">Change dimensions</span></div>
-              </a>
-              <a href="${langPrefix}/watermark-image" class="mega-link">
-                <div class="mega-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
-                <div class="mega-link-text"><span class="mega-link-name">Watermark</span><span class="mega-link-desc">Add text overlays</span></div>
-              </a>
-              <a href="${langPrefix}/jpg-to-pdf" class="mega-link">
-                <div class="mega-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>
-                <div class="mega-link-text"><span class="mega-link-name">JPG to PDF</span><span class="mega-link-desc">Document compiler</span></div>
-              </a>
-              <a href="${langPrefix}/compress-image" class="mega-link">
-                <div class="mega-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
-                <div class="mega-link-text"><span class="mega-link-name">Compress</span><span class="mega-link-desc">Auto quality optimizer</span></div>
-              </a>
-            </div>
-          </div>
-      `;
-      document.body.appendChild(megaDropdown);
-
-      const megaBtn = megaWrapper.querySelector('.mega-btn');
-
+  // ── Navigation & Tools Mega Menu ──────
+  const megaWrapper = document.querySelector('.mega-menu-wrapper');
+  const megaDropdown = document.querySelector('.mega-dropdown');
+  if (megaWrapper && megaDropdown) {
+    const megaBtn = megaWrapper.querySelector('.mega-btn');
+    if (megaBtn) {
       megaBtn.addEventListener('click', (e) => {
-        e.preventDefault(); e.stopPropagation();
+        e.preventDefault();
+        e.stopPropagation();
         const isExpanded = megaBtn.getAttribute('aria-expanded') === 'true';
         megaBtn.setAttribute('aria-expanded', !isExpanded);
         megaDropdown.classList.toggle('open');
       });
 
       document.addEventListener('click', (e) => {
-        if(!megaWrapper.contains(e.target) && !megaDropdown.contains(e.target)) {
-           megaBtn.setAttribute('aria-expanded', 'false');
-           megaDropdown.classList.remove('open');
+        if (!megaWrapper.contains(e.target) && !megaDropdown.contains(e.target)) {
+          megaBtn.setAttribute('aria-expanded', 'false');
+          megaDropdown.classList.remove('open');
         }
       });
     }
+  }
 
-    // ── Language Switcher Component ──────
-    if (navContainer && !document.querySelector('.lang-switcher')) {
-      const langNames = { en: 'English', es: 'Español', fr: 'Français', zh: '中文', hi: 'हिन्दी' };
-      const currentLangName = langNames[currentDocLang] || 'English';
-
-      const switcherDiv = document.createElement('div');
-      switcherDiv.className = 'lang-switcher';
-      
-      const path = window.location.pathname; 
-      let pathWithoutLang = path;
-      if(path.match(/^\/(es|fr|zh|hi)(\/|$)/)) {
-        pathWithoutLang = path.replace(/^\/(es|fr|zh|hi)/, '') || '/';
-      }
-
-      switcherDiv.innerHTML = `
-        <button class="lang-btn" aria-expanded="false" aria-haspopup="true">
-          <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-          <span>${currentLangName}</span>
-          <svg class="lang-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-        </button>
-        <div class="lang-menu">
-          ${Object.entries(langNames).map(([code, name]) => {
-             let newPath = code === 'en' ? pathWithoutLang : `/${code}${pathWithoutLang === '/' ? '/' : pathWithoutLang}`;
-             newPath = newPath.replace(/\/\//g, '/'); // fix double slashes
-             return `<a href="${newPath}" class="lang-opt ${code === currentDocLang ? 'active' : ''}">${name}</a>`;
-          }).join('')}
-        </div>
-      `;
-      navContainer.appendChild(switcherDiv);
-      
-      const langBtn = switcherDiv.querySelector('.lang-btn');
-      const langMenu = switcherDiv.querySelector('.lang-menu');
-      
+  // ── Language Switcher Component ──────
+  const langSwitcher = document.querySelector('.lang-switcher');
+  if (langSwitcher) {
+    const langBtn = langSwitcher.querySelector('.lang-btn');
+    const langMenu = langSwitcher.querySelector('.lang-menu');
+    if (langBtn && langMenu) {
       langBtn.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -233,11 +117,11 @@ document.addEventListener('DOMContentLoaded', () => {
         langBtn.setAttribute('aria-expanded', !isExpanded);
         langMenu.classList.toggle('open');
       });
-      
+
       document.addEventListener('click', (e) => {
-        if(!switcherDiv.contains(e.target)) {
-           langBtn.setAttribute('aria-expanded', 'false');
-           langMenu.classList.remove('open');
+        if (!langSwitcher.contains(e.target)) {
+          langBtn.setAttribute('aria-expanded', 'false');
+          langMenu.classList.remove('open');
         }
       });
     }

@@ -34,7 +34,7 @@ for filepath in glob.glob('**/*.html', recursive=True):
     
     title = title_match.group(1) if title_match else "Free Online Image Converter"
     desc = desc_match.group(1) if desc_match else "Free, secure, client-side browser image conversion tool."
-    url = canonical_match.group(1) if canonical_match else "https://image-converter-rho-six.vercel.app/"
+    url = canonical_match.group(1) if canonical_match else "https://www.imglabconverter.com/"
     
     html = strip_existing_tags(html)
     

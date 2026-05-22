@@ -6,7 +6,7 @@ Batch script to apply 3 improvements across all HTML files:
 """
 import glob, re
 
-DOMAIN = 'https://image-converter-rho-six.vercel.app'
+DOMAIN = 'https://www.imglabconverter.com'
 OG_IMAGE = f'{DOMAIN}/assets/images/og-banner.png'
 
 # hreflang config: which pages have language alternates
