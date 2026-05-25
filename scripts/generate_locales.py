@@ -5,6 +5,7 @@ base_dir = r"c:\image converter new"
 tools_to_localize = [
     "compress-image-to-100kb",
     "compress-image-to-50kb",
+    "compress-image-to-10kb",
     "jpg-to-avif",
     "photo-to-black-and-white",
     "png-to-avif",

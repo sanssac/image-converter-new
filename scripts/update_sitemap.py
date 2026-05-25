@@ -7,6 +7,7 @@ all_tools = [
     "compress-image",
     "compress-image-to-100kb",
     "compress-image-to-50kb",
+    "compress-image-to-10kb",
     "heic-to-jpg",
     "jpeg-to-webp",
     "jpg-to-avif",
