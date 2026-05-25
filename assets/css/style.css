@@ -392,6 +392,36 @@ main {
 .drop-zone p { font-size: 14px; color: #94a3b8; margin-bottom: 24px; }
 .drop-zone input { display: none; }
 
+/* ── Cloud/Local Upload Button ────────── */
+.btn-cloud {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #cbd5e1;
+  padding: 10px 20px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  line-height: 1.2;
+}
+.btn-cloud:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+.btn-cloud svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+
 .url-modal {
   display: none; position: absolute; inset: 0; background: rgba(9,9,11,0.95); backdrop-filter: blur(8px);
   border-radius: 20px; flex-direction: column; align-items: center; justify-content: center; padding: 20px; z-index: 10;
@@ -592,6 +622,7 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 [data-theme="light"] .drop-zone h2 { color: #0f172a; }
 [data-theme="light"] .drop-zone p { color: #475569; }
 [data-theme="light"] .btn-cloud { background: rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.1); color: #334155; }
+[data-theme="light"] .btn-cloud:hover { background: rgba(0,0,0,0.08); border-color: rgba(0,0,0,0.15); color: #0f172a; }
 [data-theme="light"] .file-item { background: rgba(255,255,255,0.7); border: 1px solid rgba(0,0,0,0.1); }
 [data-theme="light"] .file-item .info .name { color: #0f172a; }
 [data-theme="light"] .file-item .info .meta { color: #475569; }
