@@ -422,25 +422,6 @@ main {
 }
 
 
-.url-modal {
-  display: none; position: absolute; inset: 0; background: rgba(9,9,11,0.95); backdrop-filter: blur(8px);
-  border-radius: 20px; flex-direction: column; align-items: center; justify-content: center; padding: 20px; z-index: 10;
-}
-.url-modal.visible { display: flex; animation: fadeIn 0.3s ease; }
-.url-modal input {
-  width: 100%; padding: 12px; border-radius: 8px; background: rgba(0,0,0,0.3);
-  border: 1px solid rgba(255,255,255,0.1); color: white; margin-bottom: 12px; font-family: inherit; font-size: 13px; outline: none; transition: 0.2s border-color, 0.2s box-shadow;
-}
-.url-modal input:focus {
-  border-color: #a855f7; box-shadow: 0 0 16px rgba(168,85,247,0.2);
-}
-.url-modal .url-actions { display: flex; gap: 8px; width: 100%; }
-.url-modal button { flex: 1; padding: 10px; border-radius: 8px; border: none; font-weight: 600; cursor: pointer; transition: 0.2s; }
-.url-modal .btn-fetch { background: #6366f1; color: white; }
-.url-modal .btn-fetch:hover { background: #4f46e5; }
-.url-modal .btn-cancel { background: rgba(255,255,255,0.1); color: white; }
-.url-modal .btn-cancel:hover { background: rgba(255,255,255,0.15); }
-
 /* ── File Gallery (Grid) ────────────── */
 .file-gallery {
   display: none; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
@@ -709,12 +690,12 @@ header nav.desktop-nav a.nav-active { color: white; position: relative; }
   display: flex; align-items: center; justify-content: center; gap: 8px;
   width: 100%; padding: 11px; border-radius: 12px;
   border: 1px dashed rgba(255,255,255,0.12);
-  background: transparent; color: #64748b;
+  background: transparent; color: #94a3b8;
   font-family: inherit; font-size: 13px; font-weight: 500;
   cursor: pointer; transition: all 0.25s ease; margin-top: 2px;
 }
 .btn-clear:hover { background: rgba(239,68,68,0.07); border-color: rgba(239,68,68,0.35); color: #f87171; }
-[data-theme="light"] .btn-clear { color: #94a3b8; border-color: rgba(0,0,0,0.15); }
+[data-theme="light"] .btn-clear { color: #475569; border-color: rgba(0,0,0,0.15); }
 [data-theme="light"] .btn-clear:hover { color: #ef4444; border-color: rgba(239,68,68,0.4); background: rgba(239,68,68,0.05); }
 
 /* -- Tablet responsive header -- */

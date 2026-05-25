@@ -2,7 +2,7 @@ import os
 
 sitemap_path = r"c:\image converter new\sitemap.xml"
 
-# List of all 15 tools
+# List of all tools
 all_tools = [
     "compress-image",
     "compress-image-to-100kb",
@@ -16,10 +16,13 @@ all_tools = [
     "png-to-avif",
     "png-to-ico",
     "png-to-jpg",
+    "resize-image",
     "svg-to-jpg",
     "svg-to-png",
+    "watermark-image",
     "webp-to-jpg",
-    "webp-to-png"
+    "webp-to-png",
+    "jpg-to-pdf"
 ]
 
 languages = ["de", "es", "fr", "hi", "zh"]

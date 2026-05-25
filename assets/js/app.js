@@ -1,3 +1,6 @@
+// ── Vercel Web Analytics Bootstrapper ────────────────
+window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+
 // ── HTML Escape Helper ────────────────
 function escapeHtml(str) {
   const div = document.createElement('div');
@@ -40,6 +43,19 @@ window.addEventListener('error', (event) => {
   console.error('Global error:', event.error || event.message);
 });
 
+// ── Load Visual & UI Modules dynamically ────────────────
+const visualModules = [
+  '/assets/js/modules/theme.js',
+  '/assets/js/modules/sticky-header.js',
+  '/assets/js/modules/accordion.js'
+];
+visualModules.forEach(url => {
+  const script = document.createElement('script');
+  script.src = url;
+  script.defer = true;
+  document.head.appendChild(script);
+});
+
 document.addEventListener('DOMContentLoaded', () => {
   const dropZone    = document.getElementById('dropZone');
   const fileInput   = document.getElementById('fileInput');
@@ -52,47 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const downloadText= document.getElementById('downloadText');
   const canvas      = document.getElementById('canvas');
   
-  // ── Theme Manager ─────────────────────
-  const themeToggle = document.querySelector('.theme-toggle');
-  if (themeToggle) {
-    const sunIcon = themeToggle.querySelector('.sun-icon');
-    const moonIcon = themeToggle.querySelector('.moon-icon');
 
-    const setTheme = (theme) => {
-      document.body.dataset.theme = theme;
-      try {
-        localStorage.setItem('theme', theme);
-      } catch (e) {
-        console.warn('localStorage is blocked or unavailable:', e);
-      }
-      if (theme === 'light') {
-        if (sunIcon) sunIcon.style.display = 'block';
-        if (moonIcon) moonIcon.style.display = 'none';
-      } else {
-        if (sunIcon) sunIcon.style.display = 'none';
-        if (moonIcon) moonIcon.style.display = 'block';
-      }
-    };
-
-    // Load initial theme safely
-    let savedTheme = 'dark';
-    try {
-      savedTheme = localStorage.getItem('theme') || 'dark';
-    } catch (e) {
-      console.warn('localStorage is blocked or unavailable:', e);
-    }
-    setTheme(savedTheme);
-
-    themeToggle.addEventListener('click', () => {
-      document.body.classList.add('theme-transitioning');
-      const currentTheme = document.body.dataset.theme || 'dark';
-      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-      setTheme(newTheme);
-      setTimeout(() => {
-        document.body.classList.remove('theme-transitioning');
-      }, 350);
-    });
-  }
 
   // ── Navigation & Tools Mega Menu ──────
   const megaWrapper = document.querySelector('.mega-menu-wrapper');
@@ -149,17 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch(e) {}
   });
 
-  // ── UI Enhancement: Sticky Header Scroll ──
-  const headerEl = document.querySelector('header');
-  if (headerEl) {
-    let lastScroll = 0;
-    window.addEventListener('scroll', () => {
-      const scrollY = window.scrollY;
-      if (scrollY > 40) headerEl.classList.add('scrolled');
-      else headerEl.classList.remove('scrolled');
-      lastScroll = scrollY;
-    }, { passive: true });
-  }
+
 
   // ── Mobile Slide-out Drawer & Hamburger Toggle ──
   const hamburgerToggle = document.querySelector('.hamburger-toggle');
@@ -206,24 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // ── Drawer Accordion Transition Controls ──
-  const accordionBtns = document.querySelectorAll('.drawer-accordion-btn');
-  accordionBtns.forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const isExpanded = btn.getAttribute('aria-expanded') === 'true';
-      const content = btn.nextElementSibling;
-      btn.setAttribute('aria-expanded', !isExpanded);
-      
-      if (content) {
-        if (!isExpanded) {
-          content.style.maxHeight = content.scrollHeight + 'px';
-        } else {
-          content.style.maxHeight = '0px';
-        }
-      }
-    });
-  });
+
 
   // ── UI Enhancement: Feature Badges ──
   const trustBadge = document.querySelector('.trust-badge');
@@ -238,16 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
     trustBadge.insertAdjacentElement('afterend', badgesDiv);
   }
 
-  // ── UI Enhancement: FAQ Accordion ──
-  document.querySelectorAll('.faq-item').forEach((item, i) => {
-    const question = item.querySelector('.faq-question');
-    if (!question) return;
-    // Open first item by default
-    if (i === 0) item.classList.add('open');
-    question.addEventListener('click', () => {
-      item.classList.toggle('open');
-    });
-  });
+
 
   // ── UI Enhancement: Footer Branding ──
   const footerEl = document.querySelector('footer');
@@ -434,6 +374,18 @@ document.addEventListener('DOMContentLoaded', () => {
     e.target.value = '';
   });
 
+  const loadHeicLibrary = () => new Promise((resolve, reject) => {
+    if (typeof heic2any !== 'undefined') {
+      resolve();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js';
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error("HEIC library load failed"));
+    document.head.appendChild(script);
+  });
+
   async function handleFiles(files) {
     const wasEmpty = queuedFiles.length === 0;
     progressContainer.classList.remove('visible');
@@ -452,8 +404,13 @@ document.addEventListener('DOMContentLoaded', () => {
       const queueId = Math.random().toString(36).substr(2, 9);
       if (ext === 'heic' || ext === 'heif') {
          if (typeof heic2any === 'undefined') {
-           showToast(t.heicNotLoaded, 'error');
-           continue;
+           showToast(t.heicNotLoaded, 'info');
+           try {
+             await loadHeicLibrary();
+           } catch (err) {
+             showToast(t.heicFailed + ': ' + f.name, 'error');
+             continue;
+           }
          }
          try {
            queuedFiles.push({ file: f, result: null, id: queueId, processing: true, thumbUrl: '' });
@@ -516,12 +473,12 @@ document.addEventListener('DOMContentLoaded', () => {
       div.id = `item-${q.id}`;
       div.style.animationDelay = `${index * 0.05}s`;
       
+      const safeName = escapeHtml(q.file.name);
       const url = q.processing ? '' : q.thumbUrl;
       const thumbElement = q.processing 
           ? `<div class="skeleton-loader"></div>`
-          : `<img src="${url}" />`;
+          : `<img src="${url}" alt="Preview of ${safeName}" />`;
           
-      const safeName = escapeHtml(q.file.name);
       const metaText = q.processing ? 'Decoding HEIC...' : fmtBytes(q.file.size);
       const resultText = q.result ? '→ ' + (q.result.error ? '<span style="color:#ef4444">Failed</span>' : fmtBytes(q.result.size)) : '';
       div.innerHTML = `
@@ -561,250 +518,269 @@ document.addEventListener('DOMContentLoaded', () => {
     for (let i = 0; i < queuedFiles.length; i++) {
       let q = queuedFiles[i];
 
-      // In compress mode, keep original format; in convert mode, use tab selection
-      let targetMime = selectedMime;
-      if (isCompression) {
-        const origType = q.file.type;
-        if (origType === 'image/png') targetMime = 'image/png';
-        else if (origType === 'image/webp') targetMime = 'image/webp';
-        else targetMime = 'image/jpeg'; // default for jpg/heic/unknown
-      }
-      const targetExtMap = { 'image/jpeg':'jpg', 'image/png':'png', 'image/webp':'webp', 'image/avif':'avif', 'image/x-icon':'ico' };
-      const targetExt = targetExtMap[targetMime] || 'jpg';
-      lastTargetExt = targetExt;
+      try {
+        // In compress mode, keep original format; in convert mode, use tab selection
+        let targetMime = selectedMime;
+        if (isCompression) {
+          const origType = q.file.type;
+          if (origType === 'image/png') targetMime = 'image/png';
+          else if (origType === 'image/webp') targetMime = 'image/webp';
+          else targetMime = 'image/jpeg'; // default for jpg/heic/unknown
+        }
+        const targetExtMap = { 'image/jpeg':'jpg', 'image/png':'png', 'image/webp':'webp', 'image/avif':'avif', 'image/x-icon':'ico' };
+        const targetExt = targetExtMap[targetMime] || 'jpg';
+        lastTargetExt = targetExt;
 
-      if (q.result) {
-         convertedFiles.push({ name: `${q.file.name.replace(/\.[^.]+$/, '')}.${targetExt}`, blob: q.result });
-         totalOrigSize += q.file.size;
-         totalNewSize += q.result.size;
-      } else {
-         await new Promise(resolve => setTimeout(resolve, 15)); // Yield to main thread for UI animations
-         totalOrigSize += q.file.size;
-         const objUrl = URL.createObjectURL(q.file);
-         
-         const getBlob = (imgObj, w, h, outMime, outQuality) => new Promise(res => {
-             let targetW = w;
-             let targetH = h;
-             if (outMime === 'image/x-icon') {
-                 const size = Math.min(w, h, 256);
-                 targetW = size;
-                 targetH = size;
-             }
-             canvas.width = targetW; canvas.height = targetH;
-             const ctx = canvas.getContext('2d');
-             if (document.body.dataset.mode === 'bw') {
-                 ctx.filter = 'grayscale(100%)';
-             }
-             if (outMime === 'image/jpeg') {
-                 ctx.fillStyle = '#ffffff';
-                 ctx.fillRect(0, 0, targetW, targetH);
-             }
-             if (outMime === 'image/x-icon') {
-                 const minDim = Math.min(imgObj.naturalWidth, imgObj.naturalHeight);
-                 const sx = (imgObj.naturalWidth - minDim) / 2;
-                 const sy = (imgObj.naturalHeight - minDim) / 2;
-                 ctx.drawImage(imgObj, sx, sy, minDim, minDim, 0, 0, targetW, targetH);
-             } else {
-                 ctx.drawImage(imgObj, 0, 0, targetW, targetH);
-             }
-             ctx.filter = 'none'; // reset filter
-             
-             if (document.body.dataset.mode === 'watermark') {
-                 const wText = document.getElementById('watermarkText') ? document.getElementById('watermarkText').value.trim() : '';
-                 if (wText) {
-                     const wSize = parseInt(document.getElementById('watermarkSize').value, 10) || 32;
-                     const wPos = document.getElementById('watermarkPos') ? document.getElementById('watermarkPos').value : 'bottom-right';
-                     
-                     ctx.font = `bold ${wSize}px sans-serif`;
-                     ctx.fillStyle = 'rgba(255, 255, 255, 0.6)'; // semi-transparent white
-                     const padding = 20;
-                     const metrics = ctx.measureText(wText);
-                     const textWidth = metrics.width;
-                     
-                     let wx = padding, wy = padding + wSize;
-                     if (wPos === 'bottom-right') {
-                         wx = targetW - textWidth - padding;
-                         wy = targetH - padding;
-                     } else if (wPos === 'bottom-left') {
-                         wx = padding;
-                         wy = targetH - padding;
-                     } else if (wPos === 'top-right') {
-                         wx = targetW - textWidth - padding;
-                         wy = padding + wSize;
-                     } else if (wPos === 'center') {
-                         wx = (targetW - textWidth) / 2;
-                         wy = (targetH + wSize) / 2;
-                     }
-                     
-                     // Text shadow for contrast
-                     ctx.shadowColor = "rgba(0,0,0,0.8)";
-                     ctx.shadowBlur = 6;
-                     ctx.shadowOffsetX = 2;
-                     ctx.shadowOffsetY = 2;
-                     
-                     ctx.fillText(wText, wx, wy);
-                     
-                     // Reset shadow
-                     ctx.shadowBlur = 0;
-                     ctx.shadowOffsetX = 0;
-                     ctx.shadowOffsetY = 0;
-                 }
-             }
-             
-             if (outMime === 'image/x-icon') {
-                 canvas.toBlob(pngBlob => {
-                     if (!pngBlob) { res(null); return; }
-                     pngBlob.arrayBuffer().then(pngBuffer => {
-                         const pngBytes = new Uint8Array(pngBuffer);
-                         const icoBuffer = new ArrayBuffer(22 + pngBytes.length);
-                         const view = new DataView(icoBuffer);
-                         view.setUint16(0, 0, true);
-                         view.setUint16(2, 1, true);
-                         view.setUint16(4, 1, true);
-                         const icoW = targetW >= 256 ? 0 : targetW;
-                         const icoH = targetH >= 256 ? 0 : targetH;
-                         view.setUint8(6, icoW);
-                         view.setUint8(7, icoH);
-                         view.setUint8(8, 0);
-                         view.setUint8(9, 0);
-                         view.setUint16(10, 1, true);
-                         view.setUint16(12, 32, true);
-                         view.setUint32(14, pngBytes.length, true);
-                         view.setUint32(18, 22, true);
-                         const icoBytes = new Uint8Array(icoBuffer);
-                         icoBytes.set(pngBytes, 22);
-                         res(new Blob([icoBytes], { type: 'image/x-icon' }));
-                     });
-                 }, 'image/png');
-             } else {
-                 canvas.toBlob(b => res(b), outMime, outMime !== 'image/png' ? outQuality : undefined);
-             }
-         });
+        if (q.result) {
+           if (q.result.error) {
+              // Already failed, do not add to success totals
+           } else {
+              convertedFiles.push({ name: `${q.file.name.replace(/\.[^.]+$/, '')}.${targetExt}`, blob: q.result });
+              totalOrigSize += q.file.size;
+              totalNewSize += q.result.size;
+           }
+        } else {
+           await new Promise(resolve => setTimeout(resolve, 15)); // Yield to main thread for UI animations
+           totalOrigSize += q.file.size;
+           const objUrl = URL.createObjectURL(q.file);
+           
+           const getBlob = (imgObj, w, h, outMime, outQuality) => new Promise(res => {
+               let targetW = w;
+               let targetH = h;
+               if (outMime === 'image/x-icon') {
+                   const size = Math.min(w, h, 256);
+                   targetW = size;
+                   targetH = size;
+               }
+               canvas.width = targetW; canvas.height = targetH;
+               const ctx = canvas.getContext('2d');
+               if (!ctx) {
+                   throw new Error("Could not acquire 2D canvas context.");
+               }
+               if (document.body.dataset.mode === 'bw') {
+                   ctx.filter = 'grayscale(100%)';
+               }
+               if (outMime === 'image/jpeg') {
+                   ctx.fillStyle = '#ffffff';
+                   ctx.fillRect(0, 0, targetW, targetH);
+               }
+               if (outMime === 'image/x-icon') {
+                   const minDim = Math.min(imgObj.naturalWidth, imgObj.naturalHeight);
+                   const sx = (imgObj.naturalWidth - minDim) / 2;
+                   const sy = (imgObj.naturalHeight - minDim) / 2;
+                   ctx.drawImage(imgObj, sx, sy, minDim, minDim, 0, 0, targetW, targetH);
+               } else {
+                   ctx.drawImage(imgObj, 0, 0, targetW, targetH);
+               }
+               ctx.filter = 'none'; // reset filter
+               
+               if (document.body.dataset.mode === 'watermark') {
+                   const wText = document.getElementById('watermarkText') ? document.getElementById('watermarkText').value.trim() : '';
+                   if (wText) {
+                       const wSize = parseInt(document.getElementById('watermarkSize').value, 10) || 32;
+                       const wPos = document.getElementById('watermarkPos') ? document.getElementById('watermarkPos').value : 'bottom-right';
+                       
+                       ctx.font = `bold ${wSize}px sans-serif`;
+                       ctx.fillStyle = 'rgba(255, 255, 255, 0.6)'; // semi-transparent white
+                       const padding = 20;
+                       const metrics = ctx.measureText(wText);
+                       const textWidth = metrics.width;
+                       
+                       let wx = padding, wy = padding + wSize;
+                       if (wPos === 'bottom-right') {
+                           wx = targetW - textWidth - padding;
+                           wy = targetH - padding;
+                       } else if (wPos === 'bottom-left') {
+                           wx = padding;
+                           wy = targetH - padding;
+                       } else if (wPos === 'top-right') {
+                           wx = targetW - textWidth - padding;
+                           wy = padding + wSize;
+                       } else if (wPos === 'center') {
+                           wx = (targetW - textWidth) / 2;
+                           wy = (targetH + wSize) / 2;
+                       }
+                       
+                       // Text shadow for contrast
+                       ctx.shadowColor = "rgba(0,0,0,0.8)";
+                       ctx.shadowBlur = 6;
+                       ctx.shadowOffsetX = 2;
+                       ctx.shadowOffsetY = 2;
+                       
+                       ctx.fillText(wText, wx, wy);
+                       
+                       // Reset shadow
+                       ctx.shadowBlur = 0;
+                       ctx.shadowOffsetX = 0;
+                       ctx.shadowOffsetY = 0;
+                   }
+               }
+               
+               if (outMime === 'image/x-icon') {
+                   canvas.toBlob(pngBlob => {
+                       if (!pngBlob) { res(null); return; }
+                       pngBlob.arrayBuffer().then(pngBuffer => {
+                           const pngBytes = new Uint8Array(pngBuffer);
+                           const icoBuffer = new ArrayBuffer(22 + pngBytes.length);
+                           const view = new DataView(icoBuffer);
+                           view.setUint16(0, 0, true);
+                           view.setUint16(2, 1, true);
+                           view.setUint16(4, 1, true);
+                           const icoW = targetW >= 256 ? 0 : targetW;
+                           const icoH = targetH >= 256 ? 0 : targetH;
+                           view.setUint8(6, icoW);
+                           view.setUint8(7, icoH);
+                           view.setUint8(8, 0);
+                           view.setUint8(9, 0);
+                           view.setUint16(10, 1, true);
+                           view.setUint16(12, 32, true);
+                           view.setUint32(14, pngBytes.length, true);
+                           view.setUint32(18, 22, true);
+                           const icoBytes = new Uint8Array(icoBuffer);
+                           icoBytes.set(pngBytes, 22);
+                           res(new Blob([icoBytes], { type: 'image/x-icon' }));
+                       }).catch(err => {
+                           console.error("ICO conversion error:", err);
+                           res(null);
+                       });
+                   }, 'image/png');
+               } else {
+                   canvas.toBlob(b => res(b), outMime, outMime !== 'image/png' ? outQuality : undefined);
+               }
+           });
 
-         const blob = await new Promise((resolve) => {
-           const img = new Image();
-           img.onerror = () => {
-             URL.revokeObjectURL(objUrl);
-             resolve({ error: true });
-           };
-           img.onload = async () => {
-             let baseW = img.naturalWidth;
-             let baseH = img.naturalHeight;
-             
-             const hasSizePresets = document.querySelector('.size-presets, .preset-pill, .preset') !== null;
-             const hasBodyTargetSize = document.body.hasAttribute('data-target-size');
-             
-             if (document.body.dataset.mode === 'resize') {
-                 const rWInput = document.getElementById('resizeWidth');
-                 const rHInput = document.getElementById('resizeHeight');
-                 const maintain = document.getElementById('maintainRatio') ? document.getElementById('maintainRatio').checked : true;
-                 
-                 let newW = parseFloat(rWInput.value) || 0;
-                 let newH = parseFloat(rHInput.value) || 0;
-                 
-                 if (!newW && !newH) {
-                     newW = baseW; newH = baseH;
-                 } else if (maintain) {
-                     if (newW && !newH) newH = Math.round(baseH * (newW / baseW));
-                     else if (newH && !newW) newW = Math.round(baseW * (newH / baseH));
-                     else {
-                         // both defined but maintain ratio is checked.
-                         // we'll fit within the box.
-                         const ratio = Math.min(newW / baseW, newH / baseH);
-                         newW = Math.round(baseW * ratio);
-                         newH = Math.round(baseH * ratio);
-                     }
-                 } else {
-                     if (!newW) newW = baseW;
-                     if (!newH) newH = baseH;
-                 }
-                 
-                 const b = await getBlob(img, newW, newH, targetMime, 0.95);
-                 URL.revokeObjectURL(objUrl);
-                 resolve(b);
-                 return;
-             }
-
-             if (!isCompression || (!hasSizePresets && !hasBodyTargetSize)) {
-               // Normal conversion path
-               const b = await getBlob(img, baseW, baseH, targetMime, 0.92);
+           const blob = await new Promise((resolve, reject) => {
+             const img = new Image();
+             img.onerror = () => {
                URL.revokeObjectURL(objUrl);
-               resolve(b);
-               return;
-             }
-
-             // --- Target Size Compression Logic ---
-              let targetBytes = targetSizeValue;
-              if (targetSizeValue === 'custom') {
-                  const customVal = parseFloat(customSizeInput ? customSizeInput.value : 500) || 500;
-                  targetBytes = (customSizeUnit && customSizeUnit.value === 'MB') ? customVal * 1024 * 1024 : customVal * 1024;
-              } else if (targetSizeValue >= 10000) {
-                  // Localized pages store data-size in bytes directly
-                  targetBytes = targetSizeValue;
-              } else {
-                  // EN compress page stores data-size in KB
-                  targetBytes = targetSizeValue * 1024;
-              }
-             
-             let bestBlob = null;
-             if (targetMime === 'image/png') {
-                  // PNG is lossless HTML-wise. To compress, we must scale dimensions.
-                  let scale = 1.0;
-                  let lastPngBlob = null;
-                  while (scale >= 0.1) {
-                      lastPngBlob = await getBlob(img, baseW * scale, baseH * scale, targetMime, 1);
-                      if (lastPngBlob.size <= targetBytes) { bestBlob = lastPngBlob; break; }
-                      scale *= 0.8;
-                  }
-                  if (!bestBlob) bestBlob = lastPngBlob; // best effort: smallest tried
-             } else {
-                 // JPEG/WEBP Quality Binary Search
-                 let finalBlob = await getBlob(img, baseW, baseH, targetMime, 0.9);
-                 if (finalBlob.size <= targetBytes) {
-                     bestBlob = finalBlob;
-                 } else {
-                     let minQ = 0.01;
-                     let maxQ = 0.9;
-                     let q = 0.45;
-                     for (let attempt = 0; attempt < 6; attempt++) {
-                         let tempBlob = await getBlob(img, baseW, baseH, targetMime, q);
-                         if (tempBlob.size <= targetBytes) {
-                             bestBlob = tempBlob;
-                             minQ = q; // Can we do higher quality?
-                         } else {
-                             maxQ = q; // Need lower quality
+               resolve({ error: true });
+             };
+             img.onload = async () => {
+               try {
+                 let baseW = img.naturalWidth;
+                 let baseH = img.naturalHeight;
+                 
+                 const hasSizePresets = document.querySelector('.size-presets, .preset-pill, .preset') !== null;
+                 const hasBodyTargetSize = document.body.hasAttribute('data-target-size');
+                 
+                 if (document.body.dataset.mode === 'resize') {
+                     const rWInput = document.getElementById('resizeWidth');
+                     const rHInput = document.getElementById('resizeHeight');
+                     const maintain = document.getElementById('maintainRatio') ? document.getElementById('maintainRatio').checked : true;
+                     
+                     let newW = parseFloat(rWInput.value) || 0;
+                     let newH = parseFloat(rHInput.value) || 0;
+                     
+                     if (!newW && !newH) {
+                         newW = baseW; newH = baseH;
+                     } else if (maintain) {
+                         if (newW && !newH) newH = Math.round(baseH * (newW / baseW));
+                         else if (newH && !newW) newW = Math.round(baseW * (newH / baseH));
+                         else {
+                             const ratio = Math.min(newW / baseW, newH / baseH);
+                             newW = Math.round(baseW * ratio);
+                             newH = Math.round(baseH * ratio);
                          }
-                         q = (minQ + maxQ) / 2;
+                     } else {
+                         if (!newW) newW = baseW;
+                         if (!newH) newH = baseH;
                      }
                      
-                     // If still null (meaning even Q=0.01 is too large), engage dim scaling
-                     if (!bestBlob) {
-                         let scale = 0.85;
-                         while (scale >= 0.1) {
-                             const scaledBlob = await getBlob(img, baseW * scale, baseH * scale, targetMime, 0.1);
-                             bestBlob = scaledBlob; // guarantee we return something
-                             if (scaledBlob.size <= targetBytes) break;
-                             scale *= 0.8;
+                     const b = await getBlob(img, newW, newH, targetMime, 0.95);
+                     URL.revokeObjectURL(objUrl);
+                     resolve(b);
+                     return;
+                 }
+
+                 if (!isCompression || (!hasSizePresets && !hasBodyTargetSize)) {
+                   // Normal conversion path
+                   const b = await getBlob(img, baseW, baseH, targetMime, 0.92);
+                   URL.revokeObjectURL(objUrl);
+                   resolve(b);
+                   return;
+                 }
+
+                 // --- Target Size Compression Logic ---
+                 let targetBytes = targetSizeValue;
+                 if (targetSizeValue === 'custom') {
+                     const customVal = parseFloat(customSizeInput ? customSizeInput.value : 500) || 500;
+                     targetBytes = (customSizeUnit && customSizeUnit.value === 'MB') ? customVal * 1024 * 1024 : customVal * 1024;
+                 } else if (targetSizeValue >= 10000) {
+                     // Localized pages store data-size in bytes directly
+                     targetBytes = targetSizeValue;
+                 } else {
+                     // EN compress page stores data-size in KB
+                     targetBytes = targetSizeValue * 1024;
+                 }
+                 
+                 let bestBlob = null;
+                 if (targetMime === 'image/png') {
+                      // PNG is lossless HTML-wise. To compress, we must scale dimensions.
+                      let scale = 1.0;
+                      let lastPngBlob = null;
+                      while (scale >= 0.1) {
+                          lastPngBlob = await getBlob(img, baseW * scale, baseH * scale, targetMime, 1);
+                          if (lastPngBlob.size <= targetBytes) { bestBlob = lastPngBlob; break; }
+                          scale *= 0.8;
+                      }
+                      if (!bestBlob) bestBlob = lastPngBlob; // best effort: smallest tried
+                 } else {
+                     // JPEG/WEBP Quality Binary Search
+                     let finalBlob = await getBlob(img, baseW, baseH, targetMime, 0.9);
+                     if (finalBlob.size <= targetBytes) {
+                         bestBlob = finalBlob;
+                     } else {
+                         let minQ = 0.01;
+                         let maxQ = 0.9;
+                         let q = 0.45;
+                         for (let attempt = 0; attempt < 6; attempt++) {
+                             let tempBlob = await getBlob(img, baseW, baseH, targetMime, q);
+                             if (tempBlob.size <= targetBytes) {
+                                 bestBlob = tempBlob;
+                                 minQ = q; // Can we do higher quality?
+                             } else {
+                                 maxQ = q; // Need lower quality
+                             }
+                             q = (minQ + maxQ) / 2;
+                         }
+                         
+                         // If still null (meaning even Q=0.01 is too large), engage dim scaling
+                         if (!bestBlob) {
+                             let scale = 0.85;
+                             while (scale >= 0.1) {
+                                 const scaledBlob = await getBlob(img, baseW * scale, baseH * scale, targetMime, 0.1);
+                                 bestBlob = scaledBlob; // guarantee we return something
+                                 if (scaledBlob.size <= targetBytes) break;
+                                 scale *= 0.8;
+                             }
                          }
                      }
                  }
-             }
-             
-             URL.revokeObjectURL(objUrl);
-             resolve(bestBlob);
-           };
-           img.src = objUrl;
-         });
+                 
+                 URL.revokeObjectURL(objUrl);
+                 resolve(bestBlob);
+               } catch (err) {
+                 URL.revokeObjectURL(objUrl);
+                 reject(err);
+               }
+             };
+             img.src = objUrl;
+           });
 
-         if (blob && !blob.error) {
-           q.result = blob;
-           let baseName = q.file.name.replace(/\.[^.]+$/, '');
-           convertedFiles.push({ name: `${baseName}.${targetExt}`, blob: blob });
-           totalNewSize += blob.size;
-         } else {
-           q.result = { error: true };
-         }
-         renderGallery();
+           if (blob && !blob.error) {
+             q.result = blob;
+             let baseName = q.file.name.replace(/\.[^.]+$/, '');
+             convertedFiles.push({ name: `${baseName}.${targetExt}`, blob: blob });
+             totalNewSize += blob.size;
+           } else {
+             q.result = { error: true };
+           }
+           renderGallery();
+        }
+      } catch (err) {
+        console.error("Failed to convert image " + q.file.name + ":", err);
+        q.result = { error: true };
+        renderGallery();
       }
       
       progressFill.style.width = `${((i + 1) / queuedFiles.length) * 100}%`;
@@ -846,10 +822,10 @@ document.addEventListener('DOMContentLoaded', () => {
        const oldImgs = baContainer.querySelectorAll('img');
        oldImgs.forEach(img => { if(img.src.startsWith('blob:')) URL.revokeObjectURL(img.src); });
        baContainer.innerHTML = `
-         <img src="${origUrl}" class="ba-img ba-img-orig" />
+         <img src="${origUrl}" class="ba-img ba-img-orig" alt="Original image preview before compression" />
          <div class="ba-label ba-label-orig">Original</div>
          
-         <img id="afterImg" src="${newUrl}" class="ba-img ba-img-new" />
+         <img id="afterImg" src="${newUrl}" class="ba-img ba-img-new" alt="Optimized image preview after compression" />
          <div class="ba-label ba-label-new">Optimized</div>
          
          <div id="baLine" class="ba-line">
