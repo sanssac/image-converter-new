@@ -32,3 +32,6 @@ desktop.ini
 # npm
 node_modules/
 npm-debug.log*
+#docs
+PROJECT_HANDBOOK.md 
+NEW_DEVELOPER_ONBOARDING.md
