@@ -87,7 +87,7 @@
   <div class="mesh-glow mesh-1"></div>
   <div class="mesh-glow mesh-2"></div>
   <div id="toastContainer"></div>
-              <header>
+                <header>
     <a href="/es/" class="logo-link">
       <div class="logo">
         <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"></path><path d="M12 12v9"></path><path d="m8 17 4 4 4-4"></path></svg>
@@ -193,6 +193,14 @@
                 <div class="mega-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></div>
                 <div class="mega-link-text"><span class="mega-link-name">PNG → AVIF</span><span class="mega-link-desc">Compresión de próxima generación</span></div>
               </a>
+              <a href="/es/tiff-to-jpg" class="mega-link">
+                <div class="mega-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+                <div class="mega-link-text"><span class="mega-link-name">TIFF → JPG</span><span class="mega-link-desc">Convertir archivos Tagged Image</span></div>
+              </a>
+              <a href="/es/jpg-to-tiff" class="mega-link">
+                <div class="mega-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+                <div class="mega-link-text"><span class="mega-link-name">JPG → TIFF</span><span class="mega-link-desc">Crear imágenes rasterizadas</span></div>
+              </a>
         </div>
         <div class="mega-column">
           <h4>Herramientas y Filtros</h4>
@@ -287,6 +295,14 @@
                 <div class="mega-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></div>
                 <div class="mega-link-text"><span class="mega-link-name">PNG → AVIF</span><span class="mega-link-desc">Compresión de próxima generación</span></div>
               </a>
+              <a href="/es/tiff-to-jpg" class="mega-link">
+                <div class="mega-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+                <div class="mega-link-text"><span class="mega-link-name">TIFF → JPG</span><span class="mega-link-desc">Convertir archivos Tagged Image</span></div>
+              </a>
+              <a href="/es/jpg-to-tiff" class="mega-link">
+                <div class="mega-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+                <div class="mega-link-text"><span class="mega-link-name">JPG → TIFF</span><span class="mega-link-desc">Crear imágenes rasterizadas</span></div>
+              </a>
                 <h5 class="drawer-cat-title">Herramientas y Filtros</h5>
               <a href="/es/resize-image" class="mega-link">
                 <div class="mega-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
@@ -342,6 +358,7 @@
           <button class="tab active" data-target="image/jpeg">A JPG</button>
           <button class="tab" data-target="image/png">A PNG</button>
           <button class="tab" data-target="image/webp">A WEBP</button>
+          <button class="tab" data-target="image/tiff">A TIFF</button>
         </div>
       </div>
       <!-- Drop Zone -->
@@ -357,7 +374,7 @@
           <svg aria-hidden="true" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" stroke="none"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
           Seleccionar archivo <svg class="chevron-down" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         </button>
-        <input type="file" id="fileInput" accept="image/*,.heic" multiple />
+        <input type="file" id="fileInput" accept="image/*,.heic,.tiff,.tif" multiple />
       </div>
     <div class="trust-badge">
       <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

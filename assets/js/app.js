@@ -260,11 +260,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // ── i18n for dynamic UI strings ─────
   const lang = document.documentElement.lang || 'en';
   const i18nStrings = {
-    en:  { converting: 'Converting', of: 'of', filesSelected: 'file(s) selected - Drop more?', convertMore: 'Convert More Images', compressImages: 'Compress Images', convertImages: 'Convert Images', success: 'Success!', filesProcessed: 'file(s) processed', original: 'Original', processed: 'Processed', smaller: 'smaller', larger: 'larger', downloadZip: 'Download ZIP', download: 'Download', zipping: 'Zipping', copiedClipboard: 'Image copied to clipboard!', copyBlocked: 'Browser blocked clipboard copy.', copyNotSupported: 'Clipboard copy not supported on this browser.', heicNotLoaded: 'Loading HEIC library... Please wait.', heicFailed: 'Failed to process HEIC', zipNotLoaded: 'JSZip library has not loaded yet.', dropZoneCompressSize: 'Drop images here to compress under {size}KB' },
-    es:  { converting: 'Convirtiendo', of: 'de', filesSelected: 'archivo(s) — ¿más?', convertMore: 'Convertir más', compressImages: 'Comprimir imagen', convertImages: 'Convertir', success: '¡Éxito!', filesProcessed: 'archivo(s)', original: 'Original', processed: 'Procesado', smaller: 'más pequeño', larger: 'más grande', downloadZip: 'Descargar ZIP', download: 'Descargar', zipping: 'Comprimiendo', copiedClipboard: '¡Imagen copiada!', copyBlocked: 'Copia bloqueada por el navegador.', copyNotSupported: 'Copia no soportada.', heicNotLoaded: 'Librería HEIC no cargada.', heicFailed: 'Error HEIC', zipNotLoaded: 'JSZip no cargado.', dropZoneCompressSize: 'Arrastra imágenes aquí para comprimir a menos de {size}KB' },
-    fr:  { converting: 'Conversion', of: 'de', filesSelected: 'fichier(s) — plus ?', convertMore: 'Convertir plus', compressImages: 'Compresser', convertImages: 'Convertir', success: 'Succès !', filesProcessed: 'fichier(s)', original: 'Original', processed: 'Traité', smaller: 'plus petit', larger: 'plus grand', downloadZip: 'Télécharger ZIP', download: 'Télécharger', zipping: 'Compression', copiedClipboard: 'Image copiée !', copyBlocked: 'Copie bloquée.', copyNotSupported: 'Copie non supportée.', heicNotLoaded: 'Bibliothèque HEIC non chargée.', heicFailed: 'Erreur HEIC', zipNotLoaded: 'JSZip non chargé.', dropZoneCompressSize: 'Déposez les images ici pour compresser à moins de {size}KB' },
-    zh:  { converting: '转换中', of: '/', filesSelected: '文件已选 — 添加更多?', convertMore: '转换更多', compressImages: '压缩图片', convertImages: '转换', success: '成功！', filesProcessed: '个文件', original: '原始', processed: '处理后', smaller: '更小', larger: '更大', downloadZip: '下载 ZIP', download: '下载', zipping: '压缩中', copiedClipboard: '已复制到剪贴板！', copyBlocked: '浏览器阻止了复制。', copyNotSupported: '浏览器不支持复制。', heicNotLoaded: 'HEIC 库未加载。', heicFailed: 'HEIC 转换失败', zipNotLoaded: 'JSZip 未加载。', dropZoneCompressSize: '拖放图片至此以压缩至 {size}KB 以下' },
-    hi:  { converting: 'कनवर्ट हो रहा है', of: 'में से', filesSelected: 'फाइल चुनी — और जोड़ें?', convertMore: 'और कनवर्ट करें', compressImages: 'कंप्रेस करें', convertImages: 'कनवर्ट करें', success: 'सफल!', filesProcessed: 'फाइल', original: 'मूल', processed: 'प्रोसेस्ड', smaller: 'छोटा', larger: 'बड़ा', downloadZip: 'ZIP डाउनलोड', download: 'डाउनलोड', zipping: 'ज़िप हो रहा', copiedClipboard: 'कॉपी हो गया!', copyBlocked: 'ब्राउज़र ने कॉपी ब्लॉक किया।', copyNotSupported: 'कॉपी सपोर्ट नहीं है।', heicNotLoaded: 'HEIC लाइब्रेरी लोड नहीं हुई।', heicFailed: 'HEIC एरर', zipNotLoaded: 'JSZip लोड नहीं हुआ।', dropZoneCompressSize: 'इमेज को यहाँ छोड़ें, {size}KB से कम कंप्रेस करने के लिए' },
+    en:  { converting: 'Converting', of: 'of', filesSelected: 'file(s) selected - Drop more?', convertMore: 'Convert More Images', compressImages: 'Compress Images', convertImages: 'Convert Images', success: 'Success!', filesProcessed: 'file(s) processed', original: 'Original', processed: 'Processed', smaller: 'smaller', larger: 'larger', downloadZip: 'Download ZIP', download: 'Download', zipping: 'Zipping', copiedClipboard: 'Image copied to clipboard!', copyBlocked: 'Browser blocked clipboard copy.', copyNotSupported: 'Clipboard copy not supported on this browser.', heicNotLoaded: 'Loading HEIC library... Please wait.', heicFailed: 'Failed to process HEIC', tiffNotLoaded: 'Loading TIFF library... Please wait.', tiffFailed: 'Failed to process TIFF', zipNotLoaded: 'JSZip library has not loaded yet.', dropZoneCompressSize: 'Drop images here to compress under {size}KB' },
+    es:  { converting: 'Convirtiendo', of: 'de', filesSelected: 'archivo(s) — ¿más?', convertMore: 'Convertir más', compressImages: 'Comprimir imagen', convertImages: 'Convertir', success: '¡Éxito!', filesProcessed: 'archivo(s)', original: 'Original', processed: 'Procesado', smaller: 'más pequeño', larger: 'más grande', downloadZip: 'Descargar ZIP', download: 'Descargar', zipping: 'Comprimiendo', copiedClipboard: '¡Imagen copiada!', copyBlocked: 'Copia bloqueada por el navegador.', copyNotSupported: 'Copia no soportada.', heicNotLoaded: 'Librería HEIC no cargada.', heicFailed: 'Error HEIC', tiffNotLoaded: 'Cargando librería TIFF... Espere por favor.', tiffFailed: 'Error al procesar TIFF', zipNotLoaded: 'JSZip no cargado.', dropZoneCompressSize: 'Arrastra imágenes aquí para comprimir a menos de {size}KB' },
+    fr:  { converting: 'Conversion', of: 'de', filesSelected: 'fichier(s) — plus ?', convertMore: 'Convertir plus', compressImages: 'Compresser', convertImages: 'Convertir', success: 'Succès !', filesProcessed: 'fichier(s)', original: 'Original', processed: 'Traité', smaller: 'plus petit', larger: 'plus grand', downloadZip: 'Télécharger ZIP', download: 'Télécharger', zipping: 'Compression', copiedClipboard: 'Image copiée !', copyBlocked: 'Copie bloquée.', copyNotSupported: 'Copie non supportée.', heicNotLoaded: 'Bibliothèque HEIC non chargée.', heicFailed: 'Erreur HEIC', tiffNotLoaded: 'Chargement de la bibliothèque TIFF... Veuillez patienter.', tiffFailed: 'Échec du traitement du TIFF', zipNotLoaded: 'JSZip non chargé.', dropZoneCompressSize: 'Déposez les images ici pour compresser à moins de {size}KB' },
+    zh:  { converting: '转换中', of: '/', filesSelected: '文件已选 — 添加更多?', convertMore: '转换更多', compressImages: '压缩图片', convertImages: '转换', success: '成功！', filesProcessed: '个文件', original: '原始', processed: '处理后', smaller: '更小', larger: '更大', downloadZip: '下载 ZIP', download: '下载', zipping: '压缩中', copiedClipboard: '已复制到剪贴板！', copyBlocked: '浏览器阻止了复制。', copyNotSupported: '浏览器不支持复制。', heicNotLoaded: 'HEIC 库未加载。', heicFailed: 'HEIC 转换失败', tiffNotLoaded: '正在加载 TIFF 库... 请稍候。', tiffFailed: 'TIFF 处理失败', zipNotLoaded: 'JSZip 未加载。', dropZoneCompressSize: '拖放图片至此以压缩至 {size}KB 以下' },
+    hi:  { converting: 'कनवर्ट हो रहा है', of: 'में से', filesSelected: 'फाइल चुनी — और जोड़ें?', convertMore: 'और कनवर्ट करें', compressImages: 'कंप्रेस करें', convertImages: 'कनवर्ट करें', success: 'सफल!', filesProcessed: 'फाइल', original: 'मूल', processed: 'प्रोसेस्ड', smaller: 'छोटा', larger: 'बड़ा', downloadZip: 'ZIP डाउनलोड', download: 'डाउनलोड', zipping: 'ज़िप हो रहा', copiedClipboard: 'कॉपी हो गया!', copyBlocked: 'ब्राउज़र ने कॉपी ब्लॉक किया।', copyNotSupported: 'कॉपी सपोर्ट नहीं है।', heicNotLoaded: 'HEIC लाइब्रेरी लोड नहीं हुई।', heicFailed: 'HEIC एरर', tiffNotLoaded: 'TIFF लाइब्रेरी लोड हो रही है... कृपया प्रतीक्षा करें।', tiffFailed: 'TIFF संसाधित करने में विफल', zipNotLoaded: 'JSZip लोड नहीं हुआ।', dropZoneCompressSize: 'इमेज को यहाँ छोड़ें, {size}KB से कम कंप्रेस करने के लिए' },
   };
   const t = i18nStrings[lang] || i18nStrings.en;
   clearBtn.appendChild(document.createTextNode(' ' + t.convertMore));
@@ -386,6 +386,47 @@ document.addEventListener('DOMContentLoaded', () => {
     document.head.appendChild(script);
   });
 
+  const loadTiffLibrary = () => new Promise((resolve, reject) => {
+    if (typeof UTIF !== 'undefined') {
+      resolve();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/utif@3.1.0/UTIF.js';
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error("TIFF library load failed"));
+    document.head.appendChild(script);
+  });
+
+  async function convertTiffToPngBlob(file) {
+    const buffer = await file.arrayBuffer();
+    const ifds = UTIF.decode(buffer);
+    if (!ifds || ifds.length === 0) {
+      throw new Error("Invalid TIFF file");
+    }
+    UTIF.decodeImage(buffer, ifds[0]);
+    const rgba = UTIF.toRGBA8(ifds[0]);
+    const width = ifds[0].width;
+    const height = ifds[0].height;
+    
+    const tempCanvas = document.createElement('canvas');
+    tempCanvas.width = width;
+    tempCanvas.height = height;
+    const tempCtx = tempCanvas.getContext('2d');
+    if (!tempCtx) throw new Error("Could not get temporary canvas context");
+    
+    const imgData = tempCtx.createImageData(width, height);
+    imgData.data.set(new Uint8ClampedArray(rgba));
+    tempCtx.putImageData(imgData, 0, 0);
+    
+    return new Promise((resolve, reject) => {
+      tempCanvas.toBlob(blob => {
+        if (blob) resolve(blob);
+        else reject(new Error("Canvas conversion to Blob failed"));
+      }, 'image/png');
+    });
+  }
+
   async function handleFiles(files) {
     const wasEmpty = queuedFiles.length === 0;
     progressContainer.classList.remove('visible');
@@ -395,7 +436,7 @@ document.addEventListener('DOMContentLoaded', () => {
     for (let f of files) {
       const ext = f.name.split('.').pop().toLowerCase();
       
-      if (!f.type.startsWith('image/') && !['heic', 'heif', 'ico', 'svg'].includes(ext)) {
+      if (!f.type.startsWith('image/') && !['heic', 'heif', 'ico', 'svg', 'tiff', 'tif'].includes(ext)) {
          showToast(t.error || 'Invalid file type: ' + f.name, 'error');
          continue;
       }
@@ -428,6 +469,33 @@ document.addEventListener('DOMContentLoaded', () => {
            continue;
          } catch (e) {
            showToast(t.heicFailed + ': ' + f.name, 'error');
+           queuedFiles = queuedFiles.filter(q => q.id !== queueId);
+           continue;
+         }
+      } else if (ext === 'tiff' || ext === 'tif') {
+         if (typeof UTIF === 'undefined') {
+           showToast(t.tiffNotLoaded, 'info');
+           try {
+             await loadTiffLibrary();
+           } catch (err) {
+             showToast(t.tiffFailed + ': ' + f.name, 'error');
+             continue;
+           }
+         }
+         try {
+           queuedFiles.push({ file: f, result: null, id: queueId, processing: true, thumbUrl: '' });
+           renderGallery();
+           
+           const blob = await convertTiffToPngBlob(f);
+           fileToQueue = new File([blob], f.name.replace(/\.[^.]+$/, '.png'), { type: 'image/png' });
+           
+           const qItem = queuedFiles.find(q => q.id === queueId);
+           if (qItem) { qItem.file = fileToQueue; qItem.processing = false; qItem.thumbUrl = URL.createObjectURL(fileToQueue); renderGallery(); }
+           
+           await new Promise(resolve => setTimeout(resolve, 50));
+           continue;
+         } catch (e) {
+           showToast(t.tiffFailed + ': ' + f.name, 'error');
            queuedFiles = queuedFiles.filter(q => q.id !== queueId);
            continue;
          }
@@ -510,6 +578,18 @@ document.addEventListener('DOMContentLoaded', () => {
     
     isCompression = document.body.dataset.mode === 'compress' || document.body.dataset.compressMode === 'true';
 
+    if (selectedMime === 'image/tiff') {
+      try {
+        await loadTiffLibrary();
+      } catch (err) {
+        showToast(t.tiffFailed || "Failed to load TIFF library", "error");
+        convertBtn.disabled = false;
+        convertBtnText.textContent = isCompression ? t.compressImages : t.convertImages;
+        progressContainer.classList.remove('visible');
+        return;
+      }
+    }
+
     convertedFiles = [];
     let totalOrigSize = 0;
     let totalNewSize = 0;
@@ -527,7 +607,7 @@ document.addEventListener('DOMContentLoaded', () => {
           else if (origType === 'image/webp') targetMime = 'image/webp';
           else targetMime = 'image/jpeg'; // default for jpg/heic/unknown
         }
-        const targetExtMap = { 'image/jpeg':'jpg', 'image/png':'png', 'image/webp':'webp', 'image/avif':'avif', 'image/x-icon':'ico' };
+        const targetExtMap = { 'image/jpeg':'jpg', 'image/png':'png', 'image/webp':'webp', 'image/avif':'avif', 'image/x-icon':'ico', 'image/tiff':'tiff' };
         const targetExt = targetExtMap[targetMime] || 'jpg';
         lastTargetExt = targetExt;
 
@@ -644,6 +724,15 @@ document.addEventListener('DOMContentLoaded', () => {
                            res(null);
                        });
                    }, 'image/png');
+               } else if (outMime === 'image/tiff') {
+                   try {
+                       const imgData = ctx.getImageData(0, 0, targetW, targetH);
+                       const tiffBuffer = UTIF.encodeImage(imgData.data, targetW, targetH);
+                       res(new Blob([tiffBuffer], { type: 'image/tiff' }));
+                   } catch (err) {
+                       console.error("TIFF encoding error:", err);
+                       res(null);
+                   }
                } else {
                    canvas.toBlob(b => res(b), outMime, outMime !== 'image/png' ? outQuality : undefined);
                }
