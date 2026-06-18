@@ -8,6 +8,7 @@ body {
   min-height: 100vh;
   background: #09090b;
   color: #e2e8f0;
+  color-scheme: dark;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -585,6 +586,7 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 [data-theme="light"] {
   background: #f8fafc;
   color: #0f172a;
+  color-scheme: light;
 }
 [data-theme="light"] .mesh-1 { background: #818cf8; opacity: 0.3; }
 [data-theme="light"] .mesh-2 { background: #e879f9; opacity: 0.3; }
@@ -1101,12 +1103,12 @@ body.theme-transitioning *::after {
 }
 .format-tabs select.tab option {
   background: #18181b;
-  color: #cbd5e1;
+  color: #cbd5e1 !important;
   font-weight: 500;
 }
 [data-theme="light"] .format-tabs select.tab option {
   background: #ffffff;
-  color: #0f172a;
+  color: #0f172a !important;
 }
 
 
