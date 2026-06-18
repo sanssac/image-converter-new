@@ -279,20 +279,49 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Language Switcher Component has been moved up to run on all pages
-  const tabs = document.querySelectorAll('.format-tabs .tab');
+  const tabs = document.querySelectorAll('.format-tabs .tab:not(select)');
+  const selectTab = document.getElementById('moreFormatsSelect');
+
   if (tabs.length > 0) {
     // If tabs exist, preselect based on dataset
     tabs.forEach(tab => {
         if (tab.getAttribute('data-target') === selectedMime) {
             tabs.forEach(t => t.classList.remove('active'));
             tab.classList.add('active');
+            if (selectTab) {
+                selectTab.classList.remove('active');
+                selectTab.value = "";
+            }
         }
         tab.addEventListener('click', (e) => {
             tabs.forEach(t => t.classList.remove('active'));
+            if (selectTab) {
+                selectTab.classList.remove('active');
+                selectTab.value = "";
+            }
             e.target.classList.add('active');
             selectedMime = e.target.getAttribute('data-target');
         });
     });
+  }
+
+  if (selectTab) {
+    selectTab.addEventListener('change', (e) => {
+      const val = e.target.value;
+      if (val) {
+        tabs.forEach(t => t.classList.remove('active'));
+        selectTab.classList.add('active');
+        selectedMime = val;
+      }
+    });
+    // If initial selectedMime matches a select option, activate the select tab
+    const options = Array.from(selectTab.options);
+    const hasMatchingOption = options.some(opt => opt.value === selectedMime);
+    if (hasMatchingOption) {
+      tabs.forEach(t => t.classList.remove('active'));
+      selectTab.classList.add('active');
+      selectTab.value = selectedMime;
+    }
   }
 
   const batchCountText = document.getElementById('batchCountText');
