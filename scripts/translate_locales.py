@@ -1986,8 +1986,11 @@ def translate_page(filepath, lang, tool_name):
     step2_name = ht_trans['step2_compress_name'] if is_compress_tool else ht_trans['step2_convert_name']
     step2_text = ht_trans['step2_compress_text'] if is_compress_tool else ht_trans['step2_convert_text']
     
-    tool_suffix = "" if tool_name == "index.html" else f"{tool_name.strip('/')}/"
-    page_url = f"https://www.imglabconverter.com/{lang}/{tool_suffix}" if lang != 'en' else f"https://www.imglabconverter.com/{tool_suffix}"
+    tool_suffix = "" if tool_name == "index.html" else tool_name.strip('/')
+    if tool_suffix:
+        page_url = f"https://www.imglabconverter.com/{lang}/{tool_suffix}" if lang != 'en' else f"https://www.imglabconverter.com/{tool_suffix}"
+    else:
+        page_url = f"https://www.imglabconverter.com/{lang}" if lang != 'en' else "https://www.imglabconverter.com/"
     
     howto_schema = {
         "@context": "https://schema.org",
@@ -2070,7 +2073,7 @@ def main():
         if translated_html:
             # fix canonical URL for the translated homepage
             translated_html = re.sub(r'<link rel="canonical" href="https://www.imglabconverter.com/"', 
-                                     f'<link rel="canonical" href="https://www.imglabconverter.com/{lang}/"', translated_html)
+                                     f'<link rel="canonical" href="https://www.imglabconverter.com/{lang}"', translated_html)
             with open(dest_path, 'w', encoding='utf-8') as f:
                 f.write(translated_html)
             print(f"Compiled translated homepage: {lang}/index.html")
@@ -2090,8 +2093,9 @@ def main():
             translated_html = translate_page(src_path, lang, tool)
             if translated_html:
                 # fix canonical URL for the translated subpage
-                translated_html = re.sub(rf'<link rel="canonical" href="https://www.imglabconverter.com/{tool}/"', 
-                                         f'<link rel="canonical" href="https://www.imglabconverter.com/{lang}/{tool}/"', translated_html)
+                # support matching both with and without trailing slash in the template's canonical tag
+                translated_html = re.sub(rf'<link rel="canonical" href="https://www.imglabconverter.com/{tool}/?"', 
+                                         f'<link rel="canonical" href="https://www.imglabconverter.com/{lang}/{tool}"', translated_html)
                 # fix form actions or data target attributes if any
                 with open(dest_path, 'w', encoding='utf-8') as f:
                     f.write(translated_html)

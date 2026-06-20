@@ -32,25 +32,30 @@ for filepath in html_files:
         parts.pop(0)
         
     route = "/".join(parts)
+    
     if route:
-        route = route + "/"
+        en_url = f"{base_url}/{route}"
+    else:
+        en_url = f"{base_url}/"
         
     hreflang_block = f"""
-  <link rel="alternate" hreflang="x-default" href="{base_url}/{route}" />
-  <link rel="alternate" hreflang="en" href="{base_url}/{route}" />
+  <link rel="alternate" hreflang="x-default" href="{en_url}" />
+  <link rel="alternate" hreflang="en" href="{en_url}" />
 """
     for lang in languages:
         # Only add hreflang tag if the localized directory/file actually exists on disk
         exists = False
         if not route:
             exists = True
+            lang_url = f"{base_url}/{lang}"
         else:
             check_path = os.path.join(base_dir, lang, route, "index.html")
             if os.path.exists(check_path):
                 exists = True
+            lang_url = f"{base_url}/{lang}/{route}"
                 
         if exists:
-            hreflang_block += f'  <link rel="alternate" hreflang="{lang}" href="{base_url}/{lang}/{route}" />\n'
+            hreflang_block += f'  <link rel="alternate" hreflang="{lang}" href="{lang_url}" />\n'
         
     with open(filepath, 'r', encoding='utf-8') as f:
         html = f.read()

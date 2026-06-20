@@ -134,7 +134,7 @@ for tool_name, size_kb, fmt_mime, fmt_disp in tools_info:
     }
     
     # Build schema HowTo
-    page_url = f"https://www.imglabconverter.com/{tool_name}/"
+    page_url = f"https://www.imglabconverter.com/{tool_name}"
     howto_schema = {
         "@context": "https://schema.org",
         "@type": "HowTo",
@@ -195,16 +195,16 @@ for tool_name, size_kb, fmt_mime, fmt_disp in tools_info:
         <h3>Related Free Tools</h3>
         <a href="/">Convert Multiple Formats</a>
         <a href="/compress-image">Compress Image (Custom Size)</a>
-        <a href="/compress-image-to-10kb/">Compress Image to 10KB</a>
-        <a href="/compress-image-to-20kb/">Compress Image to 20KB</a>
-        <a href="/compress-image-to-30kb/">Compress Image to 30KB</a>
-        <a href="/compress-image-to-50kb/">Compress Image to 50KB</a>
-        <a href="/compress-image-to-100kb/">Compress Image to 100KB</a>
-        <a href="/compress-image-to-200kb/">Compress Image to 200KB</a>
-        <a href="/compress-image-to-500kb/">Compress Image to 500KB</a>
-        <a href="/compress-jpg-to-100kb/">Compress JPG to 100KB</a>
-        <a href="/compress-png-to-100kb/">Compress PNG to 100KB</a>
-        <a href="/compress-jpeg-to-100kb/">Compress JPEG to 100KB</a>
+        <a href="/compress-image-to-10kb">Compress Image to 10KB</a>
+        <a href="/compress-image-to-20kb">Compress Image to 20KB</a>
+        <a href="/compress-image-to-30kb">Compress Image to 30KB</a>
+        <a href="/compress-image-to-50kb">Compress Image to 50KB</a>
+        <a href="/compress-image-to-100kb">Compress Image to 100KB</a>
+        <a href="/compress-image-to-200kb">Compress Image to 200KB</a>
+        <a href="/compress-image-to-500kb">Compress Image to 500KB</a>
+        <a href="/compress-jpg-to-100kb">Compress JPG to 100KB</a>
+        <a href="/compress-png-to-100kb">Compress PNG to 100KB</a>
+        <a href="/compress-jpeg-to-100kb">Compress JPEG to 100KB</a>
       </section>"""
       
     # SEO article with H2 cluster structures, comparison metrics, and government application keywords
@@ -316,7 +316,7 @@ blog_posts = [
         <p>Here is a simple, secure tutorial on how to compress your JPG photos under 100KB offline, right on your machine, using our 100% private <strong>jpg size reducer</strong>.</p>
         
         <h2>Step 1: Navigate to the 100KB Compressor</h2>
-        <p>Go to our specialized <a href="/compress-image-to-100kb/">Compress Image to 100KB</a> tool or our <a href="/compress-jpg-to-100kb/">Compress JPG to 100KB</a> locking page. This pre-configures the compression algorithms to automatically stay under the 100KB limit.</p>
+        <p>Go to our specialized <a href="/compress-image-to-100kb">Compress Image to 100KB</a> tool or our <a href="/compress-jpg-to-100kb">Compress JPG to 100KB</a> locking page. This pre-configures the compression algorithms to automatically stay under the 100KB limit.</p>
         
         <h2>Step 2: Drag and Drop Your Photos</h2>
         <p>Drag your bloated JPG/JPEG photos into the drag-and-drop box, or click the select button to select files from your mobile phone camera roll or computer hard drive.</p>
@@ -340,7 +340,7 @@ blog_posts = [
         <p>Instead of converting your PNG to a blurry JPG, you can use canvas quantization. Our tool handles this directly on the client side:</p>
         
         <h2>Step 1: Open the 50KB Compressor</h2>
-        <p>Navigate to our specialized <a href="/compress-image-to-50kb/">Compress Image to 50KB</a> page. The page comes pre-configured with a 50KB threshold limitation.</p>
+        <p>Navigate to our specialized <a href="/compress-image-to-50kb">Compress Image to 50KB</a> page. The page comes pre-configured with a 50KB threshold limitation.</p>
         
         <h2>Step 2: Add Your PNG Signature or Image</h2>
         <p>Select your signature file. If your browser supports it, it will render a high-quality local thumb review instantly.</p>
@@ -366,9 +366,9 @@ blog_posts = [
         <h2>2. Target the Required Size Limit</h2>
         <p>Once cropped, navigate to the specific size-limited compressor. We provide dedicated pages that guarantee your image fits exactly within limits:</p>
         <ul>
-          <li>For extremely small files: <a href="/compress-image-to-10kb/">Compress Image to 10KB</a> or <a href="/compress-image-to-20kb/">Compress Image to 20KB</a></li>
-          <li>For typical passport photos: <a href="/compress-image-to-30kb/">Compress Image to 30KB</a> or <a href="/compress-image-to-50kb/">Compress Image to 50KB</a></li>
-          <li>For passport/resume documents: <a href="/compress-image-to-100kb/">Compress Image to 100KB</a></li>
+          <li>For extremely small files: <a href="/compress-image-to-10kb">Compress Image to 10KB</a> or <a href="/compress-image-to-20kb">Compress Image to 20KB</a></li>
+          <li>For typical passport photos: <a href="/compress-image-to-30kb">Compress Image to 30KB</a> or <a href="/compress-image-to-50kb">Compress Image to 50KB</a></li>
+          <li>For passport/resume documents: <a href="/compress-image-to-100kb">Compress Image to 100KB</a></li>
         </ul>
         
         <h2>3. Compress Privately and Locally</h2>
@@ -387,10 +387,10 @@ blog_posts = [
         <p>Follow this checklist to format your files perfectly in under 2 minutes:</p>
         
         <h2>Candidate Signature (10KB - 20KB)</h2>
-        <p>Sign on plain white paper with a black ink pen, take a clear photo, crop out excess background space, and use our <a href="/compress-image-to-20kb/">Compress Image to 20KB</a> or <a href="/compress-image-to-10kb/">Compress Image to 10KB</a> tools. This ensures the signature file remains legible and falls safely within the limit.</p>
+        <p>Sign on plain white paper with a black ink pen, take a clear photo, crop out excess background space, and use our <a href="/compress-image-to-20kb">Compress Image to 20KB</a> or <a href="/compress-image-to-10kb">Compress Image to 10KB</a> tools. This ensures the signature file remains legible and falls safely within the limit.</p>
         
         <h2>Candidate Photo (20KB - 50KB)</h2>
-        <p>Stand against a light/white background, take a passport-style headshot, and use our <a href="/compress-image-to-50kb/">Compress Image to 50KB</a> tool. The tool will automatically downscale the file to sit right between 20KB and 50KB, which is the exact acceptance window.</p>
+        <p>Stand against a light/white background, take a passport-style headshot, and use our <a href="/compress-image-to-50kb">Compress Image to 50KB</a> tool. The tool will automatically downscale the file to sit right between 20KB and 50KB, which is the exact acceptance window.</p>
         
         <h2>Absolute Privacy for Personal Documents</h2>
         <p>Never upload your official signatures or passport photos to unverified third-party cloud engines. Our client-side local optimizer executes all conversions entirely in your browser memory, meaning your document files never travel over the network. Save your time and protect your identity.</p>
@@ -407,7 +407,7 @@ for post in blog_posts:
     dest_dir = os.path.join(base_dir, "blog", slug)
     ensure_dir(dest_dir)
     
-    page_url = f"https://www.imglabconverter.com/blog/{slug}/"
+    page_url = f"https://www.imglabconverter.com/blog/{slug}"
     
     headers_block = f"""  <title>{title}</title>
   <meta name="description" content="{desc}" />

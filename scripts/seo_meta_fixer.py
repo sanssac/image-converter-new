@@ -44,12 +44,22 @@ for filepath in html_files:
         
     title_match = re.search(r'<title>(.*?)</title>', html, re.IGNORECASE)
     desc_match = re.search(r'<meta\s+name="description"\s+content="([^"]+)"', html, re.IGNORECASE)
-    canonical_match = re.search(r'<link\s+rel="canonical"\s+href="([^"]+)"', html, re.IGNORECASE)
+    canonical_match = re.search(r'<link\s+rel="canonical"\s+href="([^"]+)"\s*/?>', html, re.IGNORECASE)
     
     title = title_match.group(1).strip() if title_match else "Free Online Image Converter"
     desc = desc_match.group(1).strip() if desc_match else "Free, secure, client-side browser image conversion tool."
     url = canonical_match.group(1).strip() if canonical_match else "https://www.imglabconverter.com/"
     
+    # Normalize url (strip trailing slash if it is not the root domain)
+    if url.startswith("https://www.imglabconverter.com") and url != "https://www.imglabconverter.com/":
+        if url.endswith("/"):
+            url = url[:-1]
+            
+    if canonical_match:
+        old_canonical = canonical_match.group(0)
+        new_canonical = f'<link rel="canonical" href="{url}" />'
+        html = html.replace(old_canonical, new_canonical)
+        
     html = strip_existing_tags(html)
     
     seo_block = f"""

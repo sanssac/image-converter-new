@@ -182,11 +182,16 @@ def get_route(filepath):
     if parts[0] in ['de', 'es', 'fr', 'hi', 'zh']:
         parts = parts[1:]
         
-    if len(parts) == 0 or parts[0] == 'index.html':
+    if len(parts) == 0:
         return '/'
         
-    tool_name = parts[0]
-    return f'/{tool_name}/'
+    if parts[-1] == 'index.html':
+        parts.pop()
+        
+    if len(parts) == 0:
+        return '/'
+        
+    return '/' + '/'.join(parts)
 
 def make_mega_link(tool_key, tool_path, lang_prefix, trans):
     name, desc = trans[tool_key]
@@ -226,8 +231,7 @@ def generate_header(current_lang, route):
     trans = TRANSLATIONS.get(current_lang, TRANSLATIONS['en'])
     lang_prefix = trans['logo_prefix']
     
-    logo_href = f"{lang_prefix}/"
-    logo_href = logo_href.replace('//', '/')
+    logo_href = lang_prefix if lang_prefix else "/"
     
     # 1. Language Options Switcher Build
     lang_options = ""
@@ -247,7 +251,7 @@ def generate_header(current_lang, route):
         if page_exists:
             new_path = route if code == 'en' else f"/{code}{route}"
         else:
-            new_path = "/" if code == 'en' else f"/{code}/"
+            new_path = "/" if code == 'en' else f"/{code}"
             
         new_path = new_path.replace('//', '/')
         active_class = "active" if code == current_lang else ""
@@ -255,7 +259,7 @@ def generate_header(current_lang, route):
 
     # 2. Localized Mega Menu Grid Build
     mega_col1 = "\n".join([
-        make_mega_link('multi', '/', lang_prefix, trans),
+        make_mega_link('multi', '', lang_prefix, trans),
         make_mega_link('jpg_png', '/jpg-to-png', lang_prefix, trans),
         make_mega_link('png_jpg', '/png-to-jpg', lang_prefix, trans),
         make_mega_link('webp_jpg', '/webp-to-jpg', lang_prefix, trans),

@@ -37,14 +37,19 @@ all_tools = [
 languages = ["de", "es", "fr", "hi", "zh"]
 base_url = "https://www.imglabconverter.com"
 
+import re
+
 with open(sitemap_path, 'r', encoding='utf-8') as f:
     sitemap_content = f.read()
+
+# Normalize trailing slashes for existing loc tags (except absolute root homepage)
+sitemap_content = re.sub(r'<loc>(https://www\.imglabconverter\.com/[^<]+?)/</loc>', r'<loc>\1</loc>', sitemap_content)
 
 new_urls_xml = ""
 
 # Add any missing English tools
 for tool in all_tools:
-    url = f"{base_url}/{tool}/"
+    url = f"{base_url}/{tool}"
     if f"<loc>{url}</loc>" not in sitemap_content:
         new_urls_xml += f"""  <url>
     <loc>{url}</loc>
@@ -56,7 +61,7 @@ for tool in all_tools:
 # Add any missing Localized tools
 for lang in languages:
     for tool in all_tools:
-        url = f"{base_url}/{lang}/{tool}/"
+        url = f"{base_url}/{lang}/{tool}"
         if f"<loc>{url}</loc>" not in sitemap_content:
             new_urls_xml += f"""  <url>
     <loc>{url}</loc>
@@ -67,8 +72,8 @@ for lang in languages:
 
 if new_urls_xml:
     sitemap_content = sitemap_content.replace('</urlset>', new_urls_xml + '</urlset>')
-    with open(sitemap_path, 'w', encoding='utf-8') as f:
-        f.write(sitemap_content)
-    print("Sitemap updated successfully.")
-else:
-    print("No new URLs to add.")
+
+with open(sitemap_path, 'w', encoding='utf-8') as f:
+    f.write(sitemap_content)
+
+print("Sitemap updated and trailing slashes cleaned successfully.")
