@@ -278,8 +278,166 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // ── Setup Custom Dropdown for format select ─────
+  function setupCustomDropdown(selectId) {
+    const nativeSelect = document.getElementById(selectId);
+    if (!nativeSelect) return null;
+
+    // Create container
+    const container = document.createElement('div');
+    container.className = 'custom-select-container tab';
+    
+    // Create trigger button
+    const trigger = document.createElement('button');
+    trigger.className = 'custom-select-trigger';
+    trigger.type = 'button';
+    trigger.setAttribute('aria-haspopup', 'listbox');
+    trigger.setAttribute('aria-expanded', 'false');
+    
+    const labelSpan = document.createElement('span');
+    labelSpan.className = 'custom-select-label';
+    
+    // Set initial label to the text of the selected/placeholder option
+    const placeholderOpt = nativeSelect.options[0];
+    labelSpan.textContent = placeholderOpt ? placeholderOpt.textContent : 'More...';
+    trigger.appendChild(labelSpan);
+
+    // Arrow SVG
+    trigger.innerHTML += `<svg class="custom-select-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>`;
+    
+    container.appendChild(trigger);
+
+    // Create option menu
+    const menu = document.createElement('div');
+    menu.className = 'custom-select-menu';
+    menu.setAttribute('role', 'listbox');
+
+    // Populate options
+    const options = Array.from(nativeSelect.options).filter(opt => !opt.disabled && opt.value !== "");
+    options.forEach(opt => {
+      const optDiv = document.createElement('div');
+      optDiv.className = 'custom-select-option';
+      optDiv.setAttribute('role', 'option');
+      optDiv.setAttribute('data-value', opt.value);
+      optDiv.textContent = opt.textContent;
+      
+      optDiv.addEventListener('click', (e) => {
+        e.stopPropagation();
+        
+        // Update selected class
+        menu.querySelectorAll('.custom-select-option').forEach(o => o.classList.remove('selected'));
+        optDiv.classList.add('selected');
+        
+        // Update trigger label
+        labelSpan.textContent = opt.textContent;
+        
+        // Close menu
+        container.classList.remove('open');
+        trigger.setAttribute('aria-expanded', 'false');
+        
+        // Update native select
+        nativeSelect.value = opt.value;
+        nativeSelect.dispatchEvent(new Event('change', { bubbles: true }));
+      });
+      menu.appendChild(optDiv);
+    });
+
+    container.appendChild(menu);
+
+    // Toggle menu visibility
+    trigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = container.classList.contains('open');
+      
+      // Close other dropdowns if any
+      document.querySelectorAll('.custom-select-container').forEach(c => {
+        if (c !== container) {
+          c.classList.remove('open');
+          c.querySelector('.custom-select-trigger').setAttribute('aria-expanded', 'false');
+        }
+      });
+      
+      if (isOpen) {
+        container.classList.remove('open');
+        trigger.setAttribute('aria-expanded', 'false');
+      } else {
+        container.classList.add('open');
+        trigger.setAttribute('aria-expanded', 'true');
+      }
+    });
+
+    // Close when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!container.contains(e.target)) {
+        container.classList.remove('open');
+        trigger.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    // Keyboard navigation (Escape to close)
+    container.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        container.classList.remove('open');
+        trigger.setAttribute('aria-expanded', 'false');
+        trigger.focus();
+      }
+    });
+
+    // Function to sync custom UI based on native value
+    const syncCustomSelect = () => {
+      const val = nativeSelect.value;
+      if (!val) {
+        labelSpan.textContent = placeholderOpt ? placeholderOpt.textContent : 'More...';
+        menu.querySelectorAll('.custom-select-option').forEach(o => o.classList.remove('selected'));
+        container.classList.remove('active');
+      } else {
+        const matchingOpt = menu.querySelector(`[data-value="${val}"]`);
+        if (matchingOpt) {
+          labelSpan.textContent = matchingOpt.textContent;
+          menu.querySelectorAll('.custom-select-option').forEach(o => o.classList.remove('selected'));
+          matchingOpt.classList.add('selected');
+          container.classList.add('active');
+        }
+      }
+    };
+
+    // Override value property on native select to detect programmatic changes
+    const desc = Object.getOwnPropertyDescriptor(HTMLSelectElement.prototype, 'value');
+    Object.defineProperty(nativeSelect, 'value', {
+      get: desc.get,
+      set: function(val) {
+        desc.set.call(this, val);
+        syncCustomSelect();
+      }
+    });
+
+    // Override classList methods to sync active class
+    const originalAdd = nativeSelect.classList.add;
+    const originalRemove = nativeSelect.classList.remove;
+    nativeSelect.classList.add = function(...args) {
+      originalAdd.apply(this, args);
+      if (args.includes('active')) container.classList.add('active');
+    };
+    nativeSelect.classList.remove = function(...args) {
+      originalRemove.apply(this, args);
+      if (args.includes('active')) container.classList.remove('active');
+    };
+
+    // Sync custom dropdown when native select receives a change event
+    nativeSelect.addEventListener('change', syncCustomSelect);
+
+    // Replace native select's position in DOM but keep it hidden inside container
+    nativeSelect.parentNode.insertBefore(container, nativeSelect);
+    nativeSelect.style.display = 'none'; // Hide native select
+    container.appendChild(nativeSelect); // Move native select inside container so it's kept in DOM
+
+    return container;
+  }
+
+  setupCustomDropdown('moreFormatsSelect');
+
   // Language Switcher Component has been moved up to run on all pages
-  const tabs = document.querySelectorAll('.format-tabs .tab:not(select)');
+  const tabs = document.querySelectorAll('.format-tabs .tab:not(select):not(.custom-select-container)');
   const selectTab = document.getElementById('moreFormatsSelect');
 
   if (tabs.length > 0) {
@@ -628,13 +786,17 @@ document.addEventListener('DOMContentLoaded', () => {
       let q = queuedFiles[i];
 
       try {
-        // In compress mode, keep original format; in convert mode, use tab selection
+        // In compress mode, keep original format unless targetMime is explicitly locked; in convert mode, use tab selection
         let targetMime = selectedMime;
         if (isCompression) {
-          const origType = q.file.type;
-          if (origType === 'image/png') targetMime = 'image/png';
-          else if (origType === 'image/webp') targetMime = 'image/webp';
-          else targetMime = 'image/jpeg'; // default for jpg/heic/unknown
+          if (document.body.dataset.targetMime) {
+            targetMime = document.body.dataset.targetMime;
+          } else {
+            const origType = q.file.type;
+            if (origType === 'image/png') targetMime = 'image/png';
+            else if (origType === 'image/webp') targetMime = 'image/webp';
+            else targetMime = 'image/jpeg'; // default for jpg/heic/unknown
+          }
         }
         const targetExtMap = { 'image/jpeg':'jpg', 'image/png':'png', 'image/webp':'webp', 'image/avif':'avif', 'image/x-icon':'ico', 'image/tiff':'tiff' };
         const targetExt = targetExtMap[targetMime] || 'jpg';

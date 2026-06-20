@@ -96,6 +96,187 @@ COMMON_UI = {
 }
 
 # Rich tool translations matrices
+
+FAQ_TEMPLATES = {
+    'en': {
+        'format_image': 'image',
+        'q1': 'How do I compress a {format} to {size}KB?',
+        'a1': 'Upload your {format} into our local compressor. The client-side engine will automatically optimize resolution and quality parameters to fit within the {size}KB limit.',
+        'q2': 'Can I compress PNG to {size}KB without losing quality?',
+        'a2': 'Compressing to exactly {size}KB requires lossy optimization. While our kb reducer uses smart local canvas serialization to minimize quality loss, PNGs (especially with text or fine details) will be optimized to meet the target threshold.',
+        'q3': 'Is my image uploaded to a server?',
+        'a3': 'Absolutely not. Our compressor runs 100% locally in your web browser. Your images never leave your device, ensuring maximum privacy and security.',
+        'q4': 'Can I compress images offline?',
+        'a4': 'Yes! Since the processing is done client-side, the tool functions entirely offline without any internet connection once the page is loaded.',
+        'q5': 'Does this work on mobile phones?',
+        'a5': 'Yes, it works seamlessly on all Android devices, iPhones (including HEIC formats), and tablets directly through your mobile web browser.',
+        'q6': 'Can I compress multiple images at once?',
+        'a6': 'Yes, our tool supports bulk image compression. Drag and drop multiple files to optimize them in a single batch.',
+        'q7': 'What image formats are supported?',
+        'a7': 'We support JPG, JPEG, PNG, WEBP, HEIC, and TIFF formats. Uploaded HEIC or TIFF files are automatically processed and converted.'
+    },
+    'de': {
+        'format_image': 'Bild',
+        'q1': 'Wie komprimiere ich ein {format} auf {size}KB?',
+        'a1': 'Laden Sie Ihr {format} in unseren lokalen Kompressor hoch. Die clientseitige Engine optimiert Auflösung und Qualität automatisch, um das Limit von {size}KB einzuhalten.',
+        'q2': 'Kann ich PNG ohne Qualitätsverlust auf {size}KB komprimieren?',
+        'a2': 'Das Komprimieren auf exakt {size}KB erfordert eine verlustbehaftete Optimierung. Unser Tool nutzt intelligente Canvas-Serialisierung, um den Qualitätsverlust zu minimieren.',
+        'q3': 'Werden meine Bilder auf einen Server hochgeladen?',
+        'a3': 'Nein. Unser Kompressor läuft zu 100% lokal in Ihrem Webbrowser. Ihre Bilder verlassen Ihr Gerät nie, was maximale Privatsphäre garantiert.',
+        'q4': 'Kann ich Bilder offline komprimieren?',
+        'a4': 'Ja! Da die Verarbeitung clientseitig erfolgt, funktioniert das Tool nach dem Laden der Seite vollständig offline.',
+        'q5': 'Funktioniert das auch auf Mobiltelefonen?',
+        'a5': 'Ja, es läuft nahtlos auf allen Android-Geräten, iPhones (inkl. HEIC) und Tablets direkt im mobilen Browser.',
+        'q6': 'Kann ich mehrere Bilder gleichzeitig komprimieren?',
+        'a6': 'Ja, unser Tool unterstützt die Stapelkomprimierung. Ziehen Sie mehrere Dateien hinein, um sie in einem Rutsch zu optimieren.',
+        'q7': 'Welche Bildformate werden unterstützt?',
+        'a7': 'Wir unterstützen JPG, JPEG, PNG, WEBP, HEIC und TIFF. Hochgeladene HEIC- oder TIFF-Dateien werden automatisch verarbeitet.'
+    },
+    'es': {
+        'format_image': 'imagen',
+        'q1': '¿Cómo comprimo un {format} a {size}KB?',
+        'a1': 'Sube tu {format} a nuestro compresor local. El motor del lado del cliente optimizará la resolución y la calidad para ajustarse al límite de {size}KB.',
+        'q2': '¿Puedo comprimir PNG a {size}KB sin perder calidad?',
+        'a2': 'Comprimir a exactamente {size}KB requiere optimización con pérdida. Nuestra herramienta utiliza serialización inteligente en el navegador para minimizar la pérdida visual.',
+        'q3': '¿Se suben mis imágenes a algún servidor?',
+        'a3': 'No. Nuestro compresor funciona 100% local en tu navegador. Tus fotos nunca salen de tu dispositivo, garantizando máxima seguridad.',
+        'q4': '¿Puedo comprimir imágenes sin conexión (offline)?',
+        'a4': 'Sí, al procesarse en el cliente, el compresor funciona completamente sin conexión una vez que se carga la página.',
+        'q5': '¿Funciona en teléfonos móviles?',
+        'a5': 'Sí, funciona perfectamente en Android, iPhone (incluyendo HEIC) y tabletas desde el navegador web móvil.',
+        'q6': '¿Puedo comprimir varias imágenes a la vez?',
+        'a6': 'Sí, admitimos compresión por lotes. Arrastra múltiples archivos para optimizarlos en un solo paso.',
+        'q7': '¿Qué formatos de imagen son compatibles?',
+        'a7': 'Soportamos JPG, JPEG, PNG, WEBP, HEIC y TIFF. Los archivos HEIC o TIFF se procesan y convierten de forma automática.'
+    },
+    'fr': {
+        'format_image': 'image',
+        'q1': 'Comment compresser un {format} à {size}Ko ?',
+        'a1': 'Téléversez votre {format} dans notre compresseur local. Le moteur côté client optimisera automatiquement la résolution et la qualité sous la limite de {size}Ko.',
+        'q2': 'Puis-je compresser un PNG à {size}Ko sans perte de qualité ?',
+        'a2': 'Compresser à exactement {size}Ko nécessite une compression avec perte. Notre outil utilise une sérialisation canvas intelligente pour minimiser la perte visuelle.',
+        'q3': 'Mes images sont-elles téléversées sur un serveur ?',
+        'a3': 'Absolument pas. Notre compresseur fonctionne à 100% localement dans votre navigateur. Vos photos ne quittent jamais votre appareil.',
+        'q4': 'Puis-je compresser des images hors ligne ?',
+        'a4': 'Oui ! Comme tout le traitement se fait côté client, l\'outil fonctionne entièrement hors ligne après le chargement initial de la page.',
+        'q5': 'Est-ce que cela fonctionne sur les téléphones portables ?',
+        'a5': 'Oui, il fonctionne parfaitement sur Android, iPhone (y compris HEIC) et tablettes directement dans votre navigateur mobile.',
+        'q6': 'Puis-je compresser plusieurs images à la fois ?',
+        'a6': 'Oui, notre outil prend en charge la compression par lots. Glissez-déposez plusieurs fichiers pour les optimiser en une seule fois.',
+        'q7': 'Quels formats d\'image sont pris en charge ?',
+        'a7': 'Nous prenons en charge les formats JPG, JPEG, PNG, WEBP, HEIC et TIFF. Les fichiers HEIC ou TIFF sont automatiquement convertis.'
+    },
+    'hi': {
+        'format_image': 'इमेज',
+        'q1': '{format} को {size}KB में कैसे कंप्रेस करें?',
+        'a1': 'अपने {format} को हमारे लोकल कंप्रेसर पर अपलोड करें। हमारा क्लाइंट-साइड इंजन {size}KB सीमा में फिट होने के लिए रेजोल्यूशन और क्वालिटी को खुद ब खुद ऑप्टिमाइज़ कर देगा।',
+        'q2': 'क्या मैं बिना गुणवत्ता नुकसान के PNG को {size}KB तक कंप्रेस कर सकता हूँ?',
+        'a2': 'ठीक {size}KB तक कंप्रेस करने के लिए कुछ नुकसानदेह (lossy) ऑप्टिमाइज़ेशन की आवश्यकता होती है। हमारा टूल गुणवत्ता के नुकसान को कम करने के लिए स्मार्ट कैनवास एल्गोरिदम का उपयोग करता है।',
+        'q3': 'क्या मेरी इमेज सर्वर पर अपलोड की जाती है?',
+        'a3': 'बिल्कुल नहीं। हमारा कंप्रेसर आपके वेब ब्राउज़र में 100% स्थानीय रूप से चलता है। आपकी तस्वीरें कभी भी आपके डिवाइस से बाहर नहीं जाती हैं।',
+        'q4': 'क्या मैं छवियों को ऑफलाइन कंप्रेस कर सकता हूँ?',
+        'a4': 'हाँ! चूंकि प्रोसेसिंग क्लाइंट-साइड होती है, इसलिए पेज लोड होने के बाद यह टूल बिना इंटरनेट कनेक्शन के पूरी तरह से काम करता है।',
+        'q5': 'क्या यह मोबाइल फोन पर काम करता है?',
+        'a5': 'हाँ, यह मोबाइल वेब ब्राउज़र के माध्यम से सभी एंड्रॉइड डिवाइस, आईफोन (HEIC फॉर्मेट सहित) और टैबलेट पर आसानी से काम करता है।',
+        'q6': 'क्या मैं एक बार में कई इमेज कंप्रेस कर सकता हूँ?',
+        'a6': 'हाँ, हमारा टूल बैच कंप्रेसन का समर्थन करता है। एक बार में कई फाइलों को ऑप्टिमाइज़ करने के लिए ड्रैग और ड्रॉप करें।',
+        'q7': 'कौन-से इमेज फॉर्मेट समर्थित हैं?',
+        'a7': 'हम JPG, JPEG, PNG, WEBP, HEIC और TIFF फॉर्मेट का समर्थन करते हैं। अपलोड की गई HEIC या TIFF फाइलें स्वचालित रूप से कनवर्ट हो जाती हैं।'
+    },
+    'zh': {
+        'format_image': '图片',
+        'q1': '如何将 {format} 压缩到 {size}KB？',
+        'a1': '将您的 {format} 上传到本地压缩器。前端浏览器端引擎将自动调整分辨率和质量参数，使其符合 {size}KB 的限制。',
+        'q2': '如何无损压缩 PNG 到 {size}KB？',
+        'a2': '压缩至恰好 {size}KB 需要进行有损优化。虽然我们的 kb 减小工具使用智能本地 Canvas 序列化来尽量减少画质损失，但仍会对图像进行适当压缩以达标。',
+        'q3': '我的图片会被上传到服务器吗？',
+        'a3': '绝对不会。我们的压缩器 100% 在您的浏览器本地运行。您的图片永远不会离开您的设备，从而确保了最高的隐私和安全性。',
+        'q4': '我可以离线压缩图片吗？',
+        'a4': '可以！由于所有处理均在客户端进行，页面加载后，该工具即可完全在无网络连接的状态下离线工作。',
+        'q5': '此工具支持在手机上运行吗？',
+        'a5': '支持，它可以在安卓、iPhone（包括 HEIC 格式）和 iPad 的移动端浏览器中无缝运行。',
+        'q6': '我可以一次压缩多张图片吗？',
+        'a6': '可以，我们的工具支持批量图片压缩。拖放多个文件即可在单次批处理中优化它们。',
+        'q7': '支持哪些图片格式？',
+        'a7': '我们支持 JPG、JPEG、PNG、WEBP、HEIC 和 TIFF 格式。上传的 HEIC 或 TIFF 文件会自动处理和转换。'
+    }
+}
+
+HOWTO_TRANSLATIONS = {
+    'en': {
+        'compress_title': 'How to compress images online',
+        'convert_title': 'How to convert images online',
+        'step1_name': 'Upload Images',
+        'step1_text': 'Drag and drop your files into the upload area or click select to browse from your device.',
+        'step2_compress_name': 'Select Target Size',
+        'step2_compress_text': 'Choose a target size preset (e.g. under 50KB, 100KB) or input a custom limit.',
+        'step2_convert_name': 'Select Output Format',
+        'step2_convert_text': 'Select your desired output format from the tabs (e.g. JPG, PNG, WEBP, AVIF).',
+        'step3_name': 'Download Output',
+        'step3_text': 'Click the convert or compress button and download your optimized files instantly.'
+    },
+    'de': {
+        'compress_title': 'Wie man Bilder online komprimiert',
+        'convert_title': 'Wie man Bilder online konvertiert',
+        'step1_name': 'Bilder hochladen',
+        'step1_text': 'Ziehen Sie Ihre Dateien per Drag & Drop in den Upload-Bereich oder klicken Sie auf Auswählen.',
+        'step2_compress_name': 'Zielgröße wählen',
+        'step2_compress_text': 'Wählen Sie eine Zielgröße (z. B. unter 50KB oder 100KB) oder geben Sie ein eigenes Limit ein.',
+        'step2_convert_name': 'Ausgabeformat wählen',
+        'step2_convert_text': 'Wählen Sie das gewünschte Ausgabeformat aus den Tabs (z. B. JPG, PNG, WEBP).',
+        'step3_name': 'Ergebnis herunterladen',
+        'step3_text': 'Klicken Sie auf Konvertieren oder Komprimieren und laden Sie Ihre optimierten Dateien sofort herunter.'
+    },
+    'es': {
+        'compress_title': 'Cómo comprimir imágenes online',
+        'convert_title': 'Cómo convertir imágenes online',
+        'step1_name': 'Subir imágenes',
+        'step1_text': 'Arrastra y suelta tus archivos en el área de carga o haz clic en seleccionar.',
+        'step2_compress_name': 'Seleccionar tamaño objetivo',
+        'step2_compress_text': 'Elige un ajuste de tamaño (ej. menos de 50KB o 100KB) o ingresa un límite personalizado.',
+        'step2_convert_name': 'Seleccionar formato de salida',
+        'step2_convert_text': 'Selecciona el formato de salida deseado de las pestañas (ej. JPG, PNG, WEBP).',
+        'step3_name': 'Descargar resultado',
+        'step3_text': 'Haz clic en el botón de convertir o comprimir y descarga tus archivos optimizados al instante.'
+    },
+    'fr': {
+        'compress_title': 'Comment compresser des images en ligne',
+        'convert_title': 'Comment convertir des images en ligne',
+        'step1_name': 'Téléverser des images',
+        'step1_text': 'Glissez-déposez vos fichiers dans la zone de dépôt ou cliquez sur sélectionner.',
+        'step2_compress_name': 'Sélectionner la taille cible',
+        'step2_compress_text': 'Choisissez une taille cible prédéfinie (ex. moins de 50Ko ou 100Ko) ou saisissez une limite.',
+        'step2_convert_name': 'Sélectionner le format de sortie',
+        'step2_convert_text': 'Sélectionnez le format de sortie souhaité dans les onglets (ex. JPG, PNG, WEBP).',
+        'step3_name': 'Télécharger le résultat',
+        'step3_text': 'Cliquez sur le bouton de conversion ou de compression et téléchargez instantanément vos fichiers.'
+    },
+    'hi': {
+        'compress_title': 'ऑनलाइन इमेज कैसे कंप्रेस करें',
+        'convert_title': 'ऑनलाइन इमेज कैसे कनवर्ट करें',
+        'step1_name': 'इमेज अपलोड करें',
+        'step1_text': 'अपनी फाइलों को अपलोड क्षेत्र में खींचें और छोड़ें या चुनने के लिए क्लिक करें।',
+        'step2_compress_name': 'लक्षित आकार चुनें',
+        'step2_compress_text': 'एक लक्षित आकार प्रीसेट चुनें (जैसे 50KB या 100KB से कम) या एक कस्टम सीमा डालें।',
+        'step2_convert_name': 'आउटपुट प्रारूप चुनें',
+        'step2_convert_text': 'टैब से अपना वांछित आउटपुट प्रारूप चुनें (जैसे JPG, PNG, WEBP)।',
+        'step3_name': 'आउटपुट डाउनलोड करें',
+        'step3_text': 'कनवर्ट या कंप्रेस बटन पर क्लिक करें और अपनी ऑप्टिमाइज़ की गई फाइलों को तुरंत डाउनलोड करें।'
+    },
+    'zh': {
+        'compress_title': '如何在线压缩图片',
+        'convert_title': '如何在线转换图片',
+        'step1_name': '上传图片',
+        'step1_text': '拖放您的文件至上传区域，或点击选择按钮进行浏览。',
+        'step2_compress_name': '选择目标大小',
+        'step2_compress_text': '选择一个目标大小预设（如 50KB 或 100KB 以下）或输入自定义限制值。',
+        'step2_convert_name': '选择输出格式',
+        'step2_convert_text': '在选项卡中选择您需要的输出格式（如 JPG、PNG、WEBP）。',
+        'step3_name': '下载文件',
+        'step3_text': '点击转换或压缩按钮，即可立即下载优化后的文件。'
+    }
+}
+
 TOOL_TRANSLATIONS = {
     'index.html': {
         'de': {
@@ -1263,17 +1444,243 @@ TOOL_TRANSLATIONS = {
             'faq_q2': '图片会变大吗？',
             'faq_a2': '会，因为 PNG 是无损格式，所以文件体积相比 WebP 稍大一些，但画质完美不受损。'
         }
+    },
+    'compress-image-to-10kb': {
+        'de': {
+            'title': 'Bild auf 10KB komprimieren | 100% Sicher, Schnell & Privat',
+            'desc': 'Komprimieren Sie Bilder kostenlos online auf unter 10KB. Optimieren Sie JPG, PNG und WEBP 100% lokal im Browser für absolute Privatsphäre.',
+            'keywords': 'bild auf 10kb komprimieren, bilder verkleinern 10kb, bildgröße reduzieren 10kb',
+            'h1': 'Bild auf 10KB komprimieren',
+            'tabs': 'Auf 10KB komprimieren',
+            'article_title': 'Bilder verlustfrei auf unter 10KB verkleinern',
+            'article_p1': 'Viele offizielle Formulare und Bewerbungsportale verlangen extrem kleine Dateigrößen von unter 10KB. Unser privater, clientseitiger Kompressor löst dies schnell.',
+            'article_p2': 'Ihre sensiblen oder privaten Daten verlassen nie Ihr Gerät — 100% sicher und offline verarbeitet.',
+            'faq_q1': 'Wie kann ich ein Bild auf 10KB komprimieren?',
+            'faq_a1': 'Laden Sie Ihre Datei per Drag-and-Drop in den Konverter. Unser Tool passt Dimensionen und Kompressionsrate automatisch an, um die 10KB-Grenze einzuhalten.',
+            'faq_q2': 'Sind meine hochgeladenen Bilder sicher?',
+            'faq_a2': 'Absolut. Alles läuft lokal in Ihrem Browser ab. Ihre Bilder werden niemals auf Server hochgeladen, um absolute Privatsphäre zu garantieren.',
+            'faq_q3': 'Kann ich PNG-Dateien ohne Qualitätsverlust auf 10KB komprimieren?',
+            'faq_a3': 'Unser Kompressor wendet eine effiziente Kompression an. Bei sehr kleinen Größen wie 10KB wird die Qualität automatisch angepasst, um die Dateigröße optimal zu minimieren.'
+        },
+        'es': {
+            'title': 'Comprimir imagen a 10KB | Gratis, Privado y Seguro',
+            'desc': 'Comprime tus imágenes a menos de 10KB gratis online. Optimiza JPG, PNG y WEBP 100% local en tu navegador para total privacidad.',
+            'keywords': 'comprimir imagen a 10kb, reducir foto a 10kb, cambiar tamaño imagen a 10kb',
+            'h1': 'Comprimir imagen a 10KB',
+            'tabs': 'Comprimir a 10KB',
+            'article_title': 'Cómo reducir tus imágenes a menos de 10KB',
+            'article_p1': 'Muchos trámites gubernamentales y portales en línea exigen archivos de tamaño inferior a 10KB. Nuestra herramienta automatiza el proceso manteniendo la mejor resolución local posible.',
+            'article_p2': 'Tus fotos privadas nunca viajan por internet ni se guardan en ningún servidor externo, garantizando el máximo nivel de seguridad.',
+            'faq_q1': '¿Cómo comprimir una imagen a 10KB sin perder calidad?',
+            'faq_a1': 'Arrastra tus fotos al área de carga y el algoritmo optimizará la calidad y los píxeles para lograr el tamaño objetivo de 10KB.',
+            'faq_q2': '¿Es seguro usar este reductor en kb?',
+            'faq_a2': 'Sí, es 100% privado y seguro al procesarse en tu propio dispositivo (del lado del cliente).',
+            'faq_q3': '¿Puedo comprimir PNG a 10KB?',
+            'faq_a3': 'Sí, convertimos o cuantizamos los colores de las imágenes PNG para asegurar que ocupen menos de 10KB de forma rápida y sencilla.'
+        },
+        'fr': {
+            'title': 'Compresser Image à 10KB | Gratuit, Privé et Rapide',
+            'desc': 'Compressez vos images à moins de 10KB gratuitement en ligne. Optimisation locale et sécurisée de JPG, PNG et WEBP.',
+            'keywords': 'compresser image 10kb, réduire taille photo 10kb, compresser image en ko',
+            'h1': 'Compresser Image à 10KB',
+            'tabs': 'Compresser à 10KB',
+            'article_title': 'Comment réduire le poids d\'une image à 10KB',
+            'article_p1': 'Pour les signatures électroniques ou les formulaires administratifs stricts, notre outil réduit rapidement vos images sous les 10KB.',
+            'article_p2': 'Tout le processus est client-side, gardant vos documents personnels à l\'abri du réseau.',
+            'faq_q1': 'Comment compresser un fichier à 10KB ?',
+            'faq_a1': 'Déposez votre image, notre outil de compression ajuste de manière itérative la qualité pour descendre sous 10KB.',
+            'faq_q2': 'Les fichiers sont-ils stockés en ligne ?',
+            'faq_a2': 'Non. Vos images restent locales et ne sont jamais téléversées sur des serveurs externes.',
+            'faq_q3': 'Puis-je compresser un PNG sans perte à 10KB ?',
+            'faq_a3': 'Pour atteindre un poids aussi bas, une compression optimisée est requise. L\'outil adapte les paramètres automatiquement.'
+        },
+        'hi': {
+            'title': 'इमेज साइज 10KB तक कम करें | मुफ्त ऑनलाइन कंप्रेसर',
+            'desc': 'अपनी फोटो को मुफ्त में 10KB से कम आकार में बदलें। 100% सुरक्षित और स्थानीय जेपीजी, पीएनजी और वेबपी ऑप्टिमाइज़र।',
+            'keywords': 'फोटो साइज 10kb करें, 10kb में इमेज कंप्रेस करें, इमेज कंप्रेसर 10kb',
+            'h1': 'इमेज साइज 10KB तक कम करें',
+            'tabs': '10KB तक कंप्रेस करें',
+            'article_title': 'फोटो का आकार 10KB से कम कैसे करें',
+            'article_p1': 'हस्ताक्षर, सरकारी आवेदन और ऑनलाइन फॉर्म के लिए 10KB से कम की फोटो की आवश्यकता होती है। हमारा टूल इसे तुरंत प्रोसेस करता है।',
+            'article_p2': 'आपकी तस्वीरें कभी भी आपके डिवाइस से बाहर नहीं जाती हैं, जिससे पूर्ण गोपनीयता और सुरक्षा सुनिश्चित होती है।',
+            'faq_q1': 'मैं फोटो का साइज 10KB कैसे कर सकता हूँ?',
+            'faq_a1': 'अपनी इमेज को अपलोड करें, हमारा सिस्टम पिक्सेल और गुणवत्ता को 10KB से कम करने के लिए स्वचालित रूप से समायोजित करेगा।',
+            'faq_q2': 'क्या मेरी तस्वीरें सुरक्षित हैं?',
+            'faq_a2': 'हाँ, पूरी प्रक्रिया स्थानीय रूप से आपके ब्राउज़र में होती है, कोई सर्वर अपलोड नहीं होता।',
+            'faq_q3': 'क्या PNG को बिना गुणवत्ता नुकसान के 10KB तक कंप्रेस किया जा सकता है?',
+            'faq_a3': '10KB के अति-छोटे आकार के लिए गुणवत्ता को थोड़ा अनुकूलित करना पड़ता है, जो हमारा टूल स्वचालित रूप से कुशलता से करता है।'
+        },
+        'zh': {
+            'title': '图片压缩至 10KB | 免费在线本地优化器',
+            'desc': '免费在线将图片压缩到 10KB 以下。支持 JPG、PNG 和 WEBP 格式批量本地优化，确保隐私安全。',
+            'keywords': '图片压缩至10kb, 缩小图片到10kb, 电子签名压缩',
+            'h1': '图片压缩至 10KB',
+            'tabs': '压缩至 10KB',
+            'article_title': '如何将图片或电子签名缩减至 10KB 以内',
+            'article_p1': '电子签名、头像或某些表格系统需要图片绝对小于 10KB。该工具会在本地快速调整画质参数以适应此要求。',
+            'article_p2': '纯浏览器本地运行，数据零上传，极力保障您的隐私和安全。',
+            'faq_q1': '如何把照片压缩到10KB以下？',
+            'faq_a1': '直接拖入图片，系统会通过本地 canvas 压缩算法自动缩减大小至 10KB 以下。',
+            'faq_q2': '我的图片安全吗？',
+            'faq_a2': '绝对安全。处理均在您本地设备浏览器完成，不向外部服务器传输任何图片字节。',
+            'faq_q3': '如何无损压缩 PNG 到 10KB？',
+            'faq_a3': '对于 10KB 这样极小的体积，系统会自动进行色彩量化和无损参数的最佳结合，以达到极限缩减。'
+        }
     }
 }
+
+# Programmatically populate translations for target size and format-specific compression landing pages!
+more_sizes = [20, 30, 200, 500]
+for sz in more_sizes:
+    t_name = f"compress-image-to-{sz}kb"
+    TOOL_TRANSLATIONS[t_name] = {
+        'de': {
+            'title': f'Bild auf {sz}KB komprimieren online | Keine Anmeldung',
+            'desc': f'Bilder kostenlos online unter {sz}KB komprimieren. JPG, PNG und WEBP 100% lokal im Browser optimieren.',
+            'keywords': f'bild auf {sz}kb komprimieren, bilder verkleinern {sz}kb, png komprimieren {sz}kb',
+            'h1': f'Bild auf {sz}KB komprimieren online',
+            'tabs': f'Auf {sz}KB komprimieren',
+            'article_title': f'Wie man Bilder extrem auf unter {sz}KB komprimiert',
+            'article_p1': f'Für Online-Formulare oder Bewerbungen müssen Bilder oft unter {sz}KB groß sein. Unser kostenloser Kompressor hilft Ihnen dabei.',
+            'article_p2': f'Da die Verarbeitung lokal im Browser erfolgt, sind Ihre privaten Daten absolut sicher.'
+        },
+        'es': {
+            'title': f'Comprimir imagen a {sz}KB gratis online | Sin Registro',
+            'desc': f'Comprime tus imágenes a menos de {sz}KB gratis online. Optimización local de JPG, PNG y WEBP para total privacidad.',
+            'keywords': f'comprimir imagen a {sz}kb, reducir foto a {sz}kb, comprimir png a {sz}kb',
+            'h1': f'Comprimir imagen a {sz}KB online',
+            'tabs': f'Comprimir a {sz}KB',
+            'article_title': f'Cómo reducir tus imágenes a menos de {sz}KB',
+            'article_p1': f'Muchos trámites exigen archivos de tamaño inferior a {sz}KB. Nuestra herramienta automatiza el proceso.',
+            'article_p2': f'Tus fotos nunca viajan por internet ni se guardan en ningún servidor, garantizando seguridad total.'
+        },
+        'fr': {
+            'title': f'Compresser Image à {sz}KB en Ligne | Sans Téléchargement',
+            'desc': f'Compressez vos images à moins de {sz}KB gratuitement en ligne. Optimisation locale et ultra-rapide de JPG, PNG et WEBP.',
+            'keywords': f'compresser image {sz}kb, réduire taille photo {sz}kb, compresser png {sz}kb',
+            'h1': f'Compresser Image à {sz}KB en Ligne',
+            'tabs': f'Compresser à {sz}KB',
+            'article_title': f'Comment optimiser des photos sous le seuil de {sz}KB',
+            'article_p1': f'Notre outil calcule précisément les paramètres de qualité pour réduire vos fichiers sans dépasser la limite de {sz}KB.',
+            'article_p2': f"Tout le processus est client-side, gardant vos documents personnels à l'abri du réseau."
+        },
+        'hi': {
+            'title': f'इमेज साइज {sz}KB तक कम करें ऑनलाइन | बिना अपलोड किए',
+            'desc': f'अपनी फोटो को मुफ्त में {sz}KB से कम आकार में बदलें। 100% सुरक्षित और स्थानीय जेपीजी, पीएनजी और वेबपी कंप्रेसर।',
+            'keywords': f'फोटो साइज {sz}kb करें, {sz}kb में इमेज कंप्रेस करें, पीएनजी को {sz}kb करें',
+            'h1': f'इमेज साइज {sz}KB तक कम करें ऑनलाइन',
+            'tabs': f'{sz}KB तक कंप्रेस करें',
+            'article_title': f'फोटो का आकार {sz}KB से कम कैसे करें',
+            'article_p1': f'सरकारी आवेदन और ऑनलाइन फॉर्म के लिए {sz}KB से कम की फोटो की आवश्यकता होती है। हमारा टूल इसे तुरंत प्रोसेस करता है।',
+            'article_p2': f'आपकी तस्वीरें कभी भी आपके डिवाइस से बाहर नहीं जाती हैं, जिससे पूर्ण गोपनीयता सुनिश्चित होती है।'
+        },
+        'zh': {
+            'title': f'图片压缩至 {sz}KB 在线 | 免费安全本地优化器',
+            'desc': f'免费在线将图片压缩至 {sz}KB 以下。支持 JPG、PNG 和 WEBP 格式批量本地优化。',
+            'keywords': f'图片压缩至{sz}kb, 缩小图片到{sz}kb, png压缩{sz}kb',
+            'h1': f'图片压缩至 {sz}KB 在线',
+            'tabs': f'压缩至 {sz}KB',
+            'article_title': f'如何将图片缩减至 {sz}KB 以内',
+            'article_p1': f'电子签名、头像或某些表格系统需要图片绝对小于 {sz}KB。该工具会在本地快速调整画质以适应要求。',
+            'article_p2': f'纯本地运行，数据零上传，极力保障您的隐私和安全。'
+        }
+    }
+
+format_specific = [("jpg", 100), ("png", 100), ("jpeg", 100)]
+for fmt_name, sz in format_specific:
+    t_name = f"compress-{fmt_name}-to-{sz}kb"
+    fmt_upper = fmt_name.upper()
+    TOOL_TRANSLATIONS[t_name] = {
+        'de': {
+            'title': f'{fmt_upper} auf {sz}KB komprimieren online | Ohne Upload',
+            'desc': f'Komprimieren Sie {fmt_upper}-Bilder kostenlos online auf unter {sz}KB. Optimieren Sie Ihre {fmt_upper} 100% lokal.',
+            'keywords': f'{fmt_name} auf {sz}kb komprimieren, {fmt_name} verkleinern {sz}kb, png komprimieren {sz}kb',
+            'h1': f'{fmt_upper} auf {sz}KB komprimieren online',
+            'tabs': f'Auf {sz}KB komprimieren',
+            'article_title': f'Wie man {fmt_upper}-Dateien auf unter {sz}KB komprimiert',
+            'article_p1': f'Für Online-Formulare oder Bewerbungen müssen {fmt_upper}-Bilder oft unter {sz}KB groß sein. Unser kostenloser Kompressor hilft Ihnen dabei.',
+            'article_p2': f'Da die Verarbeitung lokal im Browser erfolgt, sind Ihre privaten Daten absolut sicher.'
+        },
+        'es': {
+            'title': f'Comprimir {fmt_upper} a {sz}KB gratis online | Sin Subida',
+            'desc': f'Comprime tus {fmt_upper} a menos de {sz}KB gratis online. Optimización local en tu navegador para total privacidad.',
+            'keywords': f'comprimir {fmt_name} a {sz}kb, reducir {fmt_name} a {sz}kb, comprimir png a {sz}kb',
+            'h1': f'Comprimir {fmt_upper} a {sz}KB online',
+            'tabs': f'Comprimir a {sz}KB',
+            'article_title': f'Cómo reducir tus {fmt_upper} a menos de {sz}KB',
+            'article_p1': f'Muchos trámites exigen archivos de tamaño inferior a {sz}KB. Nuestra herramienta automatiza el proceso.',
+            'article_p2': f'Tus fotos nunca viajan por internet ni se guardan en ningún servidor, garantizando seguridad total.'
+        },
+        'fr': {
+            'title': f'Compresser {fmt_upper} à {sz}KB en Ligne | Sans Serveur',
+            'desc': f'Compressez vos {fmt_upper} à moins de {sz}KB gratuitement en ligne. Optimisation locale et ultra-rapide.',
+            'keywords': f'compresser {fmt_name} {sz}kb, réduire taille {fmt_name} {sz}kb, compresser png {sz}kb',
+            'h1': f'Compresser {fmt_upper} à {sz}KB en Ligne',
+            'tabs': f'Compresser à {sz}KB',
+            'article_title': f'Comment optimiser des fichiers {fmt_upper} sous le seuil de {sz}KB',
+            'article_p1': f'Notre outil calcule précisément les paramètres de qualité pour réduire vos {fmt_upper} sans dépasser la limite de {sz}KB.',
+            'article_p2': f"Tout le processus est client-side, gardant vos documents personnels à l'abri du réseau."
+        },
+        'hi': {
+            'title': f'{fmt_upper} साइज {sz}KB तक कम करें online | बिना सर्वर',
+            'desc': f'अपनी {fmt_upper} फोटो को मुफ्त में {sz}KB से कम आकार में बदलें। 100% सुरक्षित और स्थानीय कंप्रेसर।',
+            'keywords': f'{fmt_name} साइज {sz}kb करें, {sz}kb में {fmt_name} कंप्रेस करें',
+            'h1': f'{fmt_upper} साइज {sz}KB तक कम करें ऑनलाइन',
+            'tabs': f'{sz}KB तक कंप्रेस करें',
+            'article_title': f'{fmt_upper} का आकार {sz}KB से कम कैसे करें',
+            'article_p1': f'सरकारी आवेदन और ऑनलाइन फॉर्म के लिए {sz}KB से कम की {fmt_upper} फोटो की आवश्यकता होती है। हमारा टूल इसे तुरंत प्रोसेस करता है।',
+            'article_p2': f'आपकी तस्वीरें कभी भी आपके डिवाइस से बाहर नहीं जाती हैं, जिससे पूर्ण गोपनीयता सुनिश्चित होती है।'
+        },
+        'zh': {
+            'title': f'{fmt_upper} 图片压缩至 {sz}KB 在线 | 免费安全本地优化器',
+            'desc': f'免费在线将 {fmt_upper} 图片压缩至 {sz}KB 以下。支持批量本地优化，确保隐私安全。',
+            'keywords': f'{fmt_name}图片压缩至{sz}kb, 缩小{fmt_name}到{sz}kb, png压缩{sz}kb',
+            'h1': f'{fmt_upper} 图片压缩至 {sz}KB 在线',
+            'tabs': f'压缩至 {sz}KB',
+            'article_title': f'如何将 {fmt_upper} 图片缩减至 {sz}KB 以内',
+            'article_p1': f'电子签名、头像或某些表格系统需要 {fmt_upper} 图片绝对小于 {sz}KB。该工具会在本地快速调整画质以适应要求。',
+            'article_p2': f'纯浏览器本地运行，数据零上传，极力保障您的隐私和安全。'
+        }
+    }
 
 def translate_page(filepath, lang, tool_name):
     with open(filepath, 'r', encoding='utf-8') as f:
         html = f.read()
         
     # Get translated parameters
+    # Auto-generate dynamic FAQ translations for all target size and format-specific pages
+    match_size = re.match(r'compress-image-to-(\d+)kb', tool_name)
+    match_fmt = re.match(r'compress-(jpg|png|jpeg)-to-(\d+)kb', tool_name)
+    if (match_size or match_fmt) and tool_name not in TOOL_TRANSLATIONS:
+        # Clone translation structure if not pre-defined
+        TOOL_TRANSLATIONS[tool_name] = {}
+        
     lang_translations = TOOL_TRANSLATIONS.get(tool_name, {}).get(lang, {})
     ui_trans = COMMON_UI.get(lang, {})
     
+    if (match_size or match_fmt):
+        size = match_size.group(1) if match_size else match_fmt.group(2)
+        raw_fmt = "image" if match_size else match_fmt.group(1).upper()
+        
+        faq_t = FAQ_TEMPLATES.get(lang, FAQ_TEMPLATES['en'])
+        translated_fmt = faq_t['format_image'] if raw_fmt == "image" else raw_fmt
+        
+        # Merge FAQ entries dynamically
+        lang_translations["faq_q1"] = faq_t["q1"].format(format=translated_fmt, size=size)
+        lang_translations["faq_a1"] = faq_t["a1"].format(format=translated_fmt, size=size)
+        lang_translations["faq_q2"] = faq_t["q2"].format(size=size)
+        lang_translations["faq_a2"] = faq_t["a2"].format(size=size)
+        lang_translations["faq_q3"] = faq_t["q3"]
+        lang_translations["faq_a3"] = faq_t["a3"]
+        lang_translations["faq_q4"] = faq_t["q4"]
+        lang_translations["faq_a4"] = faq_t["a4"]
+        lang_translations["faq_q5"] = faq_t["q5"]
+        lang_translations["faq_a5"] = faq_t["a5"]
+        lang_translations["faq_q6"] = faq_t["q6"]
+        lang_translations["faq_a6"] = faq_t["a6"]
+        lang_translations["faq_q7"] = faq_t["q7"]
+        lang_translations["faq_a7"] = faq_t["a7"]
+        
     if not lang_translations:
         print(f"Warning: No translations found for tool '{tool_name}' in language '{lang}'")
         return
@@ -1415,7 +1822,18 @@ def translate_page(filepath, lang, tool_name):
             'Convert WebP to JPG': 'WebP in JPG umwandeln',
             'Convert PNG to JPG': 'PNG in JPG umwandeln',
             'Compress Image Files': 'Bilddateien komprimieren',
-            'Convert Multiple': 'Mehrere Formate konvertieren'
+            'Convert Multiple': 'Mehrere Formate konvertieren',
+            'Compress Image (Custom Size)': 'Bild komprimieren (Custom)',
+            'Compress Image to 10KB': 'Bild auf 10KB komprimieren',
+            'Compress Image to 20KB': 'Bild auf 20KB komprimieren',
+            'Compress Image to 30KB': 'Bild auf 30KB komprimieren',
+            'Compress Image to 50KB': 'Bild auf 50KB komprimieren',
+            'Compress Image to 100KB': 'Bild auf 100KB komprimieren',
+            'Compress Image to 200KB': 'Bild auf 200KB komprimieren',
+            'Compress Image to 500KB': 'Bild auf 500KB komprimieren',
+            'Compress JPG to 100KB': 'JPG auf 100KB komprimieren',
+            'Compress PNG to 100KB': 'PNG auf 100KB komprimieren',
+            'Compress JPEG to 100KB': 'JPEG auf 100KB komprimieren'
         },
         'es': {
             'Convert Multiple Formats': 'Convertir múltiples formatos',
@@ -1423,7 +1841,18 @@ def translate_page(filepath, lang, tool_name):
             'Convert WebP to JPG': 'Convertir WebP a JPG',
             'Convert PNG to JPG': 'Convertir PNG a JPG',
             'Compress Image Files': 'Comprimir imágenes',
-            'Convert Multiple': 'Convertir múltiples formatos'
+            'Convert Multiple': 'Convertir múltiples formatos',
+            'Compress Image (Custom Size)': 'Comprimir imagen (Personalizado)',
+            'Compress Image to 10KB': 'Comprimir imagen a 10KB',
+            'Compress Image to 20KB': 'Comprimir imagen a 20KB',
+            'Compress Image to 30KB': 'Comprimir imagen a 30KB',
+            'Compress Image to 50KB': 'Comprimir imagen a 50KB',
+            'Compress Image to 100KB': 'Comprimir imagen a 100KB',
+            'Compress Image to 200KB': 'Comprimir imagen a 200KB',
+            'Compress Image to 500KB': 'Comprimir imagen a 500KB',
+            'Compress JPG to 100KB': 'Comprimir JPG a 100KB',
+            'Compress PNG to 100KB': 'Comprimir PNG a 100KB',
+            'Compress JPEG to 100KB': 'Comprimir JPEG a 100KB'
         },
         'fr': {
             'Convert Multiple Formats': 'Convertir plusieurs formats',
@@ -1431,7 +1860,18 @@ def translate_page(filepath, lang, tool_name):
             'Convert WebP to JPG': 'Convertir WebP en JPG',
             'Convert PNG to JPG': 'Convertir PNG en JPG',
             'Compress Image Files': 'Compresser des images',
-            'Convert Multiple': 'Convertir plusieurs formats'
+            'Convert Multiple': 'Convertir plusieurs formats',
+            'Compress Image (Custom Size)': 'Compresser image (Personnalisé)',
+            'Compress Image to 10KB': 'Compresser Image à 10KB',
+            'Compress Image to 20KB': 'Compresser Image à 20KB',
+            'Compress Image to 30KB': 'Compresser Image à 30KB',
+            'Compress Image to 50KB': 'Compresser Image à 50KB',
+            'Compress Image to 100KB': 'Compresser Image à 100KB',
+            'Compress Image to 200KB': 'Compresser Image à 200KB',
+            'Compress Image to 500KB': 'Compresser Image à 500KB',
+            'Compress JPG to 100KB': 'Compresser JPG à 100KB',
+            'Compress PNG to 100KB': 'Compresser PNG à 100KB',
+            'Compress JPEG to 100KB': 'Compresser JPEG à 100KB'
         },
         'hi': {
             'Convert Multiple Formats': 'कई प्रारूप बदलें',
@@ -1439,7 +1879,18 @@ def translate_page(filepath, lang, tool_name):
             'Convert WebP to JPG': 'WebP से JPG बदलें',
             'Convert PNG to JPG': 'PNG से JPG बदलें',
             'Compress Image Files': 'इमेज फाइल कंप्रेस करें',
-            'Convert Multiple': 'कई प्रारूप बदलें'
+            'Convert Multiple': 'कई प्रारूप बदलें',
+            'Compress Image (Custom Size)': 'इमेज कंप्रेस करें (कस्टम)',
+            'Compress Image to 10KB': 'इमेज साइज 10KB करें',
+            'Compress Image to 20KB': 'इमेज साइज 20KB करें',
+            'Compress Image to 30KB': 'इमेज साइज 30KB करें',
+            'Compress Image to 50KB': 'इमेज साइज 50KB करें',
+            'Compress Image to 100KB': 'इमेज साइज 100KB करें',
+            'Compress Image to 200KB': 'इमेज साइज 200KB करें',
+            'Compress Image to 500KB': 'इमेज साइज 500KB करें',
+            'Compress JPG to 100KB': 'JPG को 100KB कंप्रेस करें',
+            'Compress PNG to 100KB': 'PNG को 100KB कंप्रेस करें',
+            'Compress JPEG to 100KB': 'JPEG को 100KB कंप्रेस करें'
         },
         'zh': {
             'Convert Multiple Formats': '转换多种格式',
@@ -1447,7 +1898,18 @@ def translate_page(filepath, lang, tool_name):
             'Convert WebP to JPG': 'WebP 转 JPG 转换',
             'Convert PNG to JPG': 'PNG 转 JPG 转换',
             'Compress Image Files': '压缩图片文件',
-            'Convert Multiple': '转换多种格式'
+            'Convert Multiple': '转换多种格式',
+            'Compress Image (Custom Size)': '压缩图片（自定义大小）',
+            'Compress Image to 10KB': '图片压缩至 10KB',
+            'Compress Image to 20KB': '图片压缩至 20KB',
+            'Compress Image to 30KB': '图片压缩至 30KB',
+            'Compress Image to 50KB': '图片压缩至 50KB',
+            'Compress Image to 100KB': '图片压缩至 100KB',
+            'Compress Image to 200KB': '图片压缩至 200KB',
+            'Compress Image to 500KB': '图片压缩至 500KB',
+            'Compress JPG to 100KB': 'JPG 图片压缩至 100KB',
+            'Compress PNG to 100KB': 'PNG 图片压缩至 100KB',
+            'Compress JPEG to 100KB': 'JPEG 图片压缩至 100KB'
         }
     }
     
@@ -1471,11 +1933,14 @@ def translate_page(filepath, lang, tool_name):
         <div class="faq-answer">{lang_translations["faq_a2"]}</div>
       </div>"""
       
-    if "faq_q3" in lang_translations:
-        seo_article += f"""
+    for idx in range(3, 9):
+        q_key = f"faq_q{idx}"
+        a_key = f"faq_a{idx}"
+        if q_key in lang_translations:
+            seo_article += f"""
       <div class="faq-item">
-        <div class="faq-question">{lang_translations["faq_q3"]}</div>
-        <div class="faq-answer">{lang_translations["faq_a3"]}</div>
+        <div class="faq-question">{lang_translations[q_key]}</div>
+        <div class="faq-answer">{lang_translations[a_key]}</div>
       </div>"""
       
     seo_article += "\n    </div>"
@@ -1497,12 +1962,15 @@ def translate_page(filepath, lang, tool_name):
             "acceptedAnswer": {"@type": "Answer", "text": lang_translations["faq_a2"]}
         }
     ]
-    if "faq_q3" in lang_translations:
-        faq_entities.append({
-            "@type": "Question",
-            "name": lang_translations["faq_q3"],
-            "acceptedAnswer": {"@type": "Answer", "text": lang_translations["faq_a3"]}
-        })
+    for idx in range(3, 9):
+        q_key = f"faq_q{idx}"
+        a_key = f"faq_a{idx}"
+        if q_key in lang_translations:
+            faq_entities.append({
+                "@type": "Question",
+                "name": lang_translations[q_key],
+                "acceptedAnswer": {"@type": "Answer", "text": lang_translations[a_key]}
+            })
         
     faq_schema = {
         "@context": "https://schema.org",
@@ -1510,23 +1978,73 @@ def translate_page(filepath, lang, tool_name):
         "mainEntity": faq_entities
     }
     
+    # Build and inject the JSON-LD HowTo schema!
+    is_compress_tool = "compress" in tool_name or tool_name == "index.html"
+    ht_trans = HOWTO_TRANSLATIONS.get(lang, HOWTO_TRANSLATIONS['en'])
+    
+    ht_title = ht_trans['compress_title'] if is_compress_tool else ht_trans['convert_title']
+    step2_name = ht_trans['step2_compress_name'] if is_compress_tool else ht_trans['step2_convert_name']
+    step2_text = ht_trans['step2_compress_text'] if is_compress_tool else ht_trans['step2_convert_text']
+    
+    tool_suffix = "" if tool_name == "index.html" else f"{tool_name.strip('/')}/"
+    page_url = f"https://www.imglabconverter.com/{lang}/{tool_suffix}" if lang != 'en' else f"https://www.imglabconverter.com/{tool_suffix}"
+    
+    howto_schema = {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": ht_title,
+        "step": [
+            {
+                "@type": "HowToStep",
+                "name": ht_trans['step1_name'],
+                "text": ht_trans['step1_text'],
+                "url": page_url
+            },
+            {
+                "@type": "HowToStep",
+                "name": step2_name,
+                "text": step2_text,
+                "url": page_url
+            },
+            {
+                "@type": "HowToStep",
+                "name": ht_trans['step3_name'],
+                "text": ht_trans['step3_text'],
+                "url": page_url
+            }
+        ]
+    }
+    
     faq_schema_str = json.dumps(faq_schema, ensure_ascii=False, indent=2)
-    faq_script_block = f'''<script type="application/ld+json">
-  {faq_schema_str}
-  </script>'''
+    howto_schema_str = json.dumps(howto_schema, ensure_ascii=False, indent=2)
+    
+    schema_script_block = f'''<script type="application/ld+json">
+{faq_schema_str}
+</script>
+<script type="application/ld+json">
+{howto_schema_str}
+</script>'''
   
     # Strip any existing ld+json schemas
     html = re.sub(r'<script type="application/ld\+json">.*?</script>', '', html, flags=re.DOTALL)
     # inject the new translated JSON-LD schema right before </head>
-    html = html.replace('</head>', faq_script_block + '\n</head>')
+    html = html.replace('</head>', schema_script_block + '\n</head>')
 
     return html
 
 def main():
     all_tools = [
         "compress-image",
+        "compress-image-to-500kb",
+        "compress-image-to-200kb",
         "compress-image-to-100kb",
         "compress-image-to-50kb",
+        "compress-image-to-30kb",
+        "compress-image-to-20kb",
+        "compress-image-to-10kb",
+        "compress-jpg-to-100kb",
+        "compress-png-to-100kb",
+        "compress-jpeg-to-100kb",
         "heic-to-jpg",
         "jpeg-to-webp",
         "jpg-to-avif",

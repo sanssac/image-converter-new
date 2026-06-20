@@ -232,8 +232,23 @@ def generate_header(current_lang, route):
     # 1. Language Options Switcher Build
     lang_options = ""
     lang_names = {'en': 'English', 'es': 'Español', 'de': 'Deutsch', 'fr': 'Français', 'hi': 'हिन्दी', 'zh': '中文'}
+    base_dir = r"c:\image converter new"
     for code, name in lang_names.items():
-        new_path = route if code == 'en' else f"/{code}{route}"
+        # Check if the page exists in this language, otherwise fallback to the language's homepage
+        page_exists = False
+        sub_path = route.strip('/')
+        if not sub_path:
+            page_exists = True
+        else:
+            check_path = os.path.join(base_dir, sub_path, "index.html") if code == 'en' else os.path.join(base_dir, code, sub_path, "index.html")
+            if os.path.exists(check_path):
+                page_exists = True
+                
+        if page_exists:
+            new_path = route if code == 'en' else f"/{code}{route}"
+        else:
+            new_path = "/" if code == 'en' else f"/{code}/"
+            
         new_path = new_path.replace('//', '/')
         active_class = "active" if code == current_lang else ""
         lang_options += f'          <a href="{new_path}" class="lang-opt {active_class}">{name}</a>\n'

@@ -5,9 +5,16 @@ sitemap_path = r"c:\image converter new\sitemap.xml"
 # List of all tools
 all_tools = [
     "compress-image",
+    "compress-image-to-500kb",
+    "compress-image-to-200kb",
     "compress-image-to-100kb",
     "compress-image-to-50kb",
+    "compress-image-to-30kb",
+    "compress-image-to-20kb",
     "compress-image-to-10kb",
+    "compress-jpg-to-100kb",
+    "compress-png-to-100kb",
+    "compress-jpeg-to-100kb",
     "heic-to-jpg",
     "jpeg-to-webp",
     "jpg-to-avif",
@@ -22,7 +29,9 @@ all_tools = [
     "watermark-image",
     "webp-to-jpg",
     "webp-to-png",
-    "jpg-to-pdf"
+    "jpg-to-pdf",
+    "jpg-to-tiff",
+    "tiff-to-jpg"
 ]
 
 languages = ["de", "es", "fr", "hi", "zh"]
