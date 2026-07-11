@@ -107,6 +107,14 @@ document.addEventListener('DOMContentLoaded', () => {
         langMenu.classList.toggle('open');
       });
 
+      langSwitcher.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          langBtn.setAttribute('aria-expanded', 'false');
+          langMenu.classList.remove('open');
+          langBtn.focus();
+        }
+      });
+
       document.addEventListener('click', (e) => {
         if (!langSwitcher.contains(e.target)) {
           langBtn.setAttribute('aria-expanded', 'false');
@@ -319,6 +327,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const optDiv = document.createElement('div');
       optDiv.className = 'custom-select-option';
       optDiv.setAttribute('role', 'option');
+      optDiv.setAttribute('tabindex', '-1');
       optDiv.setAttribute('data-value', opt.value);
       optDiv.textContent = opt.textContent;
       
@@ -375,11 +384,38 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-    // Keyboard navigation (Escape to close)
+    // Keyboard navigation (Escape to close, Arrows to cycle options)
     container.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         container.classList.remove('open');
         trigger.setAttribute('aria-expanded', 'false');
+        trigger.focus();
+        return;
+      }
+      
+      const isOpen = container.classList.contains('open');
+      const options = Array.from(menu.querySelectorAll('.custom-select-option'));
+      const activeIdx = options.findIndex(o => o.classList.contains('selected') || o === document.activeElement);
+      
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        if (!isOpen) {
+          container.classList.add('open');
+          trigger.setAttribute('aria-expanded', 'true');
+        }
+        const nextIdx = activeIdx === -1 ? 0 : (activeIdx + 1) % options.length;
+        options[nextIdx].focus();
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (!isOpen) {
+          container.classList.add('open');
+          trigger.setAttribute('aria-expanded', 'true');
+        }
+        const prevIdx = activeIdx === -1 ? options.length - 1 : (activeIdx - 1 + options.length) % options.length;
+        options[prevIdx].focus();
+      } else if ((e.key === 'Enter' || e.key === ' ') && isOpen && activeIdx !== -1) {
+        e.preventDefault();
+        options[activeIdx].click();
         trigger.focus();
       }
     });
