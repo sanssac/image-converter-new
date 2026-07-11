@@ -1526,6 +1526,366 @@ TOOL_TRANSLATIONS = {
             'faq_q3': '如何无损压缩 PNG 到 10KB？',
             'faq_a3': '对于 10KB 这样极小的体积，系统会自动进行色彩量化和无损参数的最佳结合，以达到极限缩减。'
         }
+    },
+    'resize-image': {
+        'de': {
+            'title': 'Bildgröße online ändern | Kostenloses Batch-Resizer',
+            'desc': 'Ändern Sie die Größe von Bildern online kostenlos. Abmessungen in Pixeln 100% lokal im Browser anpassen.',
+            'keywords': 'bildgröße ändern, bilder verkleinern, bildabmessungen ändern, batch resizer',
+            'h1': 'Bildgröße online ändern',
+            'tabs': 'Größe ändern',
+            'article_title': 'So ändern Sie die Bildgröße schnell und einfach',
+            'article_p1': 'Das Anpassen der Bildabmessungen ist wichtig für das Design und die Ladezeiten von Webseiten. Unser Tool ermöglicht eine schnelle Größenänderung im Batch-Verfahren.',
+            'article_p2': 'Alle Berechnungen laufen lokal auf Ihrem Gerät für maximale Datensicherheit.',
+            'faq_q1': 'Bleibt das Seitenverhältnis erhalten?',
+            'faq_a1': 'Ja, Sie können das Kontrollkästchen "Seitenverhältnis beibehalten" aktivieren, um Verzerrungen zu vermeiden.',
+            'faq_q2': 'Gibt es ein Dateigrößen-Limit?',
+            'faq_a2': 'Nein, da alles in Ihrem Browser verarbeitet wird, gibt es keine künstlichen Limits für die Dateigröße.'
+        },
+        'es': {
+            'title': 'Redimensionar Imágenes Online Gratis | Image Converter',
+            'desc': 'Cambia el tamaño de tus fotos online gratis. Ajusta dimensiones en píxeles de forma local en tu navegador.',
+            'keywords': 'redimensionar imagen, cambiar tamaño de foto, redimensionador de imagenes',
+            'h1': 'Redimensionar Imágenes Online',
+            'tabs': 'Redimensionar',
+            'article_title': 'Cómo cambiar el tamaño de tus imágenes online de forma segura',
+            'article_p1': 'Ajustar las dimensiones de una imagen es clave para optimizar el rendimiento web. Nuestra herramienta te permite cambiar el tamaño de tus fotos en segundos.',
+            'article_p2': 'Todo el procesamiento ocurre de forma local en tu navegador.',
+            'faq_q1': '¿Se mantiene la proporción de aspecto?',
+            'faq_a1': 'Sí, puedes marcar la opción de mantener la relación de aspecto para evitar deformaciones.',
+            'faq_q2': '¿Es seguro?',
+            'faq_a2': 'Totalmente seguro, sin subir imágenes a ningún servidor.'
+        },
+        'fr': {
+            'title': 'Redimensionner des Images en Ligne Gratuitement | Image Converter',
+            'desc': 'Modifiez la taille et les dimensions de vos images en ligne gratuitement. Traitement local et privé.',
+            'keywords': 'redimensionner image, changer taille photo, redimensionneur image gratuit',
+            'h1': 'Redimensionner des Images en Ligne',
+            'tabs': 'Redimensionner',
+            'article_title': 'Comment changer la taille de vos images en toute sécurité',
+            'article_p1': 'Ajuster la taille en pixels de vos images est nécessaire pour le web et les réseaux sociaux. Redimensionnez vos fichiers en quelques clics.',
+            'article_p2': 'Vos fichiers restent sur votre machine pour une confidentialité totale.',
+            'faq_q1': "Le ratio d'aspect est-il préservé ?",
+            'faq_a1': 'Oui, vous pouvez verrouiller le ratio pour que vos images ne soient pas étirées.',
+            'faq_q2': 'Y a-t-il une limite de taille ?',
+            'faq_a2': 'Non, le traitement se fait localement sans aucune limite.'
+        },
+        'hi': {
+            'title': 'ऑनलाइन इमेज का आकार बदलें | मुफ़्त फोटो रिसाइज़र',
+            'desc': 'अपनी छवियों का आकार पिक्सेल में मुफ्त में बदलें। 100% सुरक्षित और स्थानीय इमेज रिसाइज़र।',
+            'keywords': 'इमेज रिसाइज़र, फोटो का आकार बदलें, इमेज रिसाइज करें, फोटो छोटा करें',
+            'h1': 'इमेज का आकार ऑनलाइन बदलें',
+            'tabs': 'आकार बदलें',
+            'article_title': 'इमेज का आकार बदलने का आसान तरीका',
+            'article_p1': 'वेबसाइट के लिए पिक्सेल आयामों को समायोजित करना बहुत आवश्यक है। यह रिसाइज़र बैच में काम करता है।',
+            'article_p2': 'यह टूल आपके स्थानीय डिवाइस पर काम करता है और डेटा सुरक्षित रखता है।',
+            'faq_q1': 'क्या फोटो का अनुपात बना रहेगा?',
+            'faq_a1': 'हाँ, आप "अनुपात बनाए रखें" विकल्प चुन सकते हैं ताकि फोटो खराब न हो।',
+            'faq_q2': 'क्या यह सुरक्षित है?',
+            'faq_a2': 'हाँ, सभी प्रक्रिया आपके स्थानीय ब्राउज़र में होती है।'
+        },
+        'zh': {
+            'title': '在线调整图片大小 | 免费批量图片缩放工具',
+            'desc': '在线免费调整图片尺寸。在本地浏览器中快速修改像素宽高，保护个人隐私。',
+            'keywords': '调整图片大小, 修改图片尺寸, 图片缩放, 批量图片改大小',
+            'h1': '在线调整图片大小',
+            'tabs': '调整大小',
+            'article_title': '如何安全地调整图片像素大小',
+            'article_p1': '为了适应网页设计或社交媒体的尺寸规范，经常需要调整图像的宽高。该工具提供便捷的批量缩放服务。',
+            'article_p2': '依靠浏览器本地 Canvas 渲染，不产生网络流量，彻底保障隐私。',
+            'faq_q1': '可以保持纵横比吗？',
+            'faq_a1': '可以，勾选“保持比例”选项即可避免图片变形。',
+            'faq_q2': '需要付费吗？',
+            'faq_a2': '不需要，这是一个 100% 免费的本地实用工具。'
+        }
+    },
+    'watermark-image': {
+        'de': {
+            'title': 'Bilder online mit Wasserzeichen versehen | Batch-Wasserzeichen',
+            'desc': 'Fügen Sie Ihren Bildern online kostenlos Textwasserzeichen hinzu. Schützen Sie Ihre Urheberrechte lokal im Browser.',
+            'keywords': 'wasserzeichen hinzufügen, bilder wasserzeichen, urheberrecht schützen',
+            'h1': 'Bilder mit Wasserzeichen versehen',
+            'tabs': 'Wasserzeichen hinzufügen',
+            'article_title': 'So versehen Sie Ihre Bilder mit einem Wasserzeichen',
+            'article_p1': 'Wasserzeichen schützen Ihre visuellen Werke vor unbefugter Nutzung. Unser Tool fügt Texte in verschiedenen Positionen und Größen hinzu.',
+            'article_p2': 'Keine Uploads nötig, Ihre Urheberrechte bleiben auf Ihrem lokalen System geschützt.',
+            'faq_q1': 'Wird die Bildqualität beeinträchtigt?',
+            'faq_a1': 'Nein, das Wasserzeichen wird direkt auf das Bild gerendert, wobei die hohe visuelle Qualität erhalten bleibt.',
+            'faq_q2': 'Werden meine Bilder irgendwo gespeichert?',
+            'faq_a2': 'Absolut nicht. Die Bearbeitung erfolgt vollständig clientseitig in Ihrem Webbrowser.'
+        },
+        'es': {
+            'title': 'Poner Marca de Agua a Imágenes Gratis | Image Converter',
+            'desc': 'Añade marcas de agua de texto a tus imágenes online gratis. Protege tus fotos de forma local en tu navegador.',
+            'keywords': 'marca de agua gratis, poner marca de agua online, proteger fotos, marca de agua texto',
+            'h1': 'Marca de Agua en Imágenes',
+            'tabs': 'Añadir marca de agua',
+            'article_title': 'Cómo proteger tus imágenes con marcas de agua online',
+            'article_p1': 'Las marcas de agua te ayudan a proteger tus derechos de autor en internet. Puedes añadir textos personalizados, ajustar tamaños y posiciones de forma masiva.',
+            'article_p2': 'Todo se procesa en tu propio dispositivo para una privacidad garantizada.',
+            'faq_q1': '¿Se pueden procesar varias fotos a la vez?',
+            'faq_a1': 'Sí, puedes arrastrar y soltar múltiples fotos para aplicarles la marca de agua en un solo lote.',
+            'faq_q2': '¿Es seguro?',
+            'faq_a2': 'Completamente seguro, las fotos nunca se suben a internet.'
+        },
+        'fr': {
+            'title': 'Ajouter un Filigrane sur vos Images | Image Converter',
+            'desc': 'Ajoutez des filigranes textuels à vos photos en ligne gratuitement. Protégez vos droits d\'auteur localement.',
+            'keywords': 'ajouter filigrane image, filigrane gratuit en ligne, protection photos',
+            'h1': 'Ajouter un Filigrane sur des Images',
+            'tabs': 'Ajouter un filigrane',
+            'article_title': 'Comment protéger vos images avec un filigrane en ligne',
+            'article_p1': 'Le filigrane est idéal pour marquer la propriété de vos clichés avant diffusion. Choisissez le texte, la taille et la position.',
+            'article_p2': 'Le traitement est effectué entièrement dans votre navigateur pour une sécurité totale.',
+            'faq_q1': 'Puis-je traiter des lots d\'images ?',
+            'faq_a1': 'Oui, glissez-déposez plusieurs fichiers pour leur appliquer le filigrane simultanément.',
+            'faq_q2': 'Les photos originales sont-elles modifiées ?',
+            'faq_a2': 'Non, vous téléchargez de nouveaux fichiers avec le filigrane incrusté.'
+        },
+        'hi': {
+            'title': 'फोटो पर वॉटरमार्क लगाएं | ऑनलाइन वॉटरमार्क टूल',
+            'desc': 'अपनी छवियों पर टेक्स्ट वॉटरमार्क मुफ्त में जोड़ें। अपने कॉपीराइट को ब्राउज़र में सुरक्षित रखें।',
+            'keywords': 'वॉटरमार्क लगाएं, फोटो वॉटरमार्क, कॉपीराइट सुरक्षित करें',
+            'h1': 'छवियों पर वॉटरमार्क लगाएं',
+            'tabs': 'वॉटरमार्क लगाएं',
+            'article_title': 'अपनी तस्वीरों को वॉटरमार्क से कैसे सुरक्षित करें',
+            'article_p1': 'वॉटरमार्क आपके चित्रों को अनधिकृत उपयोग से बचाने का एक शानदार तरीका है। आप कस्टम टेक्स्ट, आकार और स्थिति चुन सकते हैं।',
+            'article_p2': 'यह टूल पूरी तरह से आपके ब्राउज़र में काम करता है और डेटा लीक होने का कोई खतरा नहीं है।',
+            'faq_q1': 'क्या मैं एक बार में कई छवियों पर वॉटरमार्क लगा सकता हूँ?',
+            'faq_a1': 'हाँ, यह टूल बैच मोड का समर्थन करता है ताकि आप कई फाइलों पर एक साथ वॉटरमार्क लगा सकें।',
+            'faq_q2': 'क्या यह मुफ़्त है?',
+            'faq_a2': 'हाँ, यह बिना किसी शुल्क के 100% मुफ़्त है।'
+        },
+        'zh': {
+            'title': '在线图片加水印 | 批量文字水印工具',
+            'desc': '免费在线为图片添加文字水印。本地安全运行，保护图片版权不受侵犯。',
+            'keywords': '图片加水印, 在线加水印, 批量水印工具, 保护版权',
+            'h1': '在线图片添加水印',
+            'tabs': '添加水印',
+            'article_title': '如何在线为图片快速批量添加水印',
+            'article_p1': '为了防止您的摄影作品或设计被盗用，添加文字水印是极佳的方法。支持自定义大小和五个位置放置。',
+            'article_p2': '所有水印合成在浏览器端本地线程进行，绝不上传，确保您的原片安全。',
+            'faq_q1': '支持批量添加吗？',
+            'faq_a1': '支持，您可以一次拖入多张图片，系统会全部盖上水印并打包下载。',
+            'faq_q2': '可以选择哪些位置？',
+            'faq_a2': '支持四角（左上、右上、左下、右下）以及正中间五个位置。'
+        }
+    },
+    'jpg-to-pdf': {
+        'de': {
+            'title': 'JPG in PDF Konverter | Bilder als PDF speichern',
+            'desc': 'Konvertieren Sie JPG-Bilder online kostenlos in ein PDF-Dokument. 100% lokal im Browser.',
+            'keywords': 'jpg in pdf, bilder in pdf, jpg to pdf, pdf compiler',
+            'h1': 'JPG in PDF Konverter',
+            'tabs': 'In PDF konvertieren',
+            'article_title': 'Bilder in ein PDF-Dokument umwandeln',
+            'article_p1': 'Fügen Sie mehrere JPG-Bilder zu einem einzigen PDF-Dokument zusammen. Ideal für Bewerbungsunterlagen, Scans oder Portfolios.',
+            'article_p2': 'Die Konvertierung läuft lokal auf Ihrem Gerät und garantiert absolute Datensicherheit.',
+            'faq_q1': 'Werden die Bilder komprimiert?',
+            'faq_a1': 'Das Tool passt die Bilder an das A4-Format an, um ein optimales Layout ohne unnötigen Qualitätsverlust zu gewährleisten.',
+            'faq_q2': 'Wie viele Seiten kann das PDF haben?',
+            'faq_a2': 'Es gibt keine Begrenzung der Seitenzahl, da alles lokal im Browser kompiliert wird.'
+        },
+        'es': {
+            'title': 'Convertidor JPG a PDF | Unir Imágenes en PDF Gratis',
+            'desc': 'Convierte tus imágenes JPG a un documento PDF online gratis. Proceso local en tu navegador para total privacidad.',
+            'keywords': 'jpg a pdf, convertir fotos a pdf, imagenes a pdf gratis, unir pdf',
+            'h1': 'Convertidor JPG a PDF',
+            'tabs': 'Convertir a PDF',
+            'article_title': 'Cómo compilar múltiples imágenes JPG en un solo archivo PDF',
+            'article_p1': 'Agrupar tus fotos o documentos escaneados en un solo PDF facilita su envío y organización. Nuestra herramienta escala automáticamente las fotos para ajustarse al formato A4.',
+            'article_p2': 'Tus documentos confidenciales nunca viajan por internet, asegurando la máxima privacidad.',
+            'faq_q1': '¿Puedo subir otros formatos aparte de JPG?',
+            'faq_a1': 'Sí, la herramienta soporta la conversión automática de PNG, WEBP y HEIC directamente al PDF.',
+            'faq_q2': '¿Es gratis?',
+            'faq_a2': 'Sí, es 100% gratuito y sin límites de páginas.'
+        },
+        'fr': {
+            'title': 'Convertisseur JPG en PDF | Compiler des Images en PDF',
+            'desc': 'Convertissez vos images JPG en un seul fichier PDF en ligne gratuitement. Rendu local sécurisé.',
+            'keywords': 'jpg en pdf, assembler pdf, images en pdf gratuit, convertisseur image pdf',
+            'h1': 'Convertisseur JPG en PDF',
+            'tabs': 'Convertir en PDF',
+            'article_title': 'Comment assembler vos documents JPG dans un fichier PDF',
+            'article_p1': 'Parfait pour regrouper des reçus, des pièces d\'identité ou des portfolios. Vos images sont mises à l\'échelle et centrées automatiquement.',
+            'article_p2': 'Tout le processus est client-side, gardant vos documents confidentiels.',
+            'faq_q1': 'Quels formats d\'image sont acceptés ?',
+            'faq_a1': 'Vous pouvez insérer des fichiers JPG, PNG, WEBP et HEIC.',
+            'faq_q2': 'Combien de pages puis-je générer ?',
+            'faq_a2': 'Il n\'y a aucune limite du nombre de pages.'
+        },
+        'hi': {
+            'title': 'JPG से PDF कनवर्टर | छवियों को PDF में बदलें',
+            'desc': 'JPG इमेज को एक PDF दस्तावेज़ में मुफ्त में बदलें। 100% सुरक्षित और स्थानीय पीडीएफ मेकर।',
+            'keywords': 'जेपीजी से पीडीएफ, jpg to pdf, फोटो को पीडीएफ बनाएं',
+            'h1': 'JPG से PDF कनवर्टर',
+            'tabs': 'PDF में बदलें',
+            'article_title': 'कई चित्रों को एक PDF में संकलित कैसे करें',
+            'article_p1': 'रसीदें, दस्तावेज़ या तस्वीरें एक ही पीडीएफ में जमा करने के लिए यह टूल छवियों को A4 आकार में स्वचालित रूप से फिट कर देता है।',
+            'article_p2': 'यह पीडीएफ कंपाइलर बिना सर्वर के पूरी सुरक्षा के साथ काम करता है।',
+            'faq_q1': 'क्या छवियों की गुणवत्ता बनी रहेगी?',
+            'faq_a1': 'हाँ, हमारा कनवर्टर छवियों को बिना धुंधला किए उपयुक्त आकार में फिट करता है।',
+            'faq_q2': 'क्या इसकी कोई सीमा है?',
+            'faq_a2': 'नहीं, आप असीमित पेजों का पीडीएफ दस्तावेज बना सकते हैं।'
+        },
+        'zh': {
+            'title': 'JPG 转 PDF 转换器 | 免费在线合成 PDF 文档',
+            'desc': '免费在线将多张 JPG 图片合成一个 PDF 文档。100% 本地浏览器合成，确保敏感文件隐私。',
+            'keywords': 'jpg转pdf, 图片转pdf, 批量合成pdf, 多图转pdf',
+            'h1': 'JPG 转 PDF 转换器',
+            'tabs': '转换为 PDF',
+            'article_title': '如何在本地将多张 JPG/PNG 图片合成单个 PDF',
+            'article_p1': '将扫描件、发票或作品集整理合成单个 PDF，极大地方便了发送与打印。系统会将图片自动调整并居中适配 A4 页面。',
+            'article_p2': '纯前端本地打包技术，无需任何云端处理，全力守护您的证件和敏感隐私。',
+            'faq_q1': '支持除 JPG 以外的图片吗？',
+            'faq_a1': '支持，您可以把 PNG、WEBP 或 HEIC 等多种格式 of 图片一起放入并排版。',
+            'faq_q2': '合成文件有页数限制吗？',
+            'faq_a2': '没有，系统在您电脑内存中进行合成，支持无限页数。'
+        }
+    },
+    'jpg-to-tiff': {
+        'de': {
+            'title': 'JPG in TIFF Konverter | Rasterbilder erstellen',
+            'desc': 'Konvertieren Sie JPG-Bilder online kostenlos in das TIFF-Format. Ideal für hochwertigen Druck.',
+            'keywords': 'jpg in tiff, jpg to tiff, bilder in tiff',
+            'h1': 'JPG in TIFF Konverter',
+            'tabs': 'In TIFF konvertieren',
+            'article_title': 'JPG-Bilder in das TIFF-Format umwandeln',
+            'article_p1': 'TIFF ist ein etabliertes Format in der Druckindustrie und im Grafikdesign, das Rasterdaten in hoher Qualität speichert.',
+            'article_p2': 'Der Konverter arbeitet 100% lokal in Ihrem Webbrowser.',
+            'faq_q1': 'Warum TIFF statt JPG wählen?',
+            'faq_a1': 'TIFF eignet sich besser für die Weiterbearbeitung und den professionellen Druck, da es verlustfrei gespeichert werden kann.',
+            'faq_q2': 'Ist dieser Konverter sicher?',
+            'faq_a2': 'Ja, Ihre Bilder verlassen Ihr Gerät zu keinem Zeitpunkt.'
+        },
+        'es': {
+            'title': 'Convertidor JPG a TIFF | Crear Imágenes Rasterizadas',
+            'desc': 'Convierte imágenes JPG a formato TIFF online gratis. Ideal para diseño profesional e impresión.',
+            'keywords': 'jpg a tiff, convertir jpg a tiff, formato tiff gratis',
+            'h1': 'Convertidor JPG a TIFF',
+            'tabs': 'Convertir a TIFF',
+            'article_title': 'Cómo convertir tus imágenes JPG a TIFF de alta calidad',
+            'article_p1': 'TIFF es el formato estándar preferido por imprentas y publicaciones profesionales por su capacidad para almacenar datos de mapa de bits sin compresión agresiva.',
+            'article_p2': 'Todo el renderizado se realiza localmente en tu navegador sin subidas.',
+            'faq_q1': '¿Es seguro?',
+            'faq_a1': 'Sí, la conversión ocurre 100% del lado del cliente.',
+            'faq_q2': '¿Tiene costo?',
+            'faq_a2': 'No, es completamente gratuito y sin límites.'
+        },
+        'fr': {
+            'title': 'Convertisseur JPG en TIFF | Image Converter',
+            'desc': 'Convertissez vos images JPG en fichiers TIFF en ligne gratuitement. Idéal pour l\'impression professionnelle.',
+            'keywords': 'jpg en tiff, convertir jpg en tiff, image tiff gratuit',
+            'h1': 'Convertisseur JPG en TIFF',
+            'tabs': 'Convertir en TIFF',
+            'article_title': 'Comment exporter vos images JPG vers le format TIFF',
+            'article_p1': 'TIFF est largement utilisé dans l\'édition et l\'imprimerie pour sa gestion rigoureuse des données matricielles.',
+            'article_p2': 'Traitement sécurisé en local sans transfert cloud.',
+            'faq_q1': 'Pourquoi convertir en TIFF ?',
+            'faq_a1': 'Le format TIFF évite les pertes de compression lors des sauvegardes successives.',
+            'faq_q2': 'Est-ce gratuit ?',
+            'faq_a2': 'Oui, l\'outil est totalement gratuit et livre d\'accès.'
+        },
+        'hi': {
+            'title': 'JPG से TIFF कनवर्टर | उच्च गुणवत्ता वाली TIFF इमेज',
+            'desc': 'JPG इमेज को मुफ्त में TIFF प्रारूप में बदलें। 100% सुरक्षित और स्थानीय रूपांतरण।',
+            'keywords': 'जेपीजी से टिफ, jpg to tiff, टिफ कनवर्टर',
+            'h1': 'JPG से TIFF कनवर्टर',
+            'tabs': 'TIFF में बदलें',
+            'article_title': 'JPG को TIFF में बदलने का आसान तरीका',
+            'article_p1': 'TIFF प्रारूप मुख्य रूप से प्रिंटिंग और प्रकाशन उद्योगों में उपयोग किया जाता है क्योंकि यह विवरणों को सुरक्षित रखता है।',
+            'article_p2': 'यह कनवर्टर बिना किसी सर्वर को डेटा भेजे स्थानीय रूप से चलता है।',
+            'faq_q1': 'क्या यह टूल मुफ़्त है?',
+            'faq_a1': 'हाँ, यह 100% मुफ़्त है और इसकी कोई सीमा नहीं है।',
+            'faq_q2': 'क्या यह मोबाइल पर काम करता है?',
+            'faq_a2': 'हाँ, यह मोबाइल वेब ब्राउज़र के माध्यम से सभी उपकरणों पर आसानी से काम करता है।'
+        },
+        'zh': {
+            'title': 'JPG 转 TIFF 转换器 | 免费在线生成 TIFF',
+            'desc': '免费在线将 JPG 图片转换为 TIFF 格式。本地运行，适合印刷和高精度学术出版物。',
+            'keywords': 'jpg转tiff, jpg to tiff, tiff转换器, 印刷图片格式',
+            'h1': 'JPG 转 TIFF 转换器',
+            'tabs': '转换为 TIFF',
+            'article_title': '如何安全在本地将 JPG 图片转换为 TIFF 格式',
+            'article_p1': 'TIFF 是一种非常成熟的图像格式，广泛应用于出版、印刷和医学影像，以保留最精确的栅格数据。',
+            'article_p2': '依托浏览器本地引擎计算，数据无需上传，隐私极其安全。',
+            'faq_q1': 'TIFF 格式有什么优势？',
+            'faq_a1': 'TIFF 能够进行无损保存，非常方便后续进行多次无损调整和印刷排版。',
+            'faq_q2': '有大小限制吗？',
+            'faq_a2': '本站纯本地合成，不设网络带宽大小门槛，完全免费使用。'
+        }
+    },
+    'tiff-to-jpg': {
+        'de': {
+            'title': 'TIFF in JPG Konverter | Tagged-Image-Dateien umwandeln',
+            'desc': 'Konvertieren Sie TIFF-Bilder online kostenlos in JPG-Dateien. Erhöhen Sie die Kompatibilität.',
+            'keywords': 'tiff in jpg, tiff to jpg, tagged image konvertieren',
+            'h1': 'TIFF in JPG Konverter',
+            'tabs': 'In JPG konvertieren',
+            'article_title': 'TIFF-Dateien sicher in JPGs konvertieren',
+            'article_p1': 'TIFF-Dateien sind oft extrem groß und werden von Mobilgeräten oder Webseiten selten nativ unterstützt. Konvertieren Sie sie in JPG für eine einfache Freigabe.',
+            'article_p2': 'Alle Konvertierungen geschehen privat in Ihrem Webbrowser.',
+            'faq_q1': 'Wird das TIFF-Bild komprimiert?',
+            'faq_a1': 'Ja, durch die Konvertierung wird das Bild im komprimierten JPG-Format gespeichert, wodurch die Dateigröße drastisch sinkt.',
+            'faq_q2': 'Kostet dieses Tool etwas?',
+            'faq_a2': 'Nein, es ist vollkommen kostenlos.'
+        },
+        'es': {
+            'title': 'Convertidor TIFF a JPG | Convertir Archivos Tagged Image',
+            'desc': 'Convierte imágenes TIFF a JPG online gratis. Ahorra espacio de forma local en tu navegador.',
+            'keywords': 'tiff a jpg, convertir tiff a jpg, formato tiff a jpeg',
+            'h1': 'Convertidor TIFF a JPG',
+            'tabs': 'Convertir a JPG',
+            'article_title': 'Por qué convertir imágenes TIFF a JPG',
+            'article_p1': 'Los archivos TIFF suelen ser sumamente pesados y difíciles de compartir. Convertirlos al formato JPG reduce significativamente su peso haciéndolos ideales para la web.',
+            'article_p2': 'El motor de renderizado local asegura que no haya riesgos de fugas de datos.',
+            'faq_q1': '¿Qué pasa con las capas del TIFF?',
+            'faq_a1': 'El convertidor combinará automáticamente todas las capas del archivo TIFF en una sola imagen JPG plana.',
+            'faq_q2': '¿Es seguro?',
+            'faq_a2': 'Absolutamente, es un convertidor offline del lado del cliente.'
+        },
+        'fr': {
+            'title': 'Convertisseur TIFF en JPG | Image Converter',
+            'desc': 'Convertissez vos fichiers TIFF en images JPG en ligne gratuitement. Réduisez le poids des fichiers.',
+            'keywords': 'tiff en jpg, convertir tiff en jpg, image matricielle',
+            'h1': 'Convertisseur TIFF en JPG',
+            'tabs': 'Convertir en JPG',
+            'article_title': 'Comment optimiser vos clichés TIFF en fichiers JPG compressés',
+            'article_p1': 'Les fichiers TIFF sont lourds et complexes. Les convertir en JPG les rend instantanément compatibles avec la plupart des visionneuses d\'images et réseaux.',
+            'article_p2': 'Rendu sécurisé et sans intermédiaire cloud.',
+            'faq_q1': 'Les calques TIFF sont-ils conservés ?',
+            'faq_a1': 'Non, le format JPG ne gérant pas les calques, l\'image finale est aplatie.',
+            'faq_q2': 'Y a-t-il des limites de taille pour le fichier d\'entrée ?',
+            'faq_a2': 'L\'outil supporte la majorité des fichiers TIFF standard.'
+        },
+        'hi': {
+            'title': 'TIFF से JPG कनवर्टर | फ़ाइल का आकार छोटा करें',
+            'desc': 'भारी TIFF फाइलों को आसानी से JPG फॉर्मेट में बदलें। 100% सुरक्षित और स्थानीय रूपांतरण।',
+            'keywords': 'टिफ से जेपीजी, tiff to jpg, इमेज कनवर्टर',
+            'h1': 'TIFF से JPG कनवर्टर',
+            'tabs': 'JPG में बदलें',
+            'article_title': 'TIFF को JPG में बदलने का सबसे आसान तरीका',
+            'article_p1': 'TIFF फाइलें बहुत बड़ी होती हैं और उन्हें सोशल मीडिया पर शेयर करना मुश्किल होता है। JPG में बदलने से इनका साइज काफी कम हो जाता है।',
+            'article_p2': 'यह कनवर्टर सीधे आपके डिवाइस पर काम करता है और गुणवत्ता सुनिश्चित करता है।',
+            'faq_q1': 'क्या यह टूल सुरक्षित है?',
+            'faq_a1': 'हाँ, चूंकि कोई भी डेटा बाहर नहीं जाता है, यह 100% सुरक्षित और निजी है।',
+            'faq_q2': 'क्या इसके लिए इंटरनेट की आवश्यकता है?',
+            'faq_a2': 'नहीं, पेज लोड होने के बाद यह पूरी तरह से ऑफलाइन काम करता है।'
+        },
+        'zh': {
+            'title': 'TIFF 转 JPG 转换器 | 极限缩小体积',
+            'desc': '免费在线将 TIFF 图像转换为 JPG 格式。本地运行，大幅度减少印刷级别大图的文件体积。',
+            'keywords': 'tiff转jpg, tiff to jpg, tiff图转换, 批量转换大图',
+            'h1': 'TIFF 转 JPG 转换器',
+            'tabs': '转换为 JPG',
+            'article_title': '如何在线快速将大体积 TIFF 转换为 JPG 格式',
+            'article_p1': 'TIFF 图片因为常包含高精无损信息，体积动辄数十兆，在网络分发或日常查看时兼容性极差。转换为 JPG 能够立即解决此痛点。',
+            'article_p2': '所有转换分析均在您本地设备中进行，安全隔绝，不必担心重要设计稿被泄露。',
+            'faq_q1': 'TIFF 中的图层和多页会保留吗？',
+            'faq_a1': '系统在转换时，会自动将最上层可见图像图层合并栅格化为扁平的 JPG。',
+            'faq_q2': '一次能转换几张？',
+            'faq_a2': '支持多张 TIFF 文件批量推入，极速自动按顺序转为 JPG 并输出。'
+        }
     }
 }
 
@@ -2033,6 +2393,107 @@ def translate_page(filepath, lang, tool_name):
     # inject the new translated JSON-LD schema right before </head>
     html = html.replace('</head>', schema_script_block + '\n</head>')
 
+    # Translate custom UI settings for resize-image
+    if tool_name == 'resize-image':
+        resize_trans = {
+            'de': {
+                'Target Dimensions': 'Zielabmessungen',
+                'Width (px)': 'Breite (px)',
+                'Height (px)': 'Höhe (px)',
+                'Maintain aspect ratio (enter one value to auto-calculate the other)': 'Seitenverhältnis beibehalten (einen Wert eingeben, um den anderen automatisch zu berechnen)'
+            },
+            'es': {
+                'Target Dimensions': 'Dimensiones de Destino',
+                'Width (px)': 'Ancho (px)',
+                'Height (px)': 'Alto (px)',
+                'Maintain aspect ratio (enter one value to auto-calculate the other)': 'Mantener relación de aspecto (ingrese un valor para calcular automáticamente el otro)'
+            },
+            'fr': {
+                'Target Dimensions': 'Dimensions Cibles',
+                'Width (px)': 'Largeur (px)',
+                'Height (px)': 'Hauteur (px)',
+                'Maintain aspect ratio (enter one value to auto-calculate the other)': "Conserver le ratio d'aspect (entrer une valeur pour calculer l'autre automatiquement)"
+            },
+            'hi': {
+                'Target Dimensions': 'लक्षित आयाम',
+                'Width (px)': 'चौड़ाई (px)',
+                'Height (px)': 'ऊंचाई (px)',
+                'Maintain aspect ratio (enter one value to auto-calculate the other)': 'आस्पेक्ट रेशियो बनाए रखें (दूसरा ऑटो-कैलकुलेट करने के लिए एक वैल्यू डालें)'
+            },
+            'zh': {
+                'Target Dimensions': '目标尺寸',
+                'Width (px)': '宽度 (px)',
+                'Height (px)': '高度 (px)',
+                'Maintain aspect ratio (enter one value to auto-calculate the other)': '保持比例（输入一个值，另一个将自动计算）'
+            }
+        }
+        if lang in resize_trans:
+            for eng_txt, lang_txt in resize_trans[lang].items():
+                html = html.replace(eng_txt, lang_txt)
+
+    # Translate custom UI settings for watermark-image
+    if tool_name == 'watermark-image':
+        watermark_trans = {
+            'de': {
+                'Watermark Settings': 'Wasserzeichen-Einstellungen',
+                'Watermark Text (Leave empty for none)': 'Wasserzeichen-Text (Leer lassen für keins)',
+                'Text Size (px)': 'Textgröße (px)',
+                'Position': 'Position',
+                'Bottom Right': 'Unten rechts',
+                'Bottom Left': 'Unten links',
+                'Top Right': 'Oben rechts',
+                'Top Left': 'Oben links',
+                'Center': 'Mitte'
+            },
+            'es': {
+                'Watermark Settings': 'Ajustes de Marca de Agua',
+                'Watermark Text (Leave empty for none)': 'Texto de la marca de agua (dejar vacío para ninguno)',
+                'Text Size (px)': 'Tamaño del texto (px)',
+                'Position': 'Posición',
+                'Bottom Right': 'Abajo a la derecha',
+                'Bottom Left': 'Abajo a la izquierda',
+                'Top Right': 'Arriba a la derecha',
+                'Top Left': 'Arriba a la izquierda',
+                'Center': 'Centro'
+            },
+            'fr': {
+                'Watermark Settings': 'Paramètres du Filigrane',
+                'Watermark Text (Leave empty for none)': 'Texte du filigrane (laisser vide pour aucun)',
+                'Text Size (px)': 'Taille du texte (px)',
+                'Position': 'Position',
+                'Bottom Right': 'En bas à droite',
+                'Bottom Left': 'En bas à gauche',
+                'Top Right': 'En haut à droite',
+                'Top Left': 'En haut à gauche',
+                'Center': 'Centre'
+            },
+            'hi': {
+                'Watermark Settings': 'वॉटरमार्क सेटिंग्स',
+                'Watermark Text (Leave empty for none)': 'वॉटरमार्क टेक्स्ट (हटाने के लिए खाली छोड़ें)',
+                'Text Size (px)': 'टेक्स्ट का आकार (px)',
+                'Position': 'स्थिति',
+                'Bottom Right': 'नीचे दाईं ओर',
+                'Bottom Left': 'नीचे बाईं ओर',
+                'Top Right': 'ऊपर दाईं ओर',
+                'Top Left': 'ऊपर बाईं ओर',
+                'Center': 'केंद्र'
+            },
+            'zh': {
+                'Watermark Settings': '水印设置',
+                'Watermark Text (Leave empty for none)': '水印文字（留空表示不添加）',
+                'Text Size (px)': '文字大小 (px)',
+                'Position': '位置',
+                'Bottom Right': '右下角',
+                'Bottom Left': '左下角',
+                'Top Right': '右上角',
+                'Top Left': '左上角',
+                'Center': '正中间'
+            }
+        }
+        if lang in watermark_trans:
+            for eng_txt, lang_txt in watermark_trans[lang].items():
+                html = html.replace(eng_txt, lang_txt)
+
     return html
 
 def main():
@@ -2059,7 +2520,12 @@ def main():
         "svg-to-jpg",
         "svg-to-png",
         "webp-to-jpg",
-        "webp-to-png"
+        "webp-to-png",
+        "resize-image",
+        "watermark-image",
+        "jpg-to-pdf",
+        "jpg-to-tiff",
+        "tiff-to-jpg"
     ]
     
     # 1. Translate Root Homepages

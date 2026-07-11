@@ -259,12 +259,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ── i18n for dynamic UI strings ─────
   const lang = document.documentElement.lang || 'en';
-  const i18nStrings = {
-    en:  { converting: 'Converting', of: 'of', filesSelected: 'file(s) selected - Drop more?', convertMore: 'Convert More Images', compressImages: 'Compress Images', convertImages: 'Convert Images', success: 'Success!', filesProcessed: 'file(s) processed', original: 'Original', processed: 'Processed', smaller: 'smaller', larger: 'larger', downloadZip: 'Download ZIP', download: 'Download', zipping: 'Zipping', copiedClipboard: 'Image copied to clipboard!', copyBlocked: 'Browser blocked clipboard copy.', copyNotSupported: 'Clipboard copy not supported on this browser.', heicNotLoaded: 'Loading HEIC library... Please wait.', heicFailed: 'Failed to process HEIC', tiffNotLoaded: 'Loading TIFF library... Please wait.', tiffFailed: 'Failed to process TIFF', zipNotLoaded: 'JSZip library has not loaded yet.', dropZoneCompressSize: 'Drop images here to compress under {size}KB' },
-    es:  { converting: 'Convirtiendo', of: 'de', filesSelected: 'archivo(s) — ¿más?', convertMore: 'Convertir más', compressImages: 'Comprimir imagen', convertImages: 'Convertir', success: '¡Éxito!', filesProcessed: 'archivo(s)', original: 'Original', processed: 'Procesado', smaller: 'más pequeño', larger: 'más grande', downloadZip: 'Descargar ZIP', download: 'Descargar', zipping: 'Comprimiendo', copiedClipboard: '¡Imagen copiada!', copyBlocked: 'Copia bloqueada por el navegador.', copyNotSupported: 'Copia no soportada.', heicNotLoaded: 'Librería HEIC no cargada.', heicFailed: 'Error HEIC', tiffNotLoaded: 'Cargando librería TIFF... Espere por favor.', tiffFailed: 'Error al procesar TIFF', zipNotLoaded: 'JSZip no cargado.', dropZoneCompressSize: 'Arrastra imágenes aquí para comprimir a menos de {size}KB' },
-    fr:  { converting: 'Conversion', of: 'de', filesSelected: 'fichier(s) — plus ?', convertMore: 'Convertir plus', compressImages: 'Compresser', convertImages: 'Convertir', success: 'Succès !', filesProcessed: 'fichier(s)', original: 'Original', processed: 'Traité', smaller: 'plus petit', larger: 'plus grand', downloadZip: 'Télécharger ZIP', download: 'Télécharger', zipping: 'Compression', copiedClipboard: 'Image copiée !', copyBlocked: 'Copie bloquée.', copyNotSupported: 'Copie non supportée.', heicNotLoaded: 'Bibliothèque HEIC non chargée.', heicFailed: 'Erreur HEIC', tiffNotLoaded: 'Chargement de la bibliothèque TIFF... Veuillez patienter.', tiffFailed: 'Échec du traitement du TIFF', zipNotLoaded: 'JSZip non chargé.', dropZoneCompressSize: 'Déposez les images ici pour compresser à moins de {size}KB' },
-    zh:  { converting: '转换中', of: '/', filesSelected: '文件已选 — 添加更多?', convertMore: '转换更多', compressImages: '压缩图片', convertImages: '转换', success: '成功！', filesProcessed: '个文件', original: '原始', processed: '处理后', smaller: '更小', larger: '更大', downloadZip: '下载 ZIP', download: '下载', zipping: '压缩中', copiedClipboard: '已复制到剪贴板！', copyBlocked: '浏览器阻止了复制。', copyNotSupported: '浏览器不支持复制。', heicNotLoaded: 'HEIC 库未加载。', heicFailed: 'HEIC 转换失败', tiffNotLoaded: '正在加载 TIFF 库... 请稍候。', tiffFailed: 'TIFF 处理失败', zipNotLoaded: 'JSZip 未加载。', dropZoneCompressSize: '拖放图片至此以压缩至 {size}KB 以下' },
-    hi:  { converting: 'कनवर्ट हो रहा है', of: 'में से', filesSelected: 'फाइल चुनी — और जोड़ें?', convertMore: 'और कनवर्ट करें', compressImages: 'कंप्रेस करें', convertImages: 'कनवर्ट करें', success: 'सफल!', filesProcessed: 'फाइल', original: 'मूल', processed: 'प्रोसेस्ड', smaller: 'छोटा', larger: 'बड़ा', downloadZip: 'ZIP डाउनलोड', download: 'डाउनलोड', zipping: 'ज़िप हो रहा', copiedClipboard: 'कॉपी हो गया!', copyBlocked: 'ब्राउज़र ने कॉपी ब्लॉक किया।', copyNotSupported: 'कॉपी सपोर्ट नहीं है।', heicNotLoaded: 'HEIC लाइब्रेरी लोड नहीं हुई।', heicFailed: 'HEIC एरर', tiffNotLoaded: 'TIFF लाइब्रेरी लोड हो रही है... कृपया प्रतीक्षा करें।', tiffFailed: 'TIFF संसाधित करने में विफल', zipNotLoaded: 'JSZip लोड नहीं हुआ।', dropZoneCompressSize: 'इमेज को यहाँ छोड़ें, {size}KB से कम कंप्रेस करने के लिए' },
+      const i18nStrings = {
+    en:  { converting: 'Converting', of: 'of', filesSelected: 'file(s) selected - Drop more?', convertMore: 'Convert More Images', compressImages: 'Compress Images', convertImages: 'Convert Images', success: 'Success!', filesProcessed: 'file(s) processed', original: 'Original', processed: 'Processed', smaller: 'smaller', larger: 'larger', downloadZip: 'Download ZIP', download: 'Download', zipping: 'Zipping', copiedClipboard: 'Image copied to clipboard!', copyBlocked: 'Browser blocked clipboard copy.', copyNotSupported: 'Clipboard copy not supported on this browser.', heicNotLoaded: 'Loading HEIC library... Please wait.', heicFailed: 'Failed to process HEIC', tiffNotLoaded: 'Loading TIFF library... Please wait.', tiffFailed: 'Failed to process TIFF', zipNotLoaded: 'JSZip library has not loaded yet.', dropZoneCompressSize: 'Drop images here to compress under {size}KB', decodingHeic: 'Decoding HEIC...', failed: 'Failed', clearAll: 'Clear All' },
+    de:  { converting: 'Wird konvertiert', of: 'von', filesSelected: 'Datei(en) ausgewählt - Mehr ablegen?', convertMore: 'Mehr Bilder konvertieren', compressImages: 'Bilder komprimieren', convertImages: 'Bilder konvertieren', success: 'Erfolgreich!', filesProcessed: 'Datei(en) verarbeitet', original: 'Original', processed: 'Verarbeitet', smaller: 'kleiner', larger: 'größer', downloadZip: 'ZIP herunterladen', download: 'Herunterladen', zipping: 'Komprimieren', copiedClipboard: 'Bild in die Zwischenablage kopiert!', copyBlocked: 'Kopieren in Zwischenablage blockiert.', copyNotSupported: 'Zwischenablage-Kopie von diesem Browser nicht unterstützt.', heicNotLoaded: 'Lade HEIC-Bibliothek... Bitte warten.', heicFailed: 'Fehler beim Verarbeiten von HEIC', tiffNotLoaded: 'Lade TIFF-Bibliothek... Bitte warten.', tiffFailed: 'Fehler beim Verarbeiten von TIFF', zipNotLoaded: 'JSZip-Bibliothek wurde noch nicht geladen.', dropZoneCompressSize: 'Bilder hier ablegen, um sie unter {size}KB zu komprimieren', decodingHeic: 'HEIC wird decodiert...', failed: 'Fehlgeschlagen', clearAll: 'Alle löschen' },
+    es:  { converting: 'Convirtiendo', of: 'de', filesSelected: 'archivo(s) — ¿más?', convertMore: 'Convertir más', compressImages: 'Comprimir imagen', convertImages: 'Convertir', success: '¡Éxito!', filesProcessed: 'archivo(s)', original: 'Original', processed: 'Procesado', smaller: 'más pequeño', larger: 'más grande', downloadZip: 'Descargar ZIP', download: 'Descargar', zipping: 'Comprimiendo', copiedClipboard: '¡Imagen copiada!', copyBlocked: 'Copia bloqueada por el navegador.', copyNotSupported: 'Copia no soportada.', heicNotLoaded: 'Librería HEIC no cargada.', heicFailed: 'Error HEIC', tiffNotLoaded: 'Cargando librería TIFF... Espere por favor.', tiffFailed: 'Error al procesar TIFF', zipNotLoaded: 'JSZip no cargado.', dropZoneCompressSize: 'Arrastra imágenes aquí para comprimir a menos de {size}KB', decodingHeic: 'Decodificando HEIC...', failed: 'Fallido', clearAll: 'Limpiar todo' },
+    fr:  { converting: 'Conversion', of: 'de', filesSelected: 'fichier(s) — plus ?', convertMore: 'Convertir plus', compressImages: 'Compresser', convertImages: 'Convertir', success: 'Succès !', filesProcessed: 'fichier(s)', original: 'Original', processed: 'Traité', smaller: 'plus petit', larger: 'plus grand', downloadZip: 'Télécharger ZIP', download: 'Télécharger', zipping: 'Compression', copiedClipboard: 'Image copiée !', copyBlocked: 'Copie bloquée.', copyNotSupported: 'Copie non supportée.', heicNotLoaded: 'Bibliothèque HEIC non chargée.', heicFailed: 'Erreur HEIC', tiffNotLoaded: 'Chargement de la bibliothèque TIFF... Veuillez patienter.', tiffFailed: 'Échec du traitement du TIFF', zipNotLoaded: 'JSZip non chargé.', dropZoneCompressSize: 'Déposez les images ici pour compresser à moins de {size}KB', decodingHeic: 'Décodage HEIC...', failed: 'Échec', clearAll: 'Tout effacer' },
+    zh:  { converting: '转换中', of: '/', filesSelected: '文件已选 — 添加更多?', convertMore: '转换更多', compressImages: '压缩图片', convertImages: '转换', success: '成功！', filesProcessed: '个文件', original: '原始', processed: '处理后', smaller: '更小', larger: '更大', downloadZip: '下载 ZIP', download: '下载', zipping: '压缩中', copiedClipboard: '已复制到剪贴板！', copyBlocked: '浏览器阻止了复制。', copyNotSupported: '浏览器不支持复制。', heicNotLoaded: 'HEIC 库未加载。', heicFailed: 'HEIC 转换失败', tiffNotLoaded: '正在加载 TIFF 库... 请稍候。', tiffFailed: 'TIFF 处理失败', zipNotLoaded: 'JSZip 未加载。', dropZoneCompressSize: '拖放图片至此以压缩至 {size}KB 以下', decodingHeic: '正在解码 HEIC...', failed: '失败', clearAll: '清空列表' },
+    hi:  { converting: 'कनवर्ट हो रहा है', of: 'में से', filesSelected: 'फाइल चुनी — और जोड़ें?', convertMore: 'और कनवर्ट करें', compressImages: 'कंप्रेस करें', convertImages: 'कनवर्ट करें', success: 'सफल!', filesProcessed: 'फाइल', original: 'मूल', processed: 'प्रोसेस्ड', smaller: 'छोटा', larger: 'बड़ा', downloadZip: 'ZIP डाउनलोड', download: 'डाउनलोड', zipping: 'ज़िप हो रहा', copiedClipboard: 'कॉपी हो गया!', copyBlocked: 'ब्राउज़र ने कॉपी ब्लॉक किया।', copyNotSupported: 'कॉपी सपोर्ट नहीं है।', heicNotLoaded: 'HEIC लाइब्रेरी लोड नहीं हुई।', heicFailed: 'HEIC एरर', tiffNotLoaded: 'TIFF लाइब्रेरी लोड हो रही है... कृपया प्रतीक्षा करें।', tiffFailed: 'TIFF संसाधित करने में विफल', zipNotLoaded: 'JSZip लोड नहीं हुआ।', dropZoneCompressSize: 'इमेज को यहाँ छोड़ें, {size}KB से कम कंप्रेस करने के लिए', decodingHeic: 'HEIC डिकोड हो रहा है...', failed: 'विफल', clearAll: 'सब हटाएँ' },
   };
   const t = i18nStrings[lang] || i18nStrings.en;
   clearBtn.appendChild(document.createTextNode(' ' + t.convertMore));
@@ -722,6 +723,31 @@ document.addEventListener('DOMContentLoaded', () => {
     if (dropZoneH2) dropZoneH2.textContent = `${queuedFiles.length} ${t.filesSelected}`;
     
     fileGallery.innerHTML = '';
+
+    // Create Gallery Header with Clear All button
+    const headerDiv = document.createElement('div');
+    headerDiv.className = 'gallery-header';
+    
+    const countSpan = document.createElement('span');
+    countSpan.className = 'gallery-title';
+    countSpan.textContent = `${queuedFiles.length} ${t.filesSelected}`;
+    headerDiv.appendChild(countSpan);
+
+    const clearAllBtn = document.createElement('button');
+    clearAllBtn.className = 'btn-clear-all';
+    clearAllBtn.id = 'clearAllBtn';
+    clearAllBtn.type = 'button';
+    clearAllBtn.textContent = t.clearAll || 'Clear All';
+    clearAllBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        queuedFiles.forEach(q => { if (q.thumbUrl) URL.revokeObjectURL(q.thumbUrl); });
+        queuedFiles = [];
+        renderGallery();
+        if (resultCard) resultCard.classList.remove('visible');
+    });
+    headerDiv.appendChild(clearAllBtn);
+    fileGallery.appendChild(headerDiv);
+
     queuedFiles.forEach((q, index) => {
       const div = document.createElement('div');
       div.className = `file-item ${q.result ? 'done' : ''}`;
@@ -734,8 +760,19 @@ document.addEventListener('DOMContentLoaded', () => {
           ? `<div class="skeleton-loader"></div>`
           : `<img src="${url}" alt="Preview of ${safeName}" />`;
           
-      const metaText = q.processing ? 'Decoding HEIC...' : fmtBytes(q.file.size);
-      const resultText = q.result ? '→ ' + (q.result.error ? '<span style="color:#ef4444">Failed</span>' : fmtBytes(q.result.size)) : '';
+      const metaText = q.processing ? t.decodingHeic : fmtBytes(q.file.size);
+      
+      let resultText = '';
+      if (q.result) {
+        if (q.result.error) {
+          resultText = `→ <span style="color:#ef4444">${t.failed}</span>`;
+        } else {
+          const pct = Math.round(((q.file.size - q.result.size) / q.file.size) * 100);
+          const badgeHtml = pct > 0 ? `<span class="savings-pill">-${pct}%</span>` : '';
+          resultText = `→ ${fmtBytes(q.result.size)} ${badgeHtml}`;
+        }
+      }
+
       div.innerHTML = `
         <div class="thumb">${thumbElement}</div>
         <div class="info">
@@ -745,7 +782,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="status">Done</div>
         <button class="btn-remove remove" aria-label="Remove file" data-file-id="${q.id}" ${q.processing ? 'disabled' : ''}>
            <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        </button>
+         </button>
       `;
       fileGallery.appendChild(div);
     });
@@ -858,19 +895,22 @@ document.addEventListener('DOMContentLoaded', () => {
                        const textWidth = metrics.width;
                        
                        let wx = padding, wy = padding + wSize;
-                       if (wPos === 'bottom-right') {
-                           wx = targetW - textWidth - padding;
-                           wy = targetH - padding;
-                       } else if (wPos === 'bottom-left') {
-                           wx = padding;
-                           wy = targetH - padding;
-                       } else if (wPos === 'top-right') {
-                           wx = targetW - textWidth - padding;
-                           wy = padding + wSize;
-                       } else if (wPos === 'center') {
-                           wx = (targetW - textWidth) / 2;
-                           wy = (targetH + wSize) / 2;
-                       }
+                        if (wPos === 'bottom-right') {
+                            wx = targetW - textWidth - padding;
+                            wy = targetH - padding;
+                        } else if (wPos === 'bottom-left') {
+                            wx = padding;
+                            wy = targetH - padding;
+                        } else if (wPos === 'top-right') {
+                            wx = targetW - textWidth - padding;
+                            wy = padding + wSize;
+                        } else if (wPos === 'top-left') {
+                            wx = padding;
+                            wy = padding + wSize;
+                        } else if (wPos === 'center') {
+                            wx = (targetW - textWidth) / 2;
+                            wy = (targetH + wSize) / 2;
+                        }
                        
                        // Text shadow for contrast
                        ctx.shadowColor = "rgba(0,0,0,0.8)";
