@@ -89,15 +89,12 @@ header a.logo-link {
   display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit;
 }
 header .logo {
-  width: 32px; height: 32px; border-radius: 9px;
-  background: linear-gradient(135deg, #6366f1, #a855f7);
+  width: 44px; height: 44px;
   display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 0 15px rgba(99,102,241,0.25);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 header a.logo-link:hover .logo {
   transform: scale(1.06) rotate(-3deg);
-  box-shadow: 0 0 25px rgba(168,85,247,0.45);
 }
 header .logo svg { stroke: white; width: 18px; height: 18px; }
 header .site-title { font-size: 20px; font-weight: 700; margin:0; letter-spacing: -0.02em; color: #fff;}
@@ -953,8 +950,7 @@ footer::before {
   display: flex; align-items: center; gap: 8px; margin-bottom: 4px;
 }
 .footer-brand .footer-logo {
-  width: 28px; height: 28px; border-radius: 8px;
-  background: linear-gradient(135deg, #6366f1, #a855f7);
+  width: 28px; height: 28px;
   display: flex; align-items: center; justify-content: center;
 }
 .footer-brand .footer-name { font-size: 14px; font-weight: 700; color: #e2e8f0; }

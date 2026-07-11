@@ -2160,10 +2160,18 @@ def translate_page(filepath, lang, tool_name):
     html = re.sub(r'<section class="related-tools glass-panel">(.*?)</section>', route_section_anchors, html, flags=re.DOTALL)
     
     # Footer UI translation
-    html = re.sub(r'<div class="footer-copy">(.*?)Your files never leave your device(.*?)</div>', 
-                  f'<div class="footer-copy">\\1{ui_trans["footer_copy"]}\\2</div>', html)
-    html = re.sub(r'<div class="footer-copy">(.*?)Tus archivos nunca salen de tu dispositivo(.*?)</div>', 
-                  f'<div class="footer-copy">\\1{ui_trans["footer_copy"]}\\2</div>', html)
+    html = re.sub(
+        r'<div class="footer-copy">.*?Your files never leave your device.*?</div>', 
+        f'<div class="footer-copy">\n       <img src="/apple-touch-icon.png" alt="Logo" style="width:14px; height:14px; object-fit:contain; border-radius:3px; vertical-align:middle; margin-right:4px; margin-top:-2px;">\n       {ui_trans["footer_copy"]}\n    </div>', 
+        html, 
+        flags=re.DOTALL
+    )
+    html = re.sub(
+        r'<div class="footer-copy">.*?Tus archivos nunca salen de tu dispositivo.*?</div>', 
+        f'<div class="footer-copy">\n       <img src="/apple-touch-icon.png" alt="Logo" style="width:14px; height:14px; object-fit:contain; border-radius:3px; vertical-align:middle; margin-right:4px; margin-top:-2px;">\n       {ui_trans["footer_copy"]}\n    </div>', 
+        html, 
+        flags=re.DOTALL
+    )
                   
     # Policy links translation
     html = html.replace('Privacy Policy</a>', f'{ui_trans["privacy_policy"]}</a>')
