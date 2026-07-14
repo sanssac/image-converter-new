@@ -1,8 +1,23 @@
-# 🖼️ Image Converter
+# 🖼️ ImgLab Converter
 
-A fast, private, 100% client-side image converter built with Vanilla HTML/CSS/JS. No server uploads — all conversion happens inside the browser.
+A lightning-fast, privacy-first, 100% client-side image converter built with Vanilla HTML, CSS, and JavaScript. All image conversions happen directly in your browser—no files are ever uploaded to a server.
 
-**Live site:** `https://yourwebsite.com` ← update this
+**Live Site:** [https://www.imglabconverter.com](https://www.imglabconverter.com)
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-purple.svg)](LICENSE)
+[![Platform: Web](https://img.shields.io/badge/Platform-Web-blue.svg)]()
+[![Privacy: Client-Side](https://img.shields.io/badge/Privacy-100%25_Client--Side-brightgreen.svg)]()
+
+---
+
+## ✨ Features
+
+- **100% Private:** No server-side processing or storage. Your files never leave your device.
+- **Multiple Formats:** Support for converting between JPG, PNG, WEBP, AVIF, HEIC, ICO, and SVG.
+- **Batch Processing:** Convert and compress multiple images simultaneously and download them in a single ZIP file.
+- **Modern UI:** A clean glassmorphism design with system-wide dark/light theme support.
+- **SEO & Internationalization:** Fully optimized meta tags, hreflang annotations, and localized directory layouts for English, Spanish, French, German, Hindi, and Chinese.
+- **PWA Ready:** Installable app with offline support powered by service workers.
 
 ---
 
@@ -24,60 +39,54 @@ image-converter/
 ├── png-to-avif/                # /png-to-avif/ — PNG → AVIF converter
 ├── png-to-ico/                 # /png-to-ico/  — PNG → ICO converter
 ├── svg-to-jpg/                 # /svg-to-jpg/  — SVG → JPG converter
-├── compress-image/             # /compress-image/ — Image compressor
+├── compress-image/             # /compress-image/ — General image compressor
 │
 ├── ── Content Pages ───────────────────────────────────────
-├── blog/                       # /blog/ — Blog index
-│   ├── how-to-convert-jpg-to-png/
-│   ├── best-image-formats-explained/
-│   └── reduce-image-size/
+├── blog/                       # /blog/ — Informative blogs on image editing
 ├── about/                      # /about/
 ├── contact/                    # /contact/
 ├── privacy-policy/             # /privacy-policy/
 ├── terms/                      # /terms/
 │
 ├── ── Internationalization ────────────────────────────────
-├── es/                         # /es/ — Spanish homepage
-├── fr/                         # /fr/ — French homepage
-├── de/                         # /de/ — German homepage
+├── es/                         # Spanish localization
+├── fr/                         # French localization
+├── de/                         # German localization
+├── hi/                         # Hindi localization
+├── zh/                         # Chinese localization
 │
-├── ── Assets ──────────────────────────────────────────────
+├── ── Assets & Config ─────────────────────────────────────
 ├── assets/
-│   ├── css/style.css           # Global stylesheet (glassmorphism + dark/light)
-│   └── js/app.js               # Core conversion engine + UI logic
-│
-├── ── PWA & SEO ───────────────────────────────────────────
-├── sw.js                       # Service Worker (Stale-While-Revalidate caching)
-├── manifest.json               # PWA manifest
-├── favicon.svg                 # Site icon
+│   ├── css/style.css           # Global glassmorphism style rules
+│   └── js/app.js               # Conversion engine & client-side routing logic
+├── sw.js                       # Service Worker for PWA asset caching
+├── manifest.json               # PWA configuration
 ├── robots.txt                  # Search engine directives
-├── sitemap.xml                 # All URLs for crawlers
-├── googlefda0e304c8ec12dc.html # Google Search Console verification (DO NOT DELETE)
-│
-├── ── Deployment ──────────────────────────────────────────
-├── vercel.json                 # Vercel config (headers, caching, clean URLs)
+├── sitemap.xml                 # Sitemap containing all localized pages
+├── vercel.json                 # Vercel deployment cache and header overrides
 │
 └── ── Developer Scripts ───────────────────────────────────
     └── scripts/
-        └── sync_components.py  # Global nav sync — run after editing navigation
+        └── sync_components.py  # Script to synchronize global navigation changes
 ```
 
 ---
 
-## 🚀 How To Run Locally
+## 🚀 Run Locally
 
-This is a pure static site — just open `index.html` in your browser. No build step needed.
+Since this is a fully static application, you can run it directly:
 
-For Vercel-style routing locally, use any static server:
-```bash
-npx serve .
-```
+1. Double-click the `index.html` file to open it in any browser.
+2. For local testing with clean Vercel-style routing, run a static server:
+   ```bash
+   npx serve .
+   ```
 
 ---
 
-## 🛠️ How To Update Navigation Globally
+## 🛠️ Syncing Global Navigation
 
-If you add or change a navigation link, run the sync script once — it updates all 15+ HTML files automatically:
+If you modify the header, footer, or navigation bar, you can sync the changes across all 15+ tool and language pages instantly using the helper Python script:
 
 ```bash
 python scripts/sync_components.py
@@ -85,32 +94,20 @@ python scripts/sync_components.py
 
 ---
 
-## 🔧 Key Technical Details
+## 🔧 Technology Stack
 
-| Concern | Solution |
+| Feature | Tech / Implementation |
 |---|---|
-| **Conversion** | HTML5 Canvas API + `canvas.toBlob()` |
-| **HEIC support** | `heic2any` library (CDN) |
-| **Batch ZIP** | `JSZip` library (CDN) |
-| **Offline** | Service Worker (Stale-While-Revalidate) |
-| **Privacy** | 100% client-side, zero server uploads |
-| **Styling** | Glassmorphism, dark/light theme, CSS animations |
-| **SEO** | FAQPage schema, canonical tags, i18n pages |
-
----
-
-## ⚠️ Before Going Live
-
-1. Replace all `https://yourwebsite.com` references with your real domain:
-   ```bash
-   # PowerShell one-liner:
-   Get-ChildItem -Recurse -Include *.html,*.xml,*.txt | ForEach-Object { (Get-Content $_) -replace 'yourwebsite.com', 'yourrealsite.com' | Set-Content $_ }
-   ```
-2. Update Google Search Console with your real domain
-3. Submit `sitemap.xml` to Google Search Console
+| **Core Canvas Operations** | HTML5 Canvas API + `canvas.toBlob()` |
+| **HEIC Image Support** | [heic2any](https://github.com/alexcorvi/heic2any) via CDN |
+| **Multi-File Batch Downloads** | [JSZip](https://github.com/Stuk/jszip) via CDN |
+| **Offline Capabilities** | Custom PWA Service Worker (Stale-While-Revalidate caching) |
+| **Theme & UI Animations** | Modern CSS Variables, CSS Transitions, Grid Layouts |
+| **Analytics & Core Vitals** | Vercel Analytics integration |
 
 ---
 
 ## 📄 License
 
-This project is open-source and available under the [MIT License](LICENSE).
+This project is open-source and licensed under the [MIT License](LICENSE).
+
