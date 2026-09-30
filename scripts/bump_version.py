@@ -20,10 +20,12 @@ for filepath in html_files:
 
 print(f"Updated {count} files with new version tag: {new_version}")
 
+import re
 with open(os.path.join(workspace, 'sw.js'), 'r', encoding='utf-8') as f:
     sw_content = f.read()
-sw_content = sw_content.replace('image_converter_cache_v12', 'image_converter_cache_v13')
+sw_cache_id = new_version.replace('v=', 'v')
+sw_content = re.sub(r"const CACHE_NAME = ['\"][^'\"]+['\"];", f"const CACHE_NAME = 'imglab_cache_{sw_cache_id}';", sw_content)
 with open(os.path.join(workspace, 'sw.js'), 'w', encoding='utf-8') as f:
     f.write(sw_content)
-print("Updated sw.js")
+print(f"Updated sw.js CACHE_NAME to imglab_cache_{sw_cache_id}")
 

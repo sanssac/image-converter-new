@@ -114,14 +114,6 @@ header nav.desktop-nav a.nav-active { color: white; background: rgba(99,102,241,
 .header-actions {
   display: flex; align-items: center; gap: 12px;
 }
-.btn-signin { color: #e2e8f0; text-decoration: none; font-size: 14px; font-weight: 500; transition: 0.2s; }
-.btn-signin:hover { color: white; }
-.btn-signup { 
-  background: #ef4444; color: white; text-decoration: none; 
-  padding: 8px 16px; border-radius: 6px; font-size: 14px; font-weight: 600; 
-  transition: 0.2s; 
-}
-.btn-signup:hover { background: #dc2626; }
 .theme-toggle { 
   background: transparent; border: none; color: #94a3b8; cursor: pointer; 
   display: flex; align-items: center; justify-content: center; padding: 6px; border-radius: 8px; transition: 0.2s;
@@ -786,16 +778,25 @@ header nav.desktop-nav a.nav-active { color: white; position: relative; }
 
 /* -- UX #7: Savings pill badge -- */
 .savings-pill {
-  display: inline-flex; align-items: center;
-  padding: 2px 8px; border-radius: 20px;
-  font-size: 11px; font-weight: 700; letter-spacing: 0.03em;
-  background: rgba(34,197,94,0.15); color: #4ade80;
-  border: 1px solid rgba(34,197,94,0.3);
-  vertical-align: middle; margin-left: 4px;
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  background: rgba(34, 197, 94, 0.15);
+  color: #4ade80;
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  box-shadow: 0 0 10px rgba(34, 197, 94, 0.1);
+  vertical-align: middle;
+  margin-left: 6px;
 }
 .savings-pill.worse {
-  background: rgba(239,68,68,0.1); color: #f87171;
-  border-color: rgba(239,68,68,0.3);
+  background: rgba(239, 68, 68, 0.1);
+  color: #f87171;
+  border-color: rgba(239, 68, 68, 0.3);
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.1);
 }
 
 /* -- UX #1: Clear / Convert More button -- */
@@ -1262,21 +1263,7 @@ body.theme-transitioning *::after {
   transform: translateY(0);
 }
 
-/* ── Savings Percentage Pill ───────── */
-.savings-pill {
-  display: inline-flex;
-  align-items: center;
-  background: rgba(34, 197, 94, 0.12);
-  border: 1px solid rgba(34, 197, 94, 0.25);
-  color: #4ade80;
-  font-size: 10px;
-  font-weight: 700;
-  padding: 2px 6px;
-  border-radius: 6px;
-  margin-left: 6px;
-  vertical-align: middle;
-  box-shadow: 0 0 10px rgba(34, 197, 94, 0.1);
-}
+
 [data-theme="light"] .btn-clear-all {
   background: rgba(239, 68, 68, 0.08);
   border-color: rgba(239, 68, 68, 0.15);
