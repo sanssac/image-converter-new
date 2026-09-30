@@ -3,9 +3,13 @@ window.va = window.va || function () { (window.vaq = window.vaq || []).push(argu
 
 // ── HTML Escape Helper ────────────────
 function escapeHtml(str) {
-  const div = document.createElement('div');
-  div.textContent = str;
-  return div.innerHTML;
+  if (str == null) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 }
 
 // ── Toast System ──────────────────────
@@ -1189,8 +1193,19 @@ document.addEventListener('DOMContentLoaded', () => {
              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
            </div>
          </div>
-         <input type="range" class="ba-slider" min="0" max="100" value="50" oninput="document.getElementById('afterImg').style.clipPath = 'inset(0 0 0 ' + this.value + '%)'; document.getElementById('baLine').style.left = this.value + '%';">
+         <input type="range" class="ba-slider" id="baSlider" min="0" max="100" value="50" aria-label="Comparison slider">
        `;
+
+       const slider = baContainer.querySelector('.ba-slider');
+       const afterImg = baContainer.querySelector('#afterImg');
+       const baLine = baContainer.querySelector('#baLine');
+       if (slider && afterImg && baLine) {
+         slider.addEventListener('input', (e) => {
+           const val = e.target.value;
+           afterImg.style.clipPath = `inset(0 0 0 ${val}%)`;
+           baLine.style.left = `${val}%`;
+         });
+       }
     }
 
     resultCard.classList.add('visible');
