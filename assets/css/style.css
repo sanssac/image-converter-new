@@ -272,12 +272,27 @@ main {
 .page-title {
   text-align: center;
   font-size: 28px;
-  margin: 10px 0 20px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  margin: 10px 0 24px;
   background: linear-gradient(135deg, #818cf8, #d8b4fe);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  display: none; /* Hidden in favor of hero title */
+  display: block;
+}
+[data-theme="light"] .page-title {
+  background: linear-gradient(135deg, #4338ca, #7e22ce);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+@media (max-width: 640px) {
+  .page-title {
+    font-size: 22px;
+    margin: 6px 0 16px;
+  }
 }
 .seo-article p { margin-bottom: 16px; }
 .seo-article a { color: #818cf8; text-decoration: none; }
