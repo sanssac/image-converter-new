@@ -6,7 +6,6 @@ const ASSETS_TO_CACHE = [
   '/manifest.json',
   '/assets/css/style.css',
   '/assets/js/app.js',
-  '/assets/js/modules/theme.js',
   '/assets/js/modules/sticky-header.js',
   '/assets/js/modules/accordion.js'
 ];

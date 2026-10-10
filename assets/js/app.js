@@ -47,9 +47,17 @@ window.addEventListener('error', (event) => {
   console.error('Global error:', event.error || event.message);
 });
 
+// ── Dark Mode Initialization & Safeguard ────────────────
+try {
+  if (localStorage.getItem('theme')) {
+    localStorage.removeItem('theme');
+  }
+} catch (e) {}
+if (document.documentElement) document.documentElement.dataset.theme = 'dark';
+if (document.body) document.body.dataset.theme = 'dark';
+
 // ── Load Visual & UI Modules dynamically ────────────────
 const visualModules = [
-  '/assets/js/modules/theme.js',
   '/assets/js/modules/sticky-header.js',
   '/assets/js/modules/accordion.js'
 ];
@@ -186,17 +194,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-  // ── UI Enhancement: Feature Badges ──
-  const trustBadge = document.querySelector('.trust-badge');
-  if (trustBadge && !document.querySelector('.feature-badges')) {
-    const badgesDiv = document.createElement('div');
-    badgesDiv.className = 'feature-badges';
-    badgesDiv.innerHTML = `
-      <div class="feature-badge"><span class="badge-icon">⚡</span> Lightning Fast <span class="badge-dot"></span></div>
-      <div class="feature-badge"><span class="badge-icon">🔒</span> 100% Private <span class="badge-dot"></span></div>
-      <div class="feature-badge"><span class="badge-icon">♾️</span> Unlimited Files <span class="badge-dot"></span></div>
+  // ── UI Enhancement: Top Bar Feature Capsule (Option 1) ──
+  const headerEl = document.querySelector('header');
+  const headerRight = document.querySelector('header .header-right');
+  if (headerEl && headerRight && !document.querySelector('.header-features-capsule')) {
+    const capsule = document.createElement('div');
+    capsule.className = 'header-features-capsule';
+    capsule.innerHTML = `
+      <span class="capsule-item"><span class="capsule-icon">⚡</span> Fast</span>
+      <span class="capsule-dot">•</span>
+      <span class="capsule-item"><span class="capsule-icon">🔒</span> 100% Private</span>
+      <span class="capsule-dot">•</span>
+      <span class="capsule-item"><span class="capsule-icon">♾️</span> Unlimited</span>
     `;
-    trustBadge.insertAdjacentElement('afterend', badgesDiv);
+    headerEl.insertBefore(capsule, headerRight);
   }
 
 
@@ -316,7 +327,7 @@ document.addEventListener('DOMContentLoaded', () => {
     trigger.appendChild(labelSpan);
 
     // Arrow SVG
-    trigger.innerHTML += `<svg class="custom-select-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>`;
+    trigger.insertAdjacentHTML('beforeend', `<svg class="custom-select-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>`);
     
     container.appendChild(trigger);
 
@@ -1219,25 +1230,49 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  const getPngBlobForClipboard = async (blob) => {
+    if (blob.type === 'image/png') return blob;
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      const url = URL.createObjectURL(blob);
+      img.onload = () => {
+        URL.revokeObjectURL(url);
+        const c = document.createElement('canvas');
+        c.width = img.naturalWidth || img.width;
+        c.height = img.naturalHeight || img.height;
+        const ctx = c.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+        c.toBlob((pngBlob) => {
+          if (pngBlob) resolve(pngBlob);
+          else reject(new Error('Canvas export failed'));
+        }, 'image/png');
+      };
+      img.onerror = (e) => {
+        URL.revokeObjectURL(url);
+        reject(e);
+      };
+      img.src = url;
+    });
+  };
+
   if (copyBtn) {
-      copyBtn.addEventListener('click', () => {
+      copyBtn.addEventListener('click', async () => {
         if (convertedFiles.length !== 1) return;
         try {
-          const item = new ClipboardItem({ [convertedFiles[0].blob.type]: convertedFiles[0].blob });
-          navigator.clipboard.write([item]).then(() => {
-            copyBtn.classList.add('success');
-            const origIcon = copyBtn.innerHTML;
-            copyBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>';
-            showToast(t.copiedClipboard, 'success');
-            setTimeout(() => { 
-                copyBtn.classList.remove('success'); 
-                copyBtn.innerHTML = origIcon;
-            }, 2000);
-          }).catch(err => {
-            showToast(t.copyBlocked, 'error');
-          });
+          const pngBlob = await getPngBlobForClipboard(convertedFiles[0].blob);
+          const item = new ClipboardItem({ 'image/png': pngBlob });
+          await navigator.clipboard.write([item]);
+          copyBtn.classList.add('success');
+          const origIcon = copyBtn.innerHTML;
+          copyBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>';
+          showToast(t.copiedClipboard, 'success');
+          setTimeout(() => { 
+              copyBtn.classList.remove('success'); 
+              copyBtn.innerHTML = origIcon;
+          }, 2000);
         } catch (err) {
-          showToast(t.copyNotSupported, 'error');
+          console.warn('Clipboard write failed:', err);
+          showToast(t.copyBlocked, 'error');
         }
       });
   }

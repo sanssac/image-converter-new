@@ -64,8 +64,7 @@ for filepath in html_files:
     
     seo_block = f"""
   <!-- Standard SEO / Social Meta Tags -->
-  <meta name="theme-color" content="#09090b" media="(prefers-color-scheme: dark)" />
-  <meta name="theme-color" content="#f8fafc" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#09090b" />
   <meta name="author" content="Image Converter" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="{url}" />
