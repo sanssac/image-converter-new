@@ -492,6 +492,23 @@ document.addEventListener('DOMContentLoaded', () => {
   const tabs = document.querySelectorAll('.format-tabs .tab:not(select):not(.custom-select-container)');
   const selectTab = document.getElementById('moreFormatsSelect');
 
+  let queuedFiles = [];
+  let convertedFiles = [];
+  let isCompression = false; // hoisted so download handler can read it 
+
+  function invalidateResults() {
+    if (queuedFiles.length > 0 && queuedFiles.some(q => q.result !== null)) {
+      queuedFiles.forEach(q => { q.result = null; });
+      convertedFiles = [];
+      resultCard.classList.remove('visible');
+      progressContainer.classList.remove('visible');
+      progressLabel.textContent = '';
+      convertBtn.disabled = false;
+      convertBtnText.textContent = isCompression ? t.compressImages : t.convertImages;
+      renderGallery();
+    }
+  }
+
   if (tabs.length > 0) {
     // If tabs exist, preselect based on dataset
     tabs.forEach(tab => {
@@ -511,6 +528,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             e.target.classList.add('active');
             selectedMime = e.target.getAttribute('data-target');
+            invalidateResults();
         });
     });
   }
@@ -522,6 +540,7 @@ document.addEventListener('DOMContentLoaded', () => {
         tabs.forEach(t => t.classList.remove('active'));
         selectTab.classList.add('active');
         selectedMime = val;
+        invalidateResults();
       }
     });
     // If initial selectedMime matches a select option, activate the select tab
@@ -559,15 +578,18 @@ document.addEventListener('DOMContentLoaded', () => {
           if (customSizeWrapper) customSizeWrapper.style.display = 'none';
           targetSizeValue = parseInt(val, 10);
         }
+        invalidateResults();
       });
     });
   } else if (document.body.hasAttribute('data-target-size')) {
     targetSizeValue = parseInt(document.body.getAttribute('data-target-size'), 10);
   }
 
-  let queuedFiles = [];
-  let convertedFiles = [];
-  let isCompression = false; // hoisted so download handler can read it 
+  if (customSizeInput) customSizeInput.addEventListener('input', invalidateResults);
+  ['resizeWidth', 'resizeHeight', 'maintainRatio'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('input', invalidateResults);
+  });
 
   function fmtBytes(b) {
     if (!b || b < 0) return '0 B';
@@ -753,6 +775,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const qItem = queuedFiles.find(q => q.id === id);
     if (qItem && qItem.thumbUrl) URL.revokeObjectURL(qItem.thumbUrl);
     queuedFiles = queuedFiles.filter(q => q.id !== id);
+    convertedFiles = convertedFiles.filter(cf => cf.id !== id);
+    if (queuedFiles.length === 0) {
+      resultCard.classList.remove('visible');
+      progressContainer.classList.remove('visible');
+      progressLabel.textContent = '';
+      convertBtn.disabled = true;
+    }
     renderGallery();
   }
 
@@ -894,7 +923,7 @@ document.addEventListener('DOMContentLoaded', () => {
            if (q.result.error) {
               // Already failed, do not add to success totals
            } else {
-              convertedFiles.push({ name: `${q.file.name.replace(/\.[^.]+$/, '')}.${targetExt}`, blob: q.result });
+              convertedFiles.push({ id: q.id, name: `${q.file.name.replace(/\.[^.]+$/, '')}.${targetExt}`, blob: q.result });
               totalOrigSize += q.file.size;
               totalNewSize += q.result.size;
            }
@@ -1141,7 +1170,7 @@ document.addEventListener('DOMContentLoaded', () => {
            if (blob && !blob.error) {
              q.result = blob;
              let baseName = q.file.name.replace(/\.[^.]+$/, '');
-             convertedFiles.push({ name: `${baseName}.${targetExt}`, blob: blob });
+             convertedFiles.push({ id: q.id, name: `${baseName}.${targetExt}`, blob: blob });
              totalNewSize += blob.size;
            } else {
              q.result = { error: true };
@@ -1334,7 +1363,22 @@ document.addEventListener('DOMContentLoaded', () => {
       const startZip = async () => {
         downloadText.textContent = `${t.zipping} 0%...`;
         const zip = new JSZip();
-        convertedFiles.forEach(cf => zip.file(cf.name, cf.blob));
+        const usedNames = new Set();
+        convertedFiles.forEach(cf => {
+          let name = cf.name;
+          if (usedNames.has(name)) {
+            const dotIdx = name.lastIndexOf('.');
+            const base = dotIdx !== -1 ? name.slice(0, dotIdx) : name;
+            const ext = dotIdx !== -1 ? name.slice(dotIdx) : '';
+            let counter = 1;
+            while (usedNames.has(`${base} (${counter})${ext}`)) {
+              counter++;
+            }
+            name = `${base} (${counter})${ext}`;
+          }
+          usedNames.add(name);
+          zip.file(name, cf.blob);
+        });
         const zipBlob = await zip.generateAsync({ type: 'blob' }, (metadata) => {
            downloadText.textContent = `${t.zipping} ${Math.round(metadata.percent)}%...`;
         });
