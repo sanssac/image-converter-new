@@ -254,6 +254,8 @@ def generate_header(current_lang, route):
             new_path = "/" if code == 'en' else f"/{code}"
             
         new_path = new_path.replace('//', '/')
+        if new_path != '/' and new_path.endswith('/'):
+            new_path = new_path.rstrip('/')
         active_class = "active" if code == current_lang else ""
         lang_options += f'          <a href="{new_path}" class="lang-opt {active_class}">{name}</a>\n'
 
