@@ -9,7 +9,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <!-- SEO Meta Tags -->
-  <title>Free Online Image Converter | Fast, Secure, 100% Client-Side</title>
+  <title>Image Lab Converter – Free, Secure, 100% Client-Side Online Image Converter</title>
   <meta name="description" content="Quickly convert WEBP, HEIC, PNG, JPG, and 1500+ formats online. Free, unmetered, absolutely private batch processing. Your files never leave your device." />
   <meta name="keywords" content="image converter, batch image processing, convert webp to jpg, convert heic to jpg, image to png, secure image conversion, free browser image tool" />
   <meta name="robots" content="index, follow" />
@@ -17,7 +17,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="/assets/css/style.css?v=20260523" />
+<link rel="stylesheet" href="/assets/css/style.css?v=20261014" />
   <!-- Vercel Web Analytics -->
   <script defer src="/_vercel/insights/script.js"></script>
   <!-- Analytics & AdSense Placeholders -->
@@ -35,15 +35,15 @@
         "name": "Is this online image converter completely free?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Yes, our image converter is 100% free with no file size limits, no daily caps, and no watermarks."
+          "text": "Yes, Image Lab Converter is 100% free with no file size limits, no daily caps, no registration, and no watermarks."
         }
       },
       {
         "@type": "Question",
-        "name": "Are my images secure?",
+        "name": "Are my images secure and private?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Absolutely. Our app works completely in your browser (client-side). Your images are never uploaded or stored on any server, ensuring total privacy."
+          "text": "Absolutely. Our converter runs 100% client-side inside your browser via HTML5 Canvas. Your images are never uploaded, transmitted, or saved to any external server, ensuring total privacy for sensitive documents and personal photos."
         }
       },
       {
@@ -51,10 +51,51 @@
         "name": "What image formats are supported?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "We support a wide variety of formats including JPG, PNG, WEBP, and HEIC, allowing you to convert freely between them."
+          "text": "We support a comprehensive array of modern, popular, and vector image formats including JPG, PNG, WEBP, AVIF, SVG, HEIC (iPhone photos), TIFF, ICO (favicons), and PDF document compilation."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Does converting images reduce quality?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. When converting between lossless formats like PNG, WebP, or SVG, quality is fully preserved. When converting to JPEG or compressing images, you have precise control over quality and target file size."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I convert HEIC photos from iPhone without quality loss?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Simply drag and drop your Apple .heic files directly into Image Lab Converter. Our built-in decoder decodes the full-resolution photo client-side and outputs high-quality JPG or PNG files instantly on Windows, Mac, or Android."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I convert multiple files in batch and download them as a ZIP?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. You can select or drop multiple images at once. Once converted, you can download them individually or compile all processed images into a single ZIP archive or PDF document with one click."
         }
       }
     ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Image Lab Converter",
+    "url": "https://www.imglabconverter.com/",
+    "applicationCategory": "MultimediaApplication",
+    "operatingSystem": "All",
+    "browserRequirements": "Requires JavaScript. Requires HTML5 Canvas.",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "description": "Free, 100% private client-side online image converter and editing suite. Convert, compress, resize, watermark, and compile images directly in your browser."
   }
   </script>
 
@@ -62,16 +103,16 @@
   <!-- Standard SEO / Social Meta Tags -->
 
   <meta name="theme-color" content="#09090b" />
-<meta name="author" content="Image Converter" />
+<meta name="author" content="Image Lab Converter" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://www.imglabconverter.com/" />
-  <meta property="og:title" content="Free Online Image Converter | Fast, Secure, 100% Client-Side" />
+  <meta property="og:title" content="Image Lab Converter | Free Online Image Converter – Fast, Secure, 100% Client-Side" />
   <meta property="og:description" content="Quickly convert WEBP, HEIC, PNG, JPG, and 1500+ formats online. Free, unmetered, absolutely private batch processing. Your files never leave your device." />
   <meta property="og:image" content="https://www.imglabconverter.com/assets/images/og-banner.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Free Online Image Converter | Fast, Secure, 100% Client-Side" />
+  <meta name="twitter:title" content="Image Lab Converter | Free Online Image Converter – Fast, Secure, 100% Client-Side" />
   <meta name="twitter:description" content="Quickly convert WEBP, HEIC, PNG, JPG, and 1500+ formats online. Free, unmetered, absolutely private batch processing. Your files never leave your device." />
   <meta name="twitter:image" content="https://www.imglabconverter.com/assets/images/og-banner.png" />
 
@@ -103,7 +144,7 @@
       <div class="logo">
         <img src="/apple-touch-icon.png" alt="Logo" width="44" height="44" style="width:44px; height:44px; border-radius:11px; object-fit:contain;">
       </div>
-      <div class="site-title">Image <span>Converter</span></div>
+      <div class="site-title">Image Lab <span>Converter</span></div>
     </a>
     <div class="header-right">
       <nav class="desktop-nav">
@@ -236,7 +277,7 @@
       <div class="drawer-header">
         <div class="drawer-logo">
           <img src="/apple-touch-icon.png" alt="Logo" style="width:34px; height:34px; border-radius:8px; object-fit:contain; margin-right:8px;">
-          <span>Image Converter</span>
+          <span>Image Lab Converter</span>
         </div>
         <button class="drawer-close" aria-label="Close Menu">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
@@ -356,7 +397,7 @@
   <div class="page-container">
     <main>
       <div class="hero-content" style="text-align: center; margin-bottom: 32px; display: flex; flex-direction: column; align-items: center;">
-        <h1 class="hero-title">Image Converter</h1>
+        <h1 class="hero-title">Image Lab Converter</h1>
         <p class="hero-subtitle" style="margin: 0 auto;">Our converter processes your image files directly in your browser. We support PNG, JPG, GIF, WEBP and HEIC. You can seamlessly control image resolution, quality and file size.</p>
       </div>
       <div class="trust-badge">
@@ -455,15 +496,27 @@
         <h3>Frequently Asked Questions</h3>
         <div class="faq-item">
           <div class="faq-question">Is this online image converter completely free?</div>
-          <div class="faq-answer">Yes, our image converter is 100% free with no file size limits, no daily caps, and no watermarks.</div>
+          <div class="faq-answer">Yes, Image Lab Converter is 100% free with no file size limits, no daily caps, no registration, and no watermarks.</div>
         </div>
         <div class="faq-item">
-          <div class="faq-question">Are my images secure?</div>
-          <div class="faq-answer">Absolutely. Our app works completely in your browser (client-side). Your images are never uploaded or stored on any server, ensuring total privacy.</div>
+          <div class="faq-question">Are my images secure and private?</div>
+          <div class="faq-answer">Absolutely. Our converter runs 100% client-side inside your browser via HTML5 Canvas. Your images are never uploaded, transmitted, or saved to any external server, ensuring total privacy for sensitive documents and personal photos.</div>
         </div>
         <div class="faq-item">
           <div class="faq-question">What image formats are supported?</div>
-          <div class="faq-answer">We support a wide variety of formats including JPG, PNG, WEBP, and HEIC, allowing you to convert freely between them.</div>
+          <div class="faq-answer">We support a comprehensive array of modern, popular, and vector image formats including JPG, PNG, WEBP, AVIF, SVG, HEIC (iPhone photos), TIFF, ICO (favicons), and PDF document compilation.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">Does converting images reduce quality?</div>
+          <div class="faq-answer">No. When converting between lossless formats like PNG, WebP, or SVG, quality is fully preserved. When converting to JPEG or compressing images, you have precise control over quality and target file size.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">How do I convert HEIC photos from iPhone without quality loss?</div>
+          <div class="faq-answer">Simply drag and drop your Apple .heic files directly into Image Lab Converter. Our built-in decoder decodes the full-resolution photo client-side and outputs high-quality JPG or PNG files instantly on Windows, Mac, or Android.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">Can I convert multiple files in batch and download them as a ZIP?</div>
+          <div class="faq-answer">Yes. You can select or drop multiple images at once. Once converted, you can download them individually or compile all processed images into a single ZIP archive or PDF document with one click.</div>
         </div>
       </div>
     </article>
@@ -471,17 +524,67 @@
   </div>
   <canvas id="canvas"></canvas>
   <footer>
-    <div class="footer-links">
-       <a href="/privacy-policy">Privacy Policy</a>
-       <a href="/terms">Terms of Service</a>
-       <a href="/about">About Us</a>
-       <a href="/contact">Contact</a>
-    </div>
-    <div class="footer-copy">
-       <img src="/apple-touch-icon.png" alt="Logo" style="width:14px; height:14px; object-fit:contain; border-radius:3px; vertical-align:middle; margin-right:4px; margin-top:-2px;">
-       Your files never leave your device — 100% client-side rendering.
+    <div class="footer-container">
+      <div class="footer-grid">
+        <div class="footer-col footer-col-brand">
+          <div class="footer-brand">
+            <div class="footer-logo"><img src="/apple-touch-icon.png" alt="Logo" style="width: 32px; height: 32px; object-fit: contain; border-radius: 9px;"></div>
+            <div class="footer-name">Image Lab <span>Converter</span></div>
+          </div>
+          <p class="footer-tagline">100% private, client-side online image conversion, compression, and editing suite. Your photos and documents never leave your device.</p>
+          <div class="footer-privacy-pill">
+            <span class="privacy-dot"></span> 100% Client-Side &amp; Private
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Popular Converters</h4>
+          <ul>
+            <li><a href="/jpg-to-png">JPG to PNG</a></li>
+            <li><a href="/png-to-jpg">PNG to JPG</a></li>
+            <li><a href="/webp-to-jpg">WebP to JPG</a></li>
+            <li><a href="/heic-to-jpg">HEIC to JPG</a></li>
+            <li><a href="/svg-to-png">SVG to PNG</a></li>
+            <li><a href="/svg-to-jpg">SVG to JPG</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Tools &amp; Utilities</h4>
+          <ul>
+            <li><a href="/compress-image">Compress Image</a></li>
+            <li><a href="/resize-image">Resize Image</a></li>
+            <li><a href="/watermark-image">Watermark Image</a></li>
+            <li><a href="/jpg-to-pdf">JPG to PDF</a></li>
+            <li><a href="/png-to-ico">PNG to ICO</a></li>
+            <li><a href="/photo-to-black-and-white">Black &amp; White Photo</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Company &amp; Legal</h4>
+          <ul>
+            <li><a href="/about">About Us</a></li>
+            <li><a href="/blog">Guides &amp; Blog</a></li>
+            <li><a href="/contact">Contact</a></li>
+            <li><a href="/privacy-policy">Privacy Policy</a></li>
+            <li><a href="/terms">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div class="footer-copy">
+          &copy; 2026 Image Lab Converter. All rights reserved. Zero server uploads.
+        </div>
+        <div class="footer-legal-badges">
+          <span>Client-Side PWA</span>
+          <span>&bull;</span>
+          <span>HTML5 Canvas Engine</span>
+        </div>
+      </div>
     </div>
   </footer>
-  <script src="/assets/js/app.js?v=20260523"></script>
+  <script src="/assets/js/app.js?v=20261014"></script>
 </body>
 </html>

@@ -68,6 +68,30 @@ visualModules.forEach(url => {
   document.head.appendChild(script);
 });
 
+// ── WebApplication JSON-LD Structured Data Injector ────
+if (typeof document !== 'undefined') {
+  const existingSchemas = Array.from(document.querySelectorAll('script[type="application/ld+json"]'));
+  const hasAppSchema = existingSchemas.some(s => s.textContent.includes('"WebApplication"') || s.textContent.includes('"SoftwareApplication"'));
+  if (!hasAppSchema) {
+    const s = document.createElement('script');
+    s.type = 'application/ld+json';
+    s.setAttribute('data-app-schema', 'true');
+    const appSchema = {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": document.title || "Image Converter",
+      "url": window.location.href,
+      "applicationCategory": "MultimediaApplication",
+      "operatingSystem": "All",
+      "browserRequirements": "Requires JavaScript. Requires HTML5 Canvas.",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "description": (document.querySelector('meta[name="description"]') ? document.querySelector('meta[name="description"]').content : "100% private, client-side online image converter.")
+    };
+    s.textContent = JSON.stringify(appSchema);
+    document.head.appendChild(s);
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const dropZone    = document.getElementById('dropZone');
   const fileInput   = document.getElementById('fileInput');
@@ -94,6 +118,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const isExpanded = megaBtn.getAttribute('aria-expanded') === 'true';
         megaBtn.setAttribute('aria-expanded', !isExpanded);
         megaDropdown.classList.toggle('open');
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && megaDropdown.classList.contains('open')) {
+          megaBtn.setAttribute('aria-expanded', 'false');
+          megaDropdown.classList.remove('open');
+          megaBtn.focus();
+        }
       });
 
       document.addEventListener('click', (e) => {
@@ -194,23 +226,41 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-  // ── UI Enhancement: Top Bar Feature Capsule (Option 1) ──
+  // ── UI Enhancement: Top Bar Feature Capsule ──
   const headerEl = document.querySelector('header');
   const headerRight = document.querySelector('header .header-right');
   if (headerEl && headerRight && !document.querySelector('.header-features-capsule')) {
+    const pageLang = (document.documentElement.lang || 'en').slice(0, 2);
+    const capsuleTexts = {
+      en: { fast: 'Fast', priv: '100% Private', unlim: 'Unlimited' },
+      de: { fast: 'Schnell', priv: '100% Privat', unlim: 'Unbegrenzt' },
+      es: { fast: 'Rápido', priv: '100% Privado', unlim: 'Ilimitado' },
+      fr: { fast: 'Rapide', priv: '100% Privé', unlim: 'Illimité' },
+      zh: { fast: '高速', priv: '100% 隐私', unlim: '无限制' },
+      hi: { fast: 'तेज़', priv: '100% सुरक्षित', unlim: 'असीमित' }
+    };
+    const cT = capsuleTexts[pageLang] || capsuleTexts.en;
     const capsule = document.createElement('div');
     capsule.className = 'header-features-capsule';
     capsule.innerHTML = `
-      <span class="capsule-item"><span class="capsule-icon">⚡</span> Fast</span>
+      <span class="capsule-item"><span class="capsule-icon">⚡</span> ${cT.fast}</span>
       <span class="capsule-dot">•</span>
-      <span class="capsule-item"><span class="capsule-icon">🔒</span> 100% Private</span>
+      <span class="capsule-item"><span class="capsule-pulse-dot"></span><span class="capsule-icon">🔒</span> ${cT.priv}</span>
       <span class="capsule-dot">•</span>
-      <span class="capsule-item"><span class="capsule-icon">♾️</span> Unlimited</span>
+      <span class="capsule-item"><span class="capsule-icon">♾️</span> ${cT.unlim}</span>
     `;
     headerEl.insertBefore(capsule, headerRight);
   }
 
 
+
+  // ── Brand Name Update: Image Lab Converter ──
+  document.querySelectorAll('.site-title').forEach(el => {
+    el.innerHTML = 'Image Lab <span>Converter</span>';
+  });
+  document.querySelectorAll('.drawer-logo span').forEach(el => {
+    el.textContent = 'Image Lab Converter';
+  });
 
   // ── UI Enhancement: Footer Branding ──
   const footerEl = document.querySelector('footer');
@@ -219,7 +269,7 @@ document.addEventListener('DOMContentLoaded', () => {
     brand.className = 'footer-brand';
     brand.innerHTML = `
       <div class="footer-logo"><img src="/apple-touch-icon.png" alt="Logo" style="width: 28px; height: 28px; object-fit: contain; border-radius: 8px;"></div>
-      <div class="footer-name">Image <span>Converter</span></div>
+      <div class="footer-name">Image Lab <span>Converter</span></div>
     `;
     footerEl.insertBefore(brand, footerEl.firstChild);
   }
@@ -246,6 +296,17 @@ document.addEventListener('DOMContentLoaded', () => {
   
   const dropZoneH2 = dropZone.querySelector('h2');
   let defaultDropText = dropZoneH2 ? dropZoneH2.textContent : 'Drop images here';
+
+  // Dropzone keyboard accessibility
+  dropZone.setAttribute('tabindex', '0');
+  dropZone.setAttribute('role', 'button');
+  dropZone.setAttribute('aria-label', defaultDropText);
+  dropZone.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      fileInput.click();
+    }
+  });
   
   const progressContainer = document.getElementById('progressContainer');
   const progressFill = document.getElementById('progressFill');
@@ -265,13 +326,19 @@ document.addEventListener('DOMContentLoaded', () => {
     queuedFiles.forEach(q => { if (q.thumbUrl) URL.revokeObjectURL(q.thumbUrl); });
     queuedFiles = [];
     convertedFiles = [];
+    fileInput.value = '';
     const baContainer = document.getElementById('beforeAfterContainer');
-    if (baContainer) baContainer.querySelectorAll('img').forEach(img => URL.revokeObjectURL(img.src));
+    if (baContainer) {
+      baContainer.querySelectorAll('img').forEach(img => {
+        if (img.src && img.src.startsWith('blob:')) URL.revokeObjectURL(img.src);
+      });
+      baContainer.remove();
+    }
     resultCard.classList.remove('visible');
     progressContainer.classList.remove('visible');
     progressLabel.textContent = '';
     convertBtn.disabled = false;
-    convertBtnText.textContent = isCompression ? t.compressImages : t.convertImages;
+    convertBtnText.textContent = isCompression ? t.compressImages : (document.body.dataset.mode === 'pdf' ? (t.compilePdf || 'Compile PDF') : t.convertImages);
     renderGallery();
     dropZone.scrollIntoView({ behavior: 'smooth', block: 'center' });
   });
@@ -281,17 +348,52 @@ document.addEventListener('DOMContentLoaded', () => {
   let selectedMime = document.body.dataset.targetMime || 'image/jpeg';
 
   // ── i18n for dynamic UI strings ─────
-  const lang = document.documentElement.lang || 'en';
-      const i18nStrings = {
-    en:  { converting: 'Converting', of: 'of', filesSelected: 'file(s) selected - Drop more?', convertMore: 'Convert More Images', compressImages: 'Compress Images', convertImages: 'Convert Images', success: 'Success!', filesProcessed: 'file(s) processed', original: 'Original', processed: 'Processed', smaller: 'smaller', larger: 'larger', downloadZip: 'Download ZIP', download: 'Download', zipping: 'Zipping', copiedClipboard: 'Image copied to clipboard!', copyBlocked: 'Browser blocked clipboard copy.', copyNotSupported: 'Clipboard copy not supported on this browser.', heicNotLoaded: 'Loading HEIC library... Please wait.', heicFailed: 'Failed to process HEIC', tiffNotLoaded: 'Loading TIFF library... Please wait.', tiffFailed: 'Failed to process TIFF', zipNotLoaded: 'JSZip library has not loaded yet.', dropZoneCompressSize: 'Drop images here to compress under {size}KB', decodingHeic: 'Decoding HEIC...', failed: 'Failed', clearAll: 'Clear All' },
-    de:  { converting: 'Wird konvertiert', of: 'von', filesSelected: 'Datei(en) ausgewählt - Mehr ablegen?', convertMore: 'Mehr Bilder konvertieren', compressImages: 'Bilder komprimieren', convertImages: 'Bilder konvertieren', success: 'Erfolgreich!', filesProcessed: 'Datei(en) verarbeitet', original: 'Original', processed: 'Verarbeitet', smaller: 'kleiner', larger: 'größer', downloadZip: 'ZIP herunterladen', download: 'Herunterladen', zipping: 'Komprimieren', copiedClipboard: 'Bild in die Zwischenablage kopiert!', copyBlocked: 'Kopieren in Zwischenablage blockiert.', copyNotSupported: 'Zwischenablage-Kopie von diesem Browser nicht unterstützt.', heicNotLoaded: 'Lade HEIC-Bibliothek... Bitte warten.', heicFailed: 'Fehler beim Verarbeiten von HEIC', tiffNotLoaded: 'Lade TIFF-Bibliothek... Bitte warten.', tiffFailed: 'Fehler beim Verarbeiten von TIFF', zipNotLoaded: 'JSZip-Bibliothek wurde noch nicht geladen.', dropZoneCompressSize: 'Bilder hier ablegen, um sie unter {size}KB zu komprimieren', decodingHeic: 'HEIC wird decodiert...', failed: 'Fehlgeschlagen', clearAll: 'Alle löschen' },
-    es:  { converting: 'Convirtiendo', of: 'de', filesSelected: 'archivo(s) — ¿más?', convertMore: 'Convertir más', compressImages: 'Comprimir imagen', convertImages: 'Convertir', success: '¡Éxito!', filesProcessed: 'archivo(s)', original: 'Original', processed: 'Procesado', smaller: 'más pequeño', larger: 'más grande', downloadZip: 'Descargar ZIP', download: 'Descargar', zipping: 'Comprimiendo', copiedClipboard: '¡Imagen copiada!', copyBlocked: 'Copia bloqueada por el navegador.', copyNotSupported: 'Copia no soportada.', heicNotLoaded: 'Librería HEIC no cargada.', heicFailed: 'Error HEIC', tiffNotLoaded: 'Cargando librería TIFF... Espere por favor.', tiffFailed: 'Error al procesar TIFF', zipNotLoaded: 'JSZip no cargado.', dropZoneCompressSize: 'Arrastra imágenes aquí para comprimir a menos de {size}KB', decodingHeic: 'Decodificando HEIC...', failed: 'Fallido', clearAll: 'Limpiar todo' },
-    fr:  { converting: 'Conversion', of: 'de', filesSelected: 'fichier(s) — plus ?', convertMore: 'Convertir plus', compressImages: 'Compresser', convertImages: 'Convertir', success: 'Succès !', filesProcessed: 'fichier(s)', original: 'Original', processed: 'Traité', smaller: 'plus petit', larger: 'plus grand', downloadZip: 'Télécharger ZIP', download: 'Télécharger', zipping: 'Compression', copiedClipboard: 'Image copiée !', copyBlocked: 'Copie bloquée.', copyNotSupported: 'Copie non supportée.', heicNotLoaded: 'Bibliothèque HEIC non chargée.', heicFailed: 'Erreur HEIC', tiffNotLoaded: 'Chargement de la bibliothèque TIFF... Veuillez patienter.', tiffFailed: 'Échec du traitement du TIFF', zipNotLoaded: 'JSZip non chargé.', dropZoneCompressSize: 'Déposez les images ici pour compresser à moins de {size}KB', decodingHeic: 'Décodage HEIC...', failed: 'Échec', clearAll: 'Tout effacer' },
-    zh:  { converting: '转换中', of: '/', filesSelected: '文件已选 — 添加更多?', convertMore: '转换更多', compressImages: '压缩图片', convertImages: '转换', success: '成功！', filesProcessed: '个文件', original: '原始', processed: '处理后', smaller: '更小', larger: '更大', downloadZip: '下载 ZIP', download: '下载', zipping: '压缩中', copiedClipboard: '已复制到剪贴板！', copyBlocked: '浏览器阻止了复制。', copyNotSupported: '浏览器不支持复制。', heicNotLoaded: 'HEIC 库未加载。', heicFailed: 'HEIC 转换失败', tiffNotLoaded: '正在加载 TIFF 库... 请稍候。', tiffFailed: 'TIFF 处理失败', zipNotLoaded: 'JSZip 未加载。', dropZoneCompressSize: '拖放图片至此以压缩至 {size}KB 以下', decodingHeic: '正在解码 HEIC...', failed: '失败', clearAll: '清空列表' },
-    hi:  { converting: 'कनवर्ट हो रहा है', of: 'में से', filesSelected: 'फाइल चुनी — और जोड़ें?', convertMore: 'और कनवर्ट करें', compressImages: 'कंप्रेस करें', convertImages: 'कनवर्ट करें', success: 'सफल!', filesProcessed: 'फाइल', original: 'मूल', processed: 'प्रोसेस्ड', smaller: 'छोटा', larger: 'बड़ा', downloadZip: 'ZIP डाउनलोड', download: 'डाउनलोड', zipping: 'ज़िप हो रहा', copiedClipboard: 'कॉपी हो गया!', copyBlocked: 'ब्राउज़र ने कॉपी ब्लॉक किया।', copyNotSupported: 'कॉपी सपोर्ट नहीं है।', heicNotLoaded: 'HEIC लाइब्रेरी लोड नहीं हुई।', heicFailed: 'HEIC एरर', tiffNotLoaded: 'TIFF लाइब्रेरी लोड हो रही है... कृपया प्रतीक्षा करें।', tiffFailed: 'TIFF संसाधित करने में विफल', zipNotLoaded: 'JSZip लोड नहीं हुआ।', dropZoneCompressSize: 'इमेज को यहाँ छोड़ें, {size}KB से कम कंप्रेस करने के लिए', decodingHeic: 'HEIC डिकोड हो रहा है...', failed: 'विफल', clearAll: 'सब हटाएँ' },
+  const lang = (document.documentElement.lang || 'en').slice(0, 2);
+  const i18nStrings = {
+    en:  { converting: 'Converting', of: 'of', filesSelected: 'file(s) selected - Drop more?', convertMore: 'Convert More Images', compressImages: 'Compress Images', convertImages: 'Convert Images', compilePdf: 'Compile PDF', success: 'Success!', filesProcessed: 'file(s) processed', original: 'Original', processed: 'Processed', smaller: 'smaller', larger: 'larger', downloadZip: 'Download ZIP', download: 'Download', downloadPdf: 'Download PDF Document', downloadSingle: 'Download file', zipping: 'Zipping', buildingPdf: 'Building PDF...', loadingPdf: 'Loading PDF Library...', pdfNotLoaded: 'Failed to load PDF library.', copiedClipboard: 'Image copied to clipboard!', copyBlocked: 'Browser blocked clipboard copy.', copyNotSupported: 'Clipboard copy not supported on this browser.', heicNotLoaded: 'Loading HEIC library... Please wait.', heicFailed: 'Failed to process HEIC', tiffNotLoaded: 'Loading TIFF library... Please wait.', tiffFailed: 'Failed to process TIFF', zipNotLoaded: 'JSZip library has not loaded yet.', dropZoneCompressSize: 'Drop images here to compress under {size}KB', decodingHeic: 'Decoding HEIC...', failed: 'Failed', clearAll: 'Clear All', done: 'Done', error: 'Invalid file type: ', avifNotSupported: 'AVIF encoding not supported in this browser. Using WebP format.' },
+    de:  { converting: 'Wird konvertiert', of: 'von', filesSelected: 'Datei(en) ausgewählt - Mehr ablegen?', convertMore: 'Mehr Bilder konvertieren', compressImages: 'Bilder komprimieren', convertImages: 'Bilder konvertieren', compilePdf: 'PDF erstellen', success: 'Erfolgreich!', filesProcessed: 'Datei(en) verarbeitet', original: 'Original', processed: 'Verarbeitet', smaller: 'kleiner', larger: 'größer', downloadZip: 'ZIP herunterladen', download: 'Herunterladen', downloadPdf: 'PDF-Dokument herunterladen', downloadSingle: 'Datei herunterladen', zipping: 'Komprimieren', buildingPdf: 'PDF wird erstellt...', loadingPdf: 'Lade PDF-Bibliothek...', pdfNotLoaded: 'Fehler beim Laden der PDF-Bibliothek.', copiedClipboard: 'Bild in die Zwischenablage kopiert!', copyBlocked: 'Kopieren in Zwischenablage blockiert.', copyNotSupported: 'Zwischenablage-Kopie von diesem Browser nicht unterstützt.', heicNotLoaded: 'Lade HEIC-Bibliothek... Bitte warten.', heicFailed: 'Fehler beim Verarbeiten von HEIC', tiffNotLoaded: 'Lade TIFF-Bibliothek... Bitte warten.', tiffFailed: 'Fehler beim Verarbeiten von TIFF', zipNotLoaded: 'JSZip-Bibliothek wurde noch nicht geladen.', dropZoneCompressSize: 'Bilder hier ablegen, um sie unter {size}KB zu komprimieren', decodingHeic: 'HEIC wird decodiert...', failed: 'Fehlgeschlagen', clearAll: 'Alle löschen', done: 'Fertig', error: 'Ungültiger Dateityp: ', avifNotSupported: 'AVIF-Kodierung wird nicht unterstützt. WebP wird verwendet.' },
+    es:  { converting: 'Convirtiendo', of: 'de', filesSelected: 'archivo(s) — ¿más?', convertMore: 'Convertir más', compressImages: 'Comprimir imagen', convertImages: 'Convertir', compilePdf: 'Compilar PDF', success: '¡Éxito!', filesProcessed: 'archivo(s)', original: 'Original', processed: 'Procesado', smaller: 'más pequeño', larger: 'más grande', downloadZip: 'Descargar ZIP', download: 'Descargar', downloadPdf: 'Descargar Documento PDF', downloadSingle: 'Descargar archivo', zipping: 'Comprimiendo', buildingPdf: 'Creando PDF...', loadingPdf: 'Cargando librería PDF...', pdfNotLoaded: 'Error al cargar librería PDF.', copiedClipboard: '¡Imagen copiada!', copyBlocked: 'Copia bloqueada por el navegador.', copyNotSupported: 'Copia no soportada.', heicNotLoaded: 'Librería HEIC no cargada.', heicFailed: 'Error HEIC', tiffNotLoaded: 'Cargando librería TIFF... Espere por favor.', tiffFailed: 'Error al procesar TIFF', zipNotLoaded: 'JSZip no cargado.', dropZoneCompressSize: 'Arrastra imágenes aquí para comprimir a menos de {size}KB', decodingHeic: 'Decodificando HEIC...', failed: 'Fallido', clearAll: 'Limpiar todo', done: 'Listo', error: 'Tipo de archivo no válido: ', avifNotSupported: 'Navegador no soporta codificación AVIF. Usando WebP.' },
+    fr:  { converting: 'Conversion', of: 'de', filesSelected: 'fichier(s) — plus ?', convertMore: 'Convertir plus', compressImages: 'Compresser', convertImages: 'Convertir', compilePdf: 'Compiler en PDF', success: 'Succès !', filesProcessed: 'fichier(s)', original: 'Original', processed: 'Traité', smaller: 'plus petit', larger: 'plus grand', downloadZip: 'Télécharger ZIP', download: 'Télécharger', downloadPdf: 'Télécharger le Document PDF', downloadSingle: 'Télécharger le fichier', zipping: 'Compression', buildingPdf: 'Création du PDF...', loadingPdf: 'Chargement de la bibliothèque PDF...', pdfNotLoaded: 'Échec du chargement de la bibliothèque PDF.', copiedClipboard: 'Image copiée !', copyBlocked: 'Copie bloquée.', copyNotSupported: 'Copie non supportée.', heicNotLoaded: 'Bibliothèque HEIC non chargée.', heicFailed: 'Erreur HEIC', tiffNotLoaded: 'Chargement de la bibliothèque TIFF... Veuillez patienter.', tiffFailed: 'Échec du traitement du TIFF', zipNotLoaded: 'JSZip non chargé.', dropZoneCompressSize: 'Déposez les images ici pour compresser à moins de {size}KB', decodingHeic: 'Décodage HEIC...', failed: 'Échec', clearAll: 'Tout effacer', done: 'Terminé', error: 'Type de fichier non valide : ', avifNotSupported: 'Encodage AVIF non supporté. Utilisation du format WebP.' },
+    zh:  { converting: '转换中', of: '/', filesSelected: '文件已选 — 添加更多?', convertMore: '转换更多', compressImages: '压缩图片', convertImages: '转换', compilePdf: '生成 PDF', success: '成功！', filesProcessed: '个文件', original: '原始', processed: '处理后', smaller: '更小', larger: '更大', downloadZip: '下载 ZIP', download: '下载', downloadPdf: '下载 PDF 文档', downloadSingle: '下载单个文件', zipping: '压缩中', buildingPdf: '正在生成 PDF...', loadingPdf: '正在加载 PDF 库...', pdfNotLoaded: 'PDF 库加载失败。', copiedClipboard: '已复制到剪贴板！', copyBlocked: '浏览器阻止了复制。', copyNotSupported: '浏览器不支持复制。', heicNotLoaded: 'HEIC 库未加载。', heicFailed: 'HEIC 转换失败', tiffNotLoaded: '正在加载 TIFF 库... 请稍候。', tiffFailed: 'TIFF 处理失败', zipNotLoaded: 'JSZip 未加载。', dropZoneCompressSize: '拖放图片至此以压缩至 {size}KB 以下', decodingHeic: '正在解码 HEIC...', failed: '失败', clearAll: '清空列表', done: '完成', error: '无效的文件类型：', avifNotSupported: '浏览器不支持 AVIF 导出，已自动切换为 WebP。' },
+    hi:  { converting: 'कनवर्ट हो रहा है', of: 'में से', filesSelected: 'फाइल चुनी — और जोड़ें?', convertMore: 'और कनवर्ट करें', compressImages: 'कंप्रेस करें', convertImages: 'कनवर्ट करें', compilePdf: 'PDF बनाएं', success: 'सफल!', filesProcessed: 'फाइल', original: 'मूल', processed: 'प्रोसेस्ड', smaller: 'छोटा', larger: 'बड़ा', downloadZip: 'ZIP डाउनलोड', download: 'डाउनलोड', downloadPdf: 'PDF दस्तावेज़ डाउनलोड करें', downloadSingle: 'फ़ाइल डाउनलोड करें', zipping: 'ज़िप हो रहा', buildingPdf: 'PDF बन रहा है...', loadingPdf: 'PDF लाइब्रेरी लोड हो रही है...', pdfNotLoaded: 'PDF लाइब्रेरी लोड विफल।', copiedClipboard: 'कॉपी हो गया!', copyBlocked: 'ब्राउज़र ने कॉपी ब्लॉक किया।', copyNotSupported: 'कॉपी सपोर्ट नहीं है।', heicNotLoaded: 'HEIC लाइब्रेरी लोड नहीं हुई।', heicFailed: 'HEIC एरर', tiffNotLoaded: 'TIFF लाइब्रेरी लोड हो रही है... कृपया प्रतीक्षा करें।', tiffFailed: 'TIFF संसाधित करने में विफल', zipNotLoaded: 'JSZip लोड नहीं हुआ।', dropZoneCompressSize: 'इमेज को यहाँ छोड़ें, {size}KB से कम कंप्रेस करने के लिए', decodingHeic: 'HEIC डिकोड हो रहा है...', failed: 'विफल', clearAll: 'सब हटाएँ', done: 'पूर्ण', error: 'अमान्य फ़ाइल प्रकार: ', avifNotSupported: 'ब्राउज़र में AVIF समर्थित नहीं है। WebP का उपयोग किया जा रहा है।' },
   };
   const t = i18nStrings[lang] || i18nStrings.en;
   clearBtn.appendChild(document.createTextNode(' ' + t.convertMore));
+
+  // Dynamic runtime localization for trust badge, result header, and copyBtn accessibility
+  const resultHeader = document.querySelector('.result-header');
+  if (resultHeader) {
+    const successText = t.success || 'Converted successfully!';
+    const svgIcon = resultHeader.querySelector('svg');
+    if (svgIcon) {
+      resultHeader.innerHTML = '';
+      resultHeader.appendChild(svgIcon);
+      resultHeader.appendChild(document.createTextNode(' ' + successText));
+    }
+  }
+
+  const trustBadge = document.querySelector('.trust-badge');
+  if (trustBadge) {
+    const trustTexts = {
+      en: '100% secure — images never leave your device',
+      de: '100% sicher — Bilder verlassen niemals Ihr Gerät',
+      es: '100% seguro — las imágenes nunca salen de su dispositivo',
+      fr: '100% sécurisé — les images ne quittent jamais votre appareil',
+      zh: '100% 安全 — 图片永远不会离开您的设备',
+      hi: '100% सुरक्षित — इमेज कभी आपके डिवाइस से बाहर नहीं जातीं'
+    };
+    const localizedTrust = trustTexts[lang] || trustTexts.en;
+    const svgIcon = trustBadge.querySelector('svg');
+    if (svgIcon) {
+      trustBadge.innerHTML = '';
+      trustBadge.appendChild(svgIcon);
+      trustBadge.appendChild(document.createTextNode(' ' + localizedTrust));
+    }
+  }
+
+  if (copyBtn) {
+    copyBtn.setAttribute('aria-label', 'Copy image to clipboard');
+  }
 
   if (document.body.hasAttribute('data-target-size')) {
     const targetSizeVal = document.body.getAttribute('data-target-size');
@@ -488,6 +590,73 @@ document.addEventListener('DOMContentLoaded', () => {
 
   setupCustomDropdown('moreFormatsSelect');
 
+  // ── Reciprocal / Reverse Tool Quick-Switcher ───────
+  function setupReverseToolCapsule() {
+    const formatTabsEl = document.getElementById('formatTabs');
+    if (!formatTabsEl) return;
+
+    // Only apply on dedicated tool pages (which have no multi-format dropdown)
+    if (document.getElementById('moreFormatsSelect')) return;
+
+    const pathname = window.location.pathname.replace(/\/+$/, '');
+    const segments = pathname.split('/').filter(Boolean);
+    if (segments.length === 0) return;
+
+    // Detect language prefix if any (e.g. 'es', 'de', 'fr', 'zh', 'hi')
+    let langPrefix = '';
+    let toolSlug = segments[0];
+    if (['de', 'es', 'fr', 'zh', 'hi'].includes(segments[0])) {
+      langPrefix = '/' + segments[0];
+      toolSlug = segments[1] || '';
+    }
+
+    const reverseMap = {
+      'jpg-to-png': { target: 'png-to-jpg', from: 'JPG', to: 'PNG', revText: 'PNG → JPG' },
+      'png-to-jpg': { target: 'jpg-to-png', from: 'PNG', to: 'JPG', revText: 'JPG → PNG' },
+      'webp-to-jpg': { target: 'jpeg-to-webp', from: 'WebP', to: 'JPG', revText: 'JPEG → WebP' },
+      'jpeg-to-webp': { target: 'webp-to-jpg', from: 'JPEG', to: 'WebP', revText: 'WebP → JPG' },
+      'webp-to-png': { target: 'png-to-jpg', from: 'WebP', to: 'PNG', revText: 'PNG → JPG' },
+      'svg-to-png': { target: 'svg-to-jpg', from: 'SVG', to: 'PNG', revText: 'SVG → JPG' },
+      'svg-to-jpg': { target: 'svg-to-png', from: 'SVG', to: 'JPG', revText: 'SVG → PNG' },
+      'tiff-to-jpg': { target: 'jpg-to-tiff', from: 'TIFF', to: 'JPG', revText: 'JPG → TIFF' },
+      'jpg-to-tiff': { target: 'tiff-to-jpg', from: 'JPG', to: 'TIFF', revText: 'TIFF → JPG' },
+      'jpg-to-avif': { target: 'png-to-avif', from: 'JPG', to: 'AVIF', revText: 'PNG → AVIF' },
+      'png-to-avif': { target: 'jpg-to-avif', from: 'PNG', to: 'AVIF', revText: 'JPG → AVIF' }
+    };
+
+    const pair = reverseMap[toolSlug];
+    if (!pair) return;
+
+    const switchLabels = {
+      en: 'Switch to {target}',
+      de: 'Zu {target} wechseln',
+      es: 'Cambiar a {target}',
+      fr: 'Passer à {target}',
+      zh: '切换至 {target}',
+      hi: '{target} पर स्विच करें'
+    };
+    const template = switchLabels[lang] || switchLabels.en;
+    const buttonText = template.replace('{target}', pair.revText);
+    const targetUrl = `${langPrefix}/${pair.target}/`;
+
+    formatTabsEl.classList.add('reverse-capsule-bar');
+    formatTabsEl.innerHTML = `
+      <div class="flow-indicator">
+        <span class="fmt-pill from-fmt">${pair.from}</span>
+        <span class="fmt-arrow">→</span>
+        <span class="fmt-pill to-fmt active">${pair.to}</span>
+      </div>
+      <a href="${targetUrl}" class="btn-reverse-swap" aria-label="${buttonText}" title="${buttonText}">
+        <svg class="swap-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M7 16V4M7 4L3 8M7 4l4 4M17 8v12M17 20l4-4M17 20l-4-4"/>
+        </svg>
+        <span class="swap-text">${buttonText}</span>
+      </a>
+    `;
+  }
+
+  setupReverseToolCapsule();
+
   // Language Switcher Component has been moved up to run on all pages
   const tabs = document.querySelectorAll('.format-tabs .tab:not(select):not(.custom-select-container)');
   const selectTab = document.getElementById('moreFormatsSelect');
@@ -500,11 +669,18 @@ document.addEventListener('DOMContentLoaded', () => {
     if (queuedFiles.length > 0 && queuedFiles.some(q => q.result !== null)) {
       queuedFiles.forEach(q => { q.result = null; });
       convertedFiles = [];
+      const baContainer = document.getElementById('beforeAfterContainer');
+      if (baContainer) {
+        baContainer.querySelectorAll('img').forEach(img => {
+          if (img.src && img.src.startsWith('blob:')) URL.revokeObjectURL(img.src);
+        });
+        baContainer.remove();
+      }
       resultCard.classList.remove('visible');
       progressContainer.classList.remove('visible');
       progressLabel.textContent = '';
       convertBtn.disabled = false;
-      convertBtnText.textContent = isCompression ? t.compressImages : t.convertImages;
+      convertBtnText.textContent = isCompression ? t.compressImages : (document.body.dataset.mode === 'pdf' ? (t.compilePdf || 'Compile PDF') : t.convertImages);
       renderGallery();
     }
   }
@@ -586,9 +762,14 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   if (customSizeInput) customSizeInput.addEventListener('input', invalidateResults);
-  ['resizeWidth', 'resizeHeight', 'maintainRatio'].forEach(id => {
+  ['resizeWidth', 'resizeHeight', 'maintainRatio', 'watermarkText', 'watermarkSize', 'watermarkPos'].forEach(id => {
     const el = document.getElementById(id);
-    if (el) el.addEventListener('input', invalidateResults);
+    if (el) {
+      el.addEventListener('input', invalidateResults);
+      if (el.tagName === 'SELECT' || el.type === 'checkbox') {
+        el.addEventListener('change', invalidateResults);
+      }
+    }
   });
 
   function fmtBytes(b) {
@@ -635,6 +816,102 @@ document.addEventListener('DOMContentLoaded', () => {
     e.target.value = '';
   });
 
+  // ── Browser AVIF Canvas Encoding Support Check ─────
+  let isAvifSupported = null;
+  function checkAvifSupport() {
+    if (isAvifSupported !== null) return isAvifSupported;
+    try {
+      const c = document.createElement('canvas');
+      c.width = 1; c.height = 1;
+      isAvifSupported = c.toDataURL('image/avif').startsWith('data:image/avif');
+    } catch (e) {
+      isAvifSupported = false;
+    }
+    return isAvifSupported;
+  }
+
+  // ── PDF Library Lazy Loader ────────────────────────
+  const loadPdfLibrary = () => new Promise((resolve, reject) => {
+    if (typeof window.jspdf !== 'undefined') {
+      resolve();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error("PDF library load failed"));
+    document.head.appendChild(script);
+  });
+
+  // ── Multi-Resolution Favicon ICO Generator ─────────
+  async function generateMultiSizeIco(imgObj) {
+    const sizes = [16, 32, 48, 256];
+    const naturalW = imgObj.naturalWidth || imgObj.width;
+    const naturalH = imgObj.naturalHeight || imgObj.height;
+    const minDim = Math.min(naturalW, naturalH);
+    const sx = (naturalW - minDim) / 2;
+    const sy = (naturalH - minDim) / 2;
+
+    const pngBlobs = [];
+    for (const size of sizes) {
+      const c = document.createElement('canvas');
+      c.width = size;
+      c.height = size;
+      const ctx = c.getContext('2d');
+      if (!ctx) continue;
+      ctx.drawImage(imgObj, sx, sy, minDim, minDim, 0, 0, size, size);
+      const pngBlob = await new Promise(resolve => c.toBlob(resolve, 'image/png'));
+      c.width = 1; c.height = 1; // Release GPU texture
+      if (pngBlob) {
+        const buffer = await pngBlob.arrayBuffer();
+        pngBlobs.push({ size, bytes: new Uint8Array(buffer) });
+      }
+    }
+
+    if (pngBlobs.length === 0) return null;
+
+    const count = pngBlobs.length;
+    const headerSize = 6;
+    const dirEntrySize = 16;
+    let dataOffset = headerSize + count * dirEntrySize;
+
+    let totalFileSize = dataOffset;
+    for (const item of pngBlobs) {
+      totalFileSize += item.bytes.length;
+    }
+
+    const icoBuffer = new ArrayBuffer(totalFileSize);
+    const view = new DataView(icoBuffer);
+
+    view.setUint16(0, 0, true);
+    view.setUint16(2, 1, true); // type 1 = ICO
+    view.setUint16(4, count, true);
+
+    const icoBytes = new Uint8Array(icoBuffer);
+    let currentDataOffset = dataOffset;
+
+    for (let i = 0; i < count; i++) {
+      const item = pngBlobs[i];
+      const entryOffset = headerSize + i * dirEntrySize;
+      const w = item.size >= 256 ? 0 : item.size;
+      const h = item.size >= 256 ? 0 : item.size;
+
+      view.setUint8(entryOffset + 0, w);
+      view.setUint8(entryOffset + 1, h);
+      view.setUint8(entryOffset + 2, 0);
+      view.setUint8(entryOffset + 3, 0);
+      view.setUint16(entryOffset + 4, 1, true); // color planes
+      view.setUint16(entryOffset + 6, 32, true); // bpp
+      view.setUint32(entryOffset + 8, item.bytes.length, true);
+      view.setUint32(entryOffset + 12, currentDataOffset, true);
+
+      icoBytes.set(item.bytes, currentDataOffset);
+      currentDataOffset += item.bytes.length;
+    }
+
+    return new Blob([icoBytes], { type: 'image/x-icon' });
+  }
+
   const loadHeicLibrary = () => new Promise((resolve, reject) => {
     if (typeof heic2any !== 'undefined') {
       resolve();
@@ -646,6 +923,11 @@ document.addEventListener('DOMContentLoaded', () => {
     script.onerror = () => reject(new Error("HEIC library load failed"));
     document.head.appendChild(script);
   });
+
+  // Prefetch HEIC library on dedicated page for instant conversion
+  if (typeof window !== 'undefined' && window.location.pathname.includes('heic-to-jpg')) {
+    loadHeicLibrary().catch(() => {});
+  }
 
   const loadTiffLibrary = () => new Promise((resolve, reject) => {
     if (typeof UTIF !== 'undefined') {
@@ -682,6 +964,8 @@ document.addEventListener('DOMContentLoaded', () => {
     
     return new Promise((resolve, reject) => {
       tempCanvas.toBlob(blob => {
+        tempCanvas.width = 1;
+        tempCanvas.height = 1;
         if (blob) resolve(blob);
         else reject(new Error("Canvas conversion to Blob failed"));
       }, 'image/png');
@@ -704,6 +988,33 @@ document.addEventListener('DOMContentLoaded', () => {
       
       let fileToQueue = f;
       const queueId = Math.random().toString(36).substr(2, 9);
+      if (ext === 'svg') {
+         // Pre-check and normalize SVG dimensions from viewBox if width/height are absent
+         try {
+           const svgText = await f.text();
+           const parser = new DOMParser();
+           const svgDoc = parser.parseFromString(svgText, 'image/svg+xml');
+           const svgEl = svgDoc.querySelector('svg');
+           if (svgEl) {
+             let sw = parseFloat(svgEl.getAttribute('width'));
+             let sh = parseFloat(svgEl.getAttribute('height'));
+             const vb = svgEl.getAttribute('viewBox');
+             if ((!sw || !sh || isNaN(sw) || isNaN(sh)) && vb) {
+               const vbParts = vb.trim().split(/[\s,]+/).map(Number);
+               if (vbParts.length === 4 && vbParts[2] > 0 && vbParts[3] > 0) {
+                 svgEl.setAttribute('width', vbParts[2]);
+                 svgEl.setAttribute('height', vbParts[3]);
+                 const serializer = new XMLSerializer();
+                 const fixedSvg = serializer.serializeToString(svgDoc);
+                 fileToQueue = new File([fixedSvg], f.name, { type: 'image/svg+xml' });
+               }
+             }
+           }
+         } catch (e) {
+           console.warn('SVG dimension normalization bypassed:', e);
+         }
+      }
+
       if (ext === 'heic' || ext === 'heif') {
          if (typeof heic2any === 'undefined') {
            showToast(t.heicNotLoaded, 'info');
@@ -785,11 +1096,25 @@ document.addEventListener('DOMContentLoaded', () => {
     renderGallery();
   }
 
-  // Event delegation for remove buttons (avoids global function + inline onclick)
+  // Event delegation for remove and individual download buttons
   fileGallery.addEventListener('click', (e) => {
     const removeBtn = e.target.closest('.btn-remove');
     if (removeBtn && removeBtn.dataset.fileId) {
       removeFile(removeBtn.dataset.fileId);
+      return;
+    }
+    const dlBtn = e.target.closest('.btn-item-download');
+    if (dlBtn && dlBtn.dataset.downloadId) {
+      const cItem = convertedFiles.find(cf => cf.id === dlBtn.dataset.downloadId);
+      if (cItem) {
+        const url = URL.createObjectURL(cItem.blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = cItem.name;
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => { URL.revokeObjectURL(url); document.body.removeChild(a); }, 500);
+      }
     }
   });
 
@@ -853,13 +1178,26 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
 
+      let itemDownloadBtn = '';
+      if (q.result && !q.result.error) {
+        itemDownloadBtn = `
+          <button class="btn-item-download" type="button" aria-label="${t.downloadSingle || 'Download file'} - ${safeName}" data-download-id="${q.id}" title="${t.downloadSingle || 'Download file'}">
+            <svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+          </button>`;
+      }
+
       div.innerHTML = `
         <div class="thumb">${thumbElement}</div>
         <div class="info">
           <div class="name" title="${safeName}">${safeName}</div>
           <div class="meta">${metaText} ${resultText}</div>
         </div>
-        <div class="status">Done</div>
+        <div class="status">${t.done || 'Done'}</div>
+        ${itemDownloadBtn}
         <button class="btn-remove remove" aria-label="Remove file" data-file-id="${q.id}" ${q.processing ? 'disabled' : ''}>
            <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
          </button>
@@ -915,6 +1253,13 @@ document.addEventListener('DOMContentLoaded', () => {
             else targetMime = 'image/jpeg'; // default for jpg/heic/unknown
           }
         }
+        
+        // AVIF compatibility fallback check
+        if (targetMime === 'image/avif' && !checkAvifSupport()) {
+          showToast(t.avifNotSupported || 'AVIF encoding not supported by your browser. Using WebP.', 'info');
+          targetMime = 'image/webp';
+        }
+
         const targetExtMap = { 'image/jpeg':'jpg', 'image/png':'png', 'image/webp':'webp', 'image/avif':'avif', 'image/x-icon':'ico', 'image/tiff':'tiff' };
         const targetExt = targetExtMap[targetMime] || 'jpg';
         lastTargetExt = targetExt;
@@ -932,7 +1277,7 @@ document.addEventListener('DOMContentLoaded', () => {
            totalOrigSize += q.file.size;
            const objUrl = URL.createObjectURL(q.file);
            
-           const getBlob = (imgObj, w, h, outMime, outQuality) => new Promise(res => {
+           const getBlob = (imgObj, w, h, outMime, outQuality) => new Promise(async res => {
                let targetW = w;
                let targetH = h;
                if (outMime === 'image/x-icon') {
@@ -965,12 +1310,14 @@ document.addEventListener('DOMContentLoaded', () => {
                if (document.body.dataset.mode === 'watermark') {
                    const wText = document.getElementById('watermarkText') ? document.getElementById('watermarkText').value.trim() : '';
                    if (wText) {
-                       const wSize = parseInt(document.getElementById('watermarkSize').value, 10) || 32;
+                       const rawWSize = parseInt(document.getElementById('watermarkSize').value, 10) || 32;
+                        const scaleFactor = Math.max(1, Math.min(targetW, targetH) / 800);
+                        const wSize = Math.round(rawWSize * scaleFactor);
                        const wPos = document.getElementById('watermarkPos') ? document.getElementById('watermarkPos').value : 'bottom-right';
                        
                        ctx.font = `bold ${wSize}px sans-serif`;
                        ctx.fillStyle = 'rgba(255, 255, 255, 0.6)'; // semi-transparent white
-                       const padding = 20;
+                       const padding = Math.round(20 * scaleFactor);
                        const metrics = ctx.measureText(wText);
                        const textWidth = metrics.width;
                        
@@ -994,9 +1341,9 @@ document.addEventListener('DOMContentLoaded', () => {
                        
                        // Text shadow for contrast
                        ctx.shadowColor = "rgba(0,0,0,0.8)";
-                       ctx.shadowBlur = 6;
-                       ctx.shadowOffsetX = 2;
-                       ctx.shadowOffsetY = 2;
+                       ctx.shadowBlur = Math.round(6 * scaleFactor);
+                       ctx.shadowOffsetX = Math.round(2 * scaleFactor);
+                       ctx.shadowOffsetY = Math.round(2 * scaleFactor);
                        
                        ctx.fillText(wText, wx, wy);
                        
@@ -1008,6 +1355,17 @@ document.addEventListener('DOMContentLoaded', () => {
                }
                
                if (outMime === 'image/x-icon') {
+                    try {
+                        const icoBlob = await generateMultiSizeIco(canvas);
+                        res(icoBlob);
+                        return;
+                    } catch (icoErr) {
+                        console.error("Multi-size ICO conversion error:", icoErr);
+                        res(null);
+                        return;
+                    }
+                }
+                if (false && outMime === 'image/x-icon') {
                    canvas.toBlob(pngBlob => {
                        if (!pngBlob) { res(null); return; }
                        pngBlob.arrayBuffer().then(pngBuffer => {
@@ -1045,7 +1403,18 @@ document.addEventListener('DOMContentLoaded', () => {
                        res(null);
                    }
                } else {
-                   canvas.toBlob(b => res(b), outMime, outMime !== 'image/png' ? outQuality : undefined);
+                   let effectiveMime = outMime;
+                    if (effectiveMime === 'image/avif' && !checkAvifSupport()) {
+                        console.warn("AVIF export not supported in browser canvas; falling back to WebP");
+                        effectiveMime = 'image/webp';
+                    }
+                    canvas.toBlob(b => {
+                        if (!b && effectiveMime === 'image/avif') {
+                            canvas.toBlob(fallbackB => res(fallbackB), 'image/webp', outQuality);
+                        } else {
+                            res(b);
+                        }
+                    }, effectiveMime, effectiveMime !== 'image/png' ? outQuality : undefined);
                }
            });
 
@@ -1057,8 +1426,10 @@ document.addEventListener('DOMContentLoaded', () => {
              };
              img.onload = async () => {
                try {
-                 let baseW = img.naturalWidth;
-                 let baseH = img.naturalHeight;
+                 let baseW = img.naturalWidth || img.width || 800;
+                  if (baseW <= 0) baseW = 800;
+                 let baseH = img.naturalHeight || img.height || 800;
+                  if (baseH <= 0) baseH = 800;
                  
                  const hasSizePresets = document.querySelector('.size-presets, .preset-pill, .preset') !== null;
                  const hasBodyTargetSize = document.body.hasAttribute('data-target-size');
@@ -1119,7 +1490,8 @@ document.addEventListener('DOMContentLoaded', () => {
                       let scale = 1.0;
                       let lastPngBlob = null;
                       while (scale >= 0.1) {
-                          lastPngBlob = await getBlob(img, baseW * scale, baseH * scale, targetMime, 1);
+                          await new Promise(r => setTimeout(r, 0));
+                           lastPngBlob = await getBlob(img, Math.round(baseW * scale), Math.round(baseH * scale), targetMime, 1);
                           if (lastPngBlob.size <= targetBytes) { bestBlob = lastPngBlob; break; }
                           scale *= 0.8;
                       }
@@ -1134,7 +1506,8 @@ document.addEventListener('DOMContentLoaded', () => {
                          let maxQ = 0.9;
                          let q = 0.45;
                          for (let attempt = 0; attempt < 6; attempt++) {
-                             let tempBlob = await getBlob(img, baseW, baseH, targetMime, q);
+                             await new Promise(r => setTimeout(r, 0));
+                              let tempBlob = await getBlob(img, baseW, baseH, targetMime, q);
                              if (tempBlob.size <= targetBytes) {
                                  bestBlob = tempBlob;
                                  minQ = q; // Can we do higher quality?
@@ -1148,7 +1521,8 @@ document.addEventListener('DOMContentLoaded', () => {
                          if (!bestBlob) {
                              let scale = 0.85;
                              while (scale >= 0.1) {
-                                 const scaledBlob = await getBlob(img, baseW * scale, baseH * scale, targetMime, 0.1);
+                                 await new Promise(r => setTimeout(r, 0));
+                                  const scaledBlob = await getBlob(img, Math.round(baseW * scale), Math.round(baseH * scale), targetMime, 0.1);
                                  bestBlob = scaledBlob; // guarantee we return something
                                  if (scaledBlob.size <= targetBytes) break;
                                  scale *= 0.8;
@@ -1187,7 +1561,13 @@ document.addEventListener('DOMContentLoaded', () => {
       progressLabel.textContent = `${t.converting} ${i + 1} ${t.of} ${queuedFiles.length}...`;
     }
 
-    convertBtnText.textContent = isCompression ? t.compressImages : t.convertImages;
+    // Clean up offscreen canvas to release GPU memory
+    canvas.width = 1;
+    canvas.height = 1;
+    const cleanupCtx = canvas.getContext('2d');
+    if (cleanupCtx) cleanupCtx.clearRect(0, 0, 1, 1);
+
+    convertBtnText.textContent = isCompression ? t.compressImages : (document.body.dataset.mode === 'pdf' ? (t.compilePdf || 'Compile PDF') : t.convertImages);
 
     batchCountText.innerHTML = `<strong>${convertedFiles.length}</strong> ${t.filesProcessed}`;
     batchSizeOrig.innerHTML = `${t.original}: <strong>${fmtBytes(totalOrigSize)}</strong>`;
@@ -1200,7 +1580,7 @@ document.addEventListener('DOMContentLoaded', () => {
     progressLabel.textContent = '';
     
     if (document.body.dataset.mode === 'pdf') {
-        downloadText.textContent = 'Download PDF Document';
+        downloadText.textContent = t.downloadPdf || 'Download PDF Document';
         if (copyBtn) copyBtn.style.display = 'none';
     } else {
         downloadText.textContent = convertedFiles.length > 1 ? t.downloadZip : `${t.download} ${lastTargetExt.toUpperCase()}`;
@@ -1223,10 +1603,10 @@ document.addEventListener('DOMContentLoaded', () => {
        oldImgs.forEach(img => { if(img.src.startsWith('blob:')) URL.revokeObjectURL(img.src); });
        baContainer.innerHTML = `
          <img src="${origUrl}" class="ba-img ba-img-orig" alt="Original image preview before compression" />
-         <div class="ba-label ba-label-orig">Original</div>
+         <div class="ba-label ba-label-orig">${t.original || 'Original'}</div>
          
          <img id="afterImg" src="${newUrl}" class="ba-img ba-img-new" alt="Optimized image preview after compression" />
-         <div class="ba-label ba-label-new">Optimized</div>
+         <div class="ba-label ba-label-new">${t.processed || 'Optimized'}</div>
          
          <div id="baLine" class="ba-line">
            <div class="ba-slider-thumb">
@@ -1311,15 +1691,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (document.body.dataset.mode === 'pdf') {
         if (typeof window.jspdf === 'undefined') {
-            showToast('PDF Library not loaded. Please refresh.', 'error');
-            return;
+            downloadText.textContent = t.loadingPdf || 'Loading PDF Library...';
+            try {
+                await loadPdfLibrary();
+            } catch (e) {
+                showToast(t.pdfNotLoaded || 'Failed to load PDF library. Please refresh.', 'error');
+                downloadText.textContent = t.downloadPdf || 'Download PDF Document';
+                return;
+            }
         }
-        downloadText.textContent = 'Building PDF...';
+        downloadText.textContent = t.buildingPdf || 'Building PDF...';
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF({ format: 'a4', unit: 'mm' });
         
         for (let i = 0; i < convertedFiles.length; i++) {
             if (i > 0) doc.addPage();
+            const blobType = convertedFiles[i].blob.type || 'image/jpeg';
             const base64data = await new Promise(resolve => {
                 const reader = new FileReader();
                 reader.onloadend = () => resolve(reader.result);
@@ -1344,10 +1731,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 y = (pageHeight - pdfHeight) / 2; // center vertically
             }
             
-            doc.addImage(base64data, 'JPEG', x, y, finalW, finalH);
+            let imgFormat = 'JPEG';
+            if (blobType === 'image/png') imgFormat = 'PNG';
+            else if (blobType === 'image/webp') imgFormat = 'WEBP';
+
+            doc.addImage(base64data, imgFormat, x, y, finalW, finalH);
         }
         doc.save('Converted_Images.pdf');
-        downloadText.textContent = 'Download PDF Document';
+        downloadText.textContent = t.downloadPdf || 'Download PDF Document';
         return;
     }
 

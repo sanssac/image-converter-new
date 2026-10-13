@@ -1,4 +1,4 @@
-const CACHE_NAME = 'imglab_cache_v20260523';
+const CACHE_NAME = 'imglab_cache_v20261014';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',

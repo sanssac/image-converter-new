@@ -2,8 +2,8 @@ import os
 import glob
 
 workspace = "c:\\image converter new"
-old_version = "v=20260522"
-new_version = "v=20260523"
+old_version = "v=20260523"
+new_version = "v=20261014"
 
 html_files = glob.glob(os.path.join(workspace, "**", "*.html"), recursive=True)
 
