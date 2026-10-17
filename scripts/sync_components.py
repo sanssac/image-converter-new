@@ -29,7 +29,11 @@ TRANSLATIONS = {
         'jpg_pdf': ('JPG to PDF', 'Document compiler'),
         'compress': ('Compress', 'Auto quality optimizer'),
         'tiff_jpg': ('TIFF → JPG', 'Convert Tagged Image files'),
-        'jpg_tiff': ('JPG → TIFF', 'Create raster images')
+        'jpg_tiff': ('JPG → TIFF', 'Create raster images'),
+        'png_webp': ('PNG → WebP', 'Modern web format'),
+        'avif_jpg': ('AVIF → JPG', 'Universal compatibility'),
+        'avif_png': ('AVIF → PNG', 'Lossless with transparency'),
+        'crop': ('Crop Image', 'Custom aspect ratio crop'),
     },
     'de': {
         'all_tools': 'Alle Werkzeuge',
@@ -57,7 +61,11 @@ TRANSLATIONS = {
         'jpg_pdf': ('JPG in PDF', 'Dokumenten-Compiler'),
         'compress': ('Komprimieren', 'Auto-Qualitätsoptimierung'),
         'tiff_jpg': ('TIFF → JPG', 'Tagged-Image-Dateien konvertieren'),
-        'jpg_tiff': ('JPG → TIFF', 'Rasterbilder erstellen')
+        'jpg_tiff': ('JPG → TIFF', 'Rasterbilder erstellen'),
+        'png_webp': ('PNG → WebP', 'Modernes Webformat'),
+        'avif_jpg': ('AVIF → JPG', 'Universelle Kompatibilität'),
+        'avif_png': ('AVIF → PNG', 'Verlustfrei mit Transparenz'),
+        'crop': ('Bild zuschneiden', 'Seitenverhältnis anpassen'),
     },
     'es': {
         'all_tools': 'Todas las Herramientas',
@@ -85,7 +93,11 @@ TRANSLATIONS = {
         'jpg_pdf': ('JPG a PDF', 'Compilador de documentos'),
         'compress': ('Comprimir', 'Optimización automática'),
         'tiff_jpg': ('TIFF → JPG', 'Convertir archivos Tagged Image'),
-        'jpg_tiff': ('JPG → TIFF', 'Crear imágenes rasterizadas')
+        'jpg_tiff': ('JPG → TIFF', 'Crear imágenes rasterizadas'),
+        'png_webp': ('PNG → WebP', 'Formato web moderno'),
+        'avif_jpg': ('AVIF → JPG', 'Compatibilidad universal'),
+        'avif_png': ('AVIF → PNG', 'Sin pérdidas con transparencia'),
+        'crop': ('Recortar Imagen', 'Ajustar relación de aspecto'),
     },
     'fr': {
         'all_tools': 'Tous les Outils',
@@ -113,7 +125,11 @@ TRANSLATIONS = {
         'jpg_pdf': ('JPG en PDF', 'Compilateur de documents'),
         'compress': ('Compresser', 'Optimisation automatique'),
         'tiff_jpg': ('TIFF → JPG', 'Convertir fichiers Tagged Image'),
-        'jpg_tiff': ('JPG → TIFF', 'Créer des images trame')
+        'jpg_tiff': ('JPG → TIFF', 'Créer des images trame'),
+        'png_webp': ('PNG → WebP', 'Format web moderne'),
+        'avif_jpg': ('AVIF → JPG', 'Compatibilité universelle'),
+        'avif_png': ('AVIF → PNG', 'Sans perte avec transparence'),
+        'crop': ('Rogner Image', 'Ajuster les proportions'),
     },
     'hi': {
         'all_tools': 'सभी टूल्स',
@@ -141,7 +157,11 @@ TRANSLATIONS = {
         'jpg_pdf': ('JPG से PDF', 'दस्तावेज़ संकलक'),
         'compress': ('कंप्रेस', 'स्वचालित गुणवत्ता अनुकूलक'),
         'tiff_jpg': ('TIFF → JPG', 'TIFF फ़ाइलों को बदलें'),
-        'jpg_tiff': ('JPG → TIFF', 'रास्टर इमेज बनाएं')
+        'jpg_tiff': ('JPG → TIFF', 'रास्टर इमेज बनाएं'),
+        'png_webp': ('PNG → WebP', 'आधुनिक वेब फॉर्मेट'),
+        'avif_jpg': ('AVIF → JPG', 'सार्वभौमिक अनुकूलता'),
+        'avif_png': ('AVIF → PNG', 'पारदर्शिता के साथ दोषरहित'),
+        'crop': ('क्रॉप इमेज', 'कस्टम अनुपात में काटें'),
     },
     'zh': {
         'all_tools': '所有工具',
@@ -169,7 +189,11 @@ TRANSLATIONS = {
         'jpg_pdf': ('JPG转PDF', '图片合成PDF文档'),
         'compress': ('图片压缩', '自动质量优化器'),
         'tiff_jpg': ('TIFF → JPG', '转换 TIFF 图像'),
-        'jpg_tiff': ('JPG → TIFF', '生成 TIFF 图像')
+        'jpg_tiff': ('JPG → TIFF', '生成 TIFF 图像'),
+        'png_webp': ('PNG → WebP', '现代网页图片格式'),
+        'avif_jpg': ('AVIF → JPG', '通用兼容性'),
+        'avif_png': ('AVIF → PNG', '无损且支持透明度'),
+        'crop': ('裁剪图片', '自由调整宽高比')
     }
 }
 
@@ -213,7 +237,11 @@ def make_mega_link(tool_key, tool_path, lang_prefix, trans):
         'resize': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>',
         'watermark': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>',
         'jpg_pdf': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>',
-        'compress': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>'
+        'compress': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>',
+        'png_webp': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>',
+        'avif_jpg': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>',
+        'avif_png': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>',
+        'crop': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6.13 1L6 16a2 2 0 0 0 2 2h15"/><path d="M1 6.13L16 6a2 2 0 0 1 2 2v15"/></svg>'
     }
     
     href = f"{lang_prefix}{tool_path}"
@@ -222,9 +250,11 @@ def make_mega_link(tool_key, tool_path, lang_prefix, trans):
         href = '/'
     
     svg = svg_map.get(tool_key, '')
+    is_new = tool_key in ['png_webp', 'avif_jpg', 'avif_png', 'crop']
+    badge_html = ' <span class="mega-badge new-tool" style="margin-left:6px; font-size:9px; padding:1px 5px; border-radius:4px; font-weight:700;">NEW</span>' if is_new else ''
     return f'''              <a href="{href}" class="mega-link">
                 <div class="mega-icon-wrap">{svg}</div>
-                <div class="mega-link-text"><span class="mega-link-name">{name}</span><span class="mega-link-desc">{desc}</span></div>
+                <div class="mega-link-text"><span class="mega-link-name">{name}{badge_html}</span><span class="mega-link-desc">{desc}</span></div>
               </a>'''
 
 def generate_header(current_lang, route):
@@ -266,6 +296,7 @@ def generate_header(current_lang, route):
         make_mega_link('png_jpg', '/png-to-jpg', lang_prefix, trans),
         make_mega_link('webp_jpg', '/webp-to-jpg', lang_prefix, trans),
         make_mega_link('jpeg_webp', '/jpeg-to-webp', lang_prefix, trans),
+        make_mega_link('png_webp', '/png-to-webp', lang_prefix, trans),
     ])
     
     mega_col2 = "\n".join([
@@ -281,10 +312,13 @@ def generate_header(current_lang, route):
         make_mega_link('png_avif', '/png-to-avif', lang_prefix, trans),
         make_mega_link('tiff_jpg', '/tiff-to-jpg', lang_prefix, trans),
         make_mega_link('jpg_tiff', '/jpg-to-tiff', lang_prefix, trans),
+        make_mega_link('avif_jpg', '/avif-to-jpg', lang_prefix, trans),
+        make_mega_link('avif_png', '/avif-to-png', lang_prefix, trans),
     ])
     
     mega_col4 = "\n".join([
         make_mega_link('resize', '/resize-image', lang_prefix, trans),
+        make_mega_link('crop', '/crop-image', lang_prefix, trans),
         make_mega_link('watermark', '/watermark-image', lang_prefix, trans),
         make_mega_link('jpg_pdf', '/jpg-to-pdf', lang_prefix, trans),
         make_mega_link('compress', '/compress-image', lang_prefix, trans),

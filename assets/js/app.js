@@ -58,8 +58,8 @@ if (document.body) document.body.dataset.theme = 'dark';
 
 // ── Load Visual & UI Modules dynamically ────────────────
 const visualModules = [
-  '/assets/js/modules/sticky-header.js',
-  '/assets/js/modules/accordion.js'
+  '/assets/js/modules/sticky-header.js?v=20261014',
+  '/assets/js/modules/accordion.js?v=20261014'
 ];
 visualModules.forEach(url => {
   const script = document.createElement('script');
@@ -102,8 +102,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const downloadBtn = document.getElementById('downloadBtn');
   const copyBtn     = document.getElementById('copyBtn');
   const downloadText= document.getElementById('downloadText');
-  const canvas      = document.getElementById('canvas');
-  
+  let canvas        = document.getElementById('canvas');
+  if (!canvas) {
+    canvas = document.createElement('canvas');
+    canvas.id = 'canvas';
+    canvas.style.display = 'none';
+    document.body.appendChild(canvas);
+  }
 
 
   // ── Navigation & Tools Mega Menu ──────
@@ -186,11 +191,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const drawerClose = document.querySelector('.drawer-close');
 
   if (hamburgerToggle && mobileDrawer && drawerBackdrop) {
+    let prevActiveElement = null;
+
     const openDrawer = () => {
+      prevActiveElement = document.activeElement;
       mobileDrawer.classList.add('open');
       drawerBackdrop.classList.add('open');
       hamburgerToggle.setAttribute('aria-expanded', 'true');
       document.body.style.overflow = 'hidden'; // Lock background scrolling
+      if (drawerClose) drawerClose.focus();
     };
 
     const closeDrawer = () => {
@@ -198,7 +207,33 @@ document.addEventListener('DOMContentLoaded', () => {
       drawerBackdrop.classList.remove('open');
       hamburgerToggle.setAttribute('aria-expanded', 'false');
       document.body.style.overflow = ''; // Unlock background scrolling
+      if (prevActiveElement && typeof prevActiveElement.focus === 'function') {
+        prevActiveElement.focus();
+      } else {
+        hamburgerToggle.focus();
+      }
     };
+
+    // Trap focus inside drawer when open
+    mobileDrawer.addEventListener('keydown', (e) => {
+      if (e.key !== 'Tab') return;
+      const focusable = mobileDrawer.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+      if (!focusable.length) return;
+      const firstEl = focusable[0];
+      const lastEl = focusable[focusable.length - 1];
+
+      if (e.shiftKey) {
+        if (document.activeElement === firstEl) {
+          e.preventDefault();
+          lastEl.focus();
+        }
+      } else {
+        if (document.activeElement === lastEl) {
+          e.preventDefault();
+          firstEl.focus();
+        }
+      }
+    });
 
     hamburgerToggle.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -216,7 +251,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     drawerBackdrop.addEventListener('click', closeDrawer);
 
-    // Close drawer on ESC key
+    // Close drawer on ESC key and restore focus
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && mobileDrawer.classList.contains('open')) {
         closeDrawer();
@@ -298,8 +333,6 @@ document.addEventListener('DOMContentLoaded', () => {
   let defaultDropText = dropZoneH2 ? dropZoneH2.textContent : 'Drop images here';
 
   // Dropzone keyboard accessibility
-  dropZone.setAttribute('tabindex', '0');
-  dropZone.setAttribute('role', 'button');
   dropZone.setAttribute('aria-label', defaultDropText);
   dropZone.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' || e.key === ' ') {
@@ -311,22 +344,21 @@ document.addEventListener('DOMContentLoaded', () => {
   const progressContainer = document.getElementById('progressContainer');
   const progressFill = document.getElementById('progressFill');
 
-  // Inject progress label element dynamically so we don't need to edit all HTML files
+  // Inject progress label element dynamically with ARIA live attributes
   let progressLabel = document.createElement('div');
   progressLabel.id = 'progressLabel';
   progressLabel.className = 'progress-label';
+  progressLabel.setAttribute('role', 'status');
+  progressLabel.setAttribute('aria-live', 'polite');
   progressContainer.insertAdjacentElement('afterend', progressLabel);
 
-  // Inject clear button into result card once
-  const clearBtn = document.createElement('button');
-  clearBtn.id = 'clearBtn';
-  clearBtn.className = 'btn-clear';
-  clearBtn.innerHTML = `<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.5"/></svg>`;
-  clearBtn.addEventListener('click', () => {
+  // Centralized converter state reset function
+  function resetConverterState() {
     queuedFiles.forEach(q => { if (q.thumbUrl) URL.revokeObjectURL(q.thumbUrl); });
+    convertedFiles.forEach(cf => { if (cf.blobUrl) URL.revokeObjectURL(cf.blobUrl); });
     queuedFiles = [];
     convertedFiles = [];
-    fileInput.value = '';
+    if (fileInput) fileInput.value = '';
     const baContainer = document.getElementById('beforeAfterContainer');
     if (baContainer) {
       baContainer.querySelectorAll('img').forEach(img => {
@@ -334,14 +366,31 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       baContainer.remove();
     }
-    resultCard.classList.remove('visible');
-    progressContainer.classList.remove('visible');
-    progressLabel.textContent = '';
-    convertBtn.disabled = false;
-    convertBtnText.textContent = isCompression ? t.compressImages : (document.body.dataset.mode === 'pdf' ? (t.compilePdf || 'Compile PDF') : t.convertImages);
+    if (resultCard) {
+      resultCard.classList.remove('visible');
+      resultCard.classList.remove('success-anim');
+    }
+    if (progressContainer) progressContainer.classList.remove('visible');
+    if (progressLabel) progressLabel.textContent = '';
+    if (convertBtn) {
+      convertBtn.disabled = false;
+      if (convertBtnText) {
+        convertBtnText.textContent = isCompression ? t.compressImages : (document.body.dataset.mode === 'pdf' ? (t.compilePdf || 'Compile PDF') : t.convertImages);
+      }
+    }
     renderGallery();
-    dropZone.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  });
+    if (dropZone) {
+      dropZone.classList.remove('has-files');
+      dropZone.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
+
+  // Inject clear button into result card once
+  const clearBtn = document.createElement('button');
+  clearBtn.id = 'clearBtn';
+  clearBtn.className = 'btn-clear';
+  clearBtn.innerHTML = `<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4.5"/></svg>`;
+  clearBtn.addEventListener('click', resetConverterState);
   resultCard.appendChild(clearBtn);
 
   // Settings logic (Tabs)
@@ -350,12 +399,12 @@ document.addEventListener('DOMContentLoaded', () => {
   // ── i18n for dynamic UI strings ─────
   const lang = (document.documentElement.lang || 'en').slice(0, 2);
   const i18nStrings = {
-    en:  { converting: 'Converting', of: 'of', filesSelected: 'file(s) selected - Drop more?', convertMore: 'Convert More Images', compressImages: 'Compress Images', convertImages: 'Convert Images', compilePdf: 'Compile PDF', success: 'Success!', filesProcessed: 'file(s) processed', original: 'Original', processed: 'Processed', smaller: 'smaller', larger: 'larger', downloadZip: 'Download ZIP', download: 'Download', downloadPdf: 'Download PDF Document', downloadSingle: 'Download file', zipping: 'Zipping', buildingPdf: 'Building PDF...', loadingPdf: 'Loading PDF Library...', pdfNotLoaded: 'Failed to load PDF library.', copiedClipboard: 'Image copied to clipboard!', copyBlocked: 'Browser blocked clipboard copy.', copyNotSupported: 'Clipboard copy not supported on this browser.', heicNotLoaded: 'Loading HEIC library... Please wait.', heicFailed: 'Failed to process HEIC', tiffNotLoaded: 'Loading TIFF library... Please wait.', tiffFailed: 'Failed to process TIFF', zipNotLoaded: 'JSZip library has not loaded yet.', dropZoneCompressSize: 'Drop images here to compress under {size}KB', decodingHeic: 'Decoding HEIC...', failed: 'Failed', clearAll: 'Clear All', done: 'Done', error: 'Invalid file type: ', avifNotSupported: 'AVIF encoding not supported in this browser. Using WebP format.' },
-    de:  { converting: 'Wird konvertiert', of: 'von', filesSelected: 'Datei(en) ausgewählt - Mehr ablegen?', convertMore: 'Mehr Bilder konvertieren', compressImages: 'Bilder komprimieren', convertImages: 'Bilder konvertieren', compilePdf: 'PDF erstellen', success: 'Erfolgreich!', filesProcessed: 'Datei(en) verarbeitet', original: 'Original', processed: 'Verarbeitet', smaller: 'kleiner', larger: 'größer', downloadZip: 'ZIP herunterladen', download: 'Herunterladen', downloadPdf: 'PDF-Dokument herunterladen', downloadSingle: 'Datei herunterladen', zipping: 'Komprimieren', buildingPdf: 'PDF wird erstellt...', loadingPdf: 'Lade PDF-Bibliothek...', pdfNotLoaded: 'Fehler beim Laden der PDF-Bibliothek.', copiedClipboard: 'Bild in die Zwischenablage kopiert!', copyBlocked: 'Kopieren in Zwischenablage blockiert.', copyNotSupported: 'Zwischenablage-Kopie von diesem Browser nicht unterstützt.', heicNotLoaded: 'Lade HEIC-Bibliothek... Bitte warten.', heicFailed: 'Fehler beim Verarbeiten von HEIC', tiffNotLoaded: 'Lade TIFF-Bibliothek... Bitte warten.', tiffFailed: 'Fehler beim Verarbeiten von TIFF', zipNotLoaded: 'JSZip-Bibliothek wurde noch nicht geladen.', dropZoneCompressSize: 'Bilder hier ablegen, um sie unter {size}KB zu komprimieren', decodingHeic: 'HEIC wird decodiert...', failed: 'Fehlgeschlagen', clearAll: 'Alle löschen', done: 'Fertig', error: 'Ungültiger Dateityp: ', avifNotSupported: 'AVIF-Kodierung wird nicht unterstützt. WebP wird verwendet.' },
-    es:  { converting: 'Convirtiendo', of: 'de', filesSelected: 'archivo(s) — ¿más?', convertMore: 'Convertir más', compressImages: 'Comprimir imagen', convertImages: 'Convertir', compilePdf: 'Compilar PDF', success: '¡Éxito!', filesProcessed: 'archivo(s)', original: 'Original', processed: 'Procesado', smaller: 'más pequeño', larger: 'más grande', downloadZip: 'Descargar ZIP', download: 'Descargar', downloadPdf: 'Descargar Documento PDF', downloadSingle: 'Descargar archivo', zipping: 'Comprimiendo', buildingPdf: 'Creando PDF...', loadingPdf: 'Cargando librería PDF...', pdfNotLoaded: 'Error al cargar librería PDF.', copiedClipboard: '¡Imagen copiada!', copyBlocked: 'Copia bloqueada por el navegador.', copyNotSupported: 'Copia no soportada.', heicNotLoaded: 'Librería HEIC no cargada.', heicFailed: 'Error HEIC', tiffNotLoaded: 'Cargando librería TIFF... Espere por favor.', tiffFailed: 'Error al procesar TIFF', zipNotLoaded: 'JSZip no cargado.', dropZoneCompressSize: 'Arrastra imágenes aquí para comprimir a menos de {size}KB', decodingHeic: 'Decodificando HEIC...', failed: 'Fallido', clearAll: 'Limpiar todo', done: 'Listo', error: 'Tipo de archivo no válido: ', avifNotSupported: 'Navegador no soporta codificación AVIF. Usando WebP.' },
-    fr:  { converting: 'Conversion', of: 'de', filesSelected: 'fichier(s) — plus ?', convertMore: 'Convertir plus', compressImages: 'Compresser', convertImages: 'Convertir', compilePdf: 'Compiler en PDF', success: 'Succès !', filesProcessed: 'fichier(s)', original: 'Original', processed: 'Traité', smaller: 'plus petit', larger: 'plus grand', downloadZip: 'Télécharger ZIP', download: 'Télécharger', downloadPdf: 'Télécharger le Document PDF', downloadSingle: 'Télécharger le fichier', zipping: 'Compression', buildingPdf: 'Création du PDF...', loadingPdf: 'Chargement de la bibliothèque PDF...', pdfNotLoaded: 'Échec du chargement de la bibliothèque PDF.', copiedClipboard: 'Image copiée !', copyBlocked: 'Copie bloquée.', copyNotSupported: 'Copie non supportée.', heicNotLoaded: 'Bibliothèque HEIC non chargée.', heicFailed: 'Erreur HEIC', tiffNotLoaded: 'Chargement de la bibliothèque TIFF... Veuillez patienter.', tiffFailed: 'Échec du traitement du TIFF', zipNotLoaded: 'JSZip non chargé.', dropZoneCompressSize: 'Déposez les images ici pour compresser à moins de {size}KB', decodingHeic: 'Décodage HEIC...', failed: 'Échec', clearAll: 'Tout effacer', done: 'Terminé', error: 'Type de fichier non valide : ', avifNotSupported: 'Encodage AVIF non supporté. Utilisation du format WebP.' },
-    zh:  { converting: '转换中', of: '/', filesSelected: '文件已选 — 添加更多?', convertMore: '转换更多', compressImages: '压缩图片', convertImages: '转换', compilePdf: '生成 PDF', success: '成功！', filesProcessed: '个文件', original: '原始', processed: '处理后', smaller: '更小', larger: '更大', downloadZip: '下载 ZIP', download: '下载', downloadPdf: '下载 PDF 文档', downloadSingle: '下载单个文件', zipping: '压缩中', buildingPdf: '正在生成 PDF...', loadingPdf: '正在加载 PDF 库...', pdfNotLoaded: 'PDF 库加载失败。', copiedClipboard: '已复制到剪贴板！', copyBlocked: '浏览器阻止了复制。', copyNotSupported: '浏览器不支持复制。', heicNotLoaded: 'HEIC 库未加载。', heicFailed: 'HEIC 转换失败', tiffNotLoaded: '正在加载 TIFF 库... 请稍候。', tiffFailed: 'TIFF 处理失败', zipNotLoaded: 'JSZip 未加载。', dropZoneCompressSize: '拖放图片至此以压缩至 {size}KB 以下', decodingHeic: '正在解码 HEIC...', failed: '失败', clearAll: '清空列表', done: '完成', error: '无效的文件类型：', avifNotSupported: '浏览器不支持 AVIF 导出，已自动切换为 WebP。' },
-    hi:  { converting: 'कनवर्ट हो रहा है', of: 'में से', filesSelected: 'फाइल चुनी — और जोड़ें?', convertMore: 'और कनवर्ट करें', compressImages: 'कंप्रेस करें', convertImages: 'कनवर्ट करें', compilePdf: 'PDF बनाएं', success: 'सफल!', filesProcessed: 'फाइल', original: 'मूल', processed: 'प्रोसेस्ड', smaller: 'छोटा', larger: 'बड़ा', downloadZip: 'ZIP डाउनलोड', download: 'डाउनलोड', downloadPdf: 'PDF दस्तावेज़ डाउनलोड करें', downloadSingle: 'फ़ाइल डाउनलोड करें', zipping: 'ज़िप हो रहा', buildingPdf: 'PDF बन रहा है...', loadingPdf: 'PDF लाइब्रेरी लोड हो रही है...', pdfNotLoaded: 'PDF लाइब्रेरी लोड विफल।', copiedClipboard: 'कॉपी हो गया!', copyBlocked: 'ब्राउज़र ने कॉपी ब्लॉक किया।', copyNotSupported: 'कॉपी सपोर्ट नहीं है।', heicNotLoaded: 'HEIC लाइब्रेरी लोड नहीं हुई।', heicFailed: 'HEIC एरर', tiffNotLoaded: 'TIFF लाइब्रेरी लोड हो रही है... कृपया प्रतीक्षा करें।', tiffFailed: 'TIFF संसाधित करने में विफल', zipNotLoaded: 'JSZip लोड नहीं हुआ।', dropZoneCompressSize: 'इमेज को यहाँ छोड़ें, {size}KB से कम कंप्रेस करने के लिए', decodingHeic: 'HEIC डिकोड हो रहा है...', failed: 'विफल', clearAll: 'सब हटाएँ', done: 'पूर्ण', error: 'अमान्य फ़ाइल प्रकार: ', avifNotSupported: 'ब्राउज़र में AVIF समर्थित नहीं है। WebP का उपयोग किया जा रहा है।' },
+    en:  { converting: 'Converting', of: 'of', filesSelected: 'file(s) selected - Drop more?', convertMore: 'Convert More Images', compressImages: 'Compress Images', convertImages: 'Convert Images', compilePdf: 'Compile PDF', success: 'Success!', filesProcessed: 'file(s) processed', original: 'Original', processed: 'Processed', smaller: 'smaller', larger: 'larger', downloadZip: 'Download ZIP', download: 'Download', downloadPdf: 'Download PDF Document', downloadSingle: 'Download file', zipping: 'Zipping', buildingPdf: 'Building PDF...', loadingPdf: 'Loading PDF Library...', pdfNotLoaded: 'Failed to load PDF library.', copiedClipboard: 'Image copied to clipboard!', copyBlocked: 'Browser blocked clipboard copy.', copyNotSupported: 'Clipboard copy not supported on this browser.', heicNotLoaded: 'Loading HEIC library... Please wait.', heicFailed: 'Failed to process HEIC', tiffNotLoaded: 'Loading TIFF library... Please wait.', tiffFailed: 'Failed to process TIFF', zipNotLoaded: 'JSZip library has not loaded yet.', dropZoneCompressSize: 'Drop images here to compress under {size}KB', decodingHeic: 'Decoding HEIC...', failed: 'Failed', clearAll: 'Clear All', done: 'Done', error: 'Invalid file type: ', avifNotSupported: 'AVIF encoding not supported in this browser. Using WebP format.', pastedSuccess: 'Pasted image from clipboard' },
+    de:  { converting: 'Wird konvertiert', of: 'von', filesSelected: 'Datei(en) ausgewählt - Mehr ablegen?', convertMore: 'Mehr Bilder konvertieren', compressImages: 'Bilder komprimieren', convertImages: 'Bilder konvertieren', compilePdf: 'PDF erstellen', success: 'Erfolgreich!', filesProcessed: 'Datei(en) verarbeitet', original: 'Original', processed: 'Verarbeitet', smaller: 'kleiner', larger: 'größer', downloadZip: 'ZIP herunterladen', download: 'Herunterladen', downloadPdf: 'PDF-Dokument herunterladen', downloadSingle: 'Datei herunterladen', zipping: 'Komprimieren', buildingPdf: 'PDF wird erstellt...', loadingPdf: 'Lade PDF-Bibliothek...', pdfNotLoaded: 'Fehler beim Laden der PDF-Bibliothek.', copiedClipboard: 'Bild in die Zwischenablage kopiert!', copyBlocked: 'Kopieren in Zwischenablage blockiert.', copyNotSupported: 'Zwischenablage-Kopie von diesem Browser nicht unterstützt.', heicNotLoaded: 'Lade HEIC-Bibliothek... Bitte warten.', heicFailed: 'Fehler beim Verarbeiten von HEIC', tiffNotLoaded: 'Lade TIFF-Bibliothek... Bitte warten.', tiffFailed: 'Fehler beim Verarbeiten von TIFF', zipNotLoaded: 'JSZip-Bibliothek wurde noch nicht geladen.', dropZoneCompressSize: 'Bilder hier ablegen, um sie unter {size}KB zu komprimieren', decodingHeic: 'HEIC wird decodiert...', failed: 'Fehlgeschlagen', clearAll: 'Alle löschen', done: 'Fertig', error: 'Ungültiger Dateityp: ', avifNotSupported: 'AVIF-Kodierung wird nicht unterstützt. WebP wird verwendet.', pastedSuccess: 'Bild aus Zwischenablage eingefügt' },
+    es:  { converting: 'Convirtiendo', of: 'de', filesSelected: 'archivo(s) — ¿más?', convertMore: 'Convertir más', compressImages: 'Comprimir imagen', convertImages: 'Convertir', compilePdf: 'Compilar PDF', success: '¡Éxito!', filesProcessed: 'archivo(s)', original: 'Original', processed: 'Procesado', smaller: 'más pequeño', larger: 'más grande', downloadZip: 'Descargar ZIP', download: 'Descargar', downloadPdf: 'Descargar Documento PDF', downloadSingle: 'Descargar archivo', zipping: 'Comprimiendo', buildingPdf: 'Creando PDF...', loadingPdf: 'Cargando librería PDF...', pdfNotLoaded: 'Error al cargar librería PDF.', copiedClipboard: '¡Imagen copiada!', copyBlocked: 'Copia bloqueada por el navegador.', copyNotSupported: 'Copia no soportada.', heicNotLoaded: 'Librería HEIC no cargada.', heicFailed: 'Error HEIC', tiffNotLoaded: 'Cargando librería TIFF... Espere por favor.', tiffFailed: 'Error al procesar TIFF', zipNotLoaded: 'JSZip no cargado.', dropZoneCompressSize: 'Arrastra imágenes aquí para comprimir a menos de {size}KB', decodingHeic: 'Decodificando HEIC...', failed: 'Fallido', clearAll: 'Limpiar todo', done: 'Listo', error: 'Tipo de archivo no válido: ', avifNotSupported: 'Navegador no soporta codificación AVIF. Usando WebP.', pastedSuccess: 'Imagen pegada del portapapeles' },
+    fr:  { converting: 'Conversion', of: 'de', filesSelected: 'fichier(s) — plus ?', convertMore: 'Convertir plus', compressImages: 'Compresser', convertImages: 'Convertir', compilePdf: 'Compiler en PDF', success: 'Succès !', filesProcessed: 'fichier(s)', original: 'Original', processed: 'Traité', smaller: 'plus petit', larger: 'plus grand', downloadZip: 'Télécharger ZIP', download: 'Télécharger', downloadPdf: 'Télécharger le Document PDF', downloadSingle: 'Télécharger le fichier', zipping: 'Compression', buildingPdf: 'Création du PDF...', loadingPdf: 'Chargement de la bibliothèque PDF...', pdfNotLoaded: 'Échec du chargement de la bibliothèque PDF.', copiedClipboard: 'Image copiée !', copyBlocked: 'Copie bloquée.', copyNotSupported: 'Copie non supportée.', heicNotLoaded: 'Bibliothèque HEIC non chargée.', heicFailed: 'Erreur HEIC', tiffNotLoaded: 'Chargement de la bibliothèque TIFF... Veuillez patienter.', tiffFailed: 'Échec du traitement du TIFF', zipNotLoaded: 'JSZip non chargé.', dropZoneCompressSize: 'Déposez les images ici pour compresser à moins de {size}KB', decodingHeic: 'Décodage HEIC...', failed: 'Échec', clearAll: 'Tout effacer', done: 'Terminé', error: 'Type de fichier non valide : ', avifNotSupported: 'Encodage AVIF non supporté. Utilisation du format WebP.', pastedSuccess: 'Image collée depuis le presse-papiers' },
+    zh:  { converting: '转换中', of: '/', filesSelected: '文件已选 — 添加更多?', convertMore: '转换更多', compressImages: '压缩图片', convertImages: '转换', compilePdf: '生成 PDF', success: '成功！', filesProcessed: '个文件', original: '原始', processed: '处理后', smaller: '更小', larger: '更大', downloadZip: '下载 ZIP', download: '下载', downloadPdf: '下载 PDF 文档', downloadSingle: '下载单个文件', zipping: '压缩中', buildingPdf: '正在生成 PDF...', loadingPdf: '正在加载 PDF 库...', pdfNotLoaded: 'PDF 库加载失败。', copiedClipboard: '已复制到剪贴板！', copyBlocked: '浏览器阻止了复制。', copyNotSupported: '浏览器不支持复制。', heicNotLoaded: 'HEIC 库未加载。', heicFailed: 'HEIC 转换失败', tiffNotLoaded: '正在加载 TIFF 库... 请稍候。', tiffFailed: 'TIFF 处理失败', zipNotLoaded: 'JSZip 未加载。', dropZoneCompressSize: '拖放图片至此以压缩至 {size}KB 以下', decodingHeic: '正在解码 HEIC...', failed: '失败', clearAll: '清空列表', done: '完成', error: '无效的文件类型：', avifNotSupported: '浏览器不支持 AVIF 导出，已自动切换为 WebP。', pastedSuccess: '已从剪贴板粘贴图片' },
+    hi:  { converting: 'कनवर्ट हो रहा है', of: 'में से', filesSelected: 'फाइल चुनी — और जोड़ें?', convertMore: 'और कनवर्ट करें', compressImages: 'कंप्रेस करें', convertImages: 'कनवर्ट करें', compilePdf: 'PDF बनाएं', success: 'सफल!', filesProcessed: 'फाइल', original: 'मूल', processed: 'प्रोसेस्ड', smaller: 'छोटा', larger: 'बड़ा', downloadZip: 'ZIP डाउनलोड', download: 'डाउनलोड', downloadPdf: 'PDF दस्तावेज़ डाउनलोड करें', downloadSingle: 'फ़ाइल डाउनलोड करें', zipping: 'ज़िप हो रहा', buildingPdf: 'PDF बन रहा है...', loadingPdf: 'PDF लाइब्रेरी लोड हो रही है...', pdfNotLoaded: 'PDF लाइब्रेरी लोड विफल।', copiedClipboard: 'कॉपी हो गया!', copyBlocked: 'ब्राउज़र ने कॉपी ब्लॉक किया।', copyNotSupported: 'कॉपी सपोर्ट नहीं है।', heicNotLoaded: 'HEIC लाइब्रेरी लोड नहीं हुई।', heicFailed: 'HEIC एरर', tiffNotLoaded: 'TIFF लाइब्रेरी लोड हो रही है... कृपया प्रतीक्षा करें।', tiffFailed: 'TIFF संसाधित करने में विफल', zipNotLoaded: 'JSZip लोड नहीं हुआ।', dropZoneCompressSize: 'इमेज को यहाँ छोड़ें, {size}KB से कम कंप्रेस करने के लिए', decodingHeic: 'HEIC डिकोड हो रहा है...', failed: 'विफल', clearAll: 'सब हटाएँ', done: 'पूर्ण', error: 'अमान्य फ़ाइल प्रकार: ', avifNotSupported: 'ब्राउज़र में AVIF समर्थित नहीं है। WebP का उपयोग किया जा रहा है।', pastedSuccess: 'क्लिपबोर्ड से इमेज पेस्ट की गई' },
   };
   const t = i18nStrings[lang] || i18nStrings.en;
   clearBtn.appendChild(document.createTextNode(' ' + t.convertMore));
@@ -615,13 +664,16 @@ document.addEventListener('DOMContentLoaded', () => {
       'png-to-jpg': { target: 'jpg-to-png', from: 'PNG', to: 'JPG', revText: 'JPG → PNG' },
       'webp-to-jpg': { target: 'jpeg-to-webp', from: 'WebP', to: 'JPG', revText: 'JPEG → WebP' },
       'jpeg-to-webp': { target: 'webp-to-jpg', from: 'JPEG', to: 'WebP', revText: 'WebP → JPG' },
-      'webp-to-png': { target: 'png-to-jpg', from: 'WebP', to: 'PNG', revText: 'PNG → JPG' },
+      'webp-to-png': { target: 'png-to-webp', from: 'WebP', to: 'PNG', revText: 'PNG → WebP' },
+      'png-to-webp': { target: 'webp-to-png', from: 'PNG', to: 'WebP', revText: 'WebP → PNG' },
       'svg-to-png': { target: 'svg-to-jpg', from: 'SVG', to: 'PNG', revText: 'SVG → JPG' },
       'svg-to-jpg': { target: 'svg-to-png', from: 'SVG', to: 'JPG', revText: 'SVG → PNG' },
       'tiff-to-jpg': { target: 'jpg-to-tiff', from: 'TIFF', to: 'JPG', revText: 'JPG → TIFF' },
       'jpg-to-tiff': { target: 'tiff-to-jpg', from: 'JPG', to: 'TIFF', revText: 'TIFF → JPG' },
-      'jpg-to-avif': { target: 'png-to-avif', from: 'JPG', to: 'AVIF', revText: 'PNG → AVIF' },
-      'png-to-avif': { target: 'jpg-to-avif', from: 'PNG', to: 'AVIF', revText: 'JPG → AVIF' }
+      'jpg-to-avif': { target: 'avif-to-jpg', from: 'JPG', to: 'AVIF', revText: 'AVIF → JPG' },
+      'avif-to-jpg': { target: 'jpg-to-avif', from: 'AVIF', to: 'JPG', revText: 'JPG → AVIF' },
+      'png-to-avif': { target: 'avif-to-png', from: 'PNG', to: 'AVIF', revText: 'AVIF → PNG' },
+      'avif-to-png': { target: 'png-to-avif', from: 'AVIF', to: 'PNG', revText: 'PNG → AVIF' }
     };
 
     const pair = reverseMap[toolSlug];
@@ -637,7 +689,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     const template = switchLabels[lang] || switchLabels.en;
     const buttonText = template.replace('{target}', pair.revText);
-    const targetUrl = `${langPrefix}/${pair.target}/`;
+    const targetUrl = `${langPrefix}/${pair.target}`;
 
     formatTabsEl.classList.add('reverse-capsule-bar');
     formatTabsEl.innerHTML = `
@@ -762,7 +814,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   if (customSizeInput) customSizeInput.addEventListener('input', invalidateResults);
-  ['resizeWidth', 'resizeHeight', 'maintainRatio', 'watermarkText', 'watermarkSize', 'watermarkPos'].forEach(id => {
+  ['watermarkText', 'watermarkSize', 'watermarkPos', 'cropRatio', 'cropX', 'cropY', 'cropW', 'cropH'].forEach(id => {
     const el = document.getElementById(id);
     if (el) {
       el.addEventListener('input', invalidateResults);
@@ -771,6 +823,85 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
   });
+
+  // ── Dedicated Resize Image Tool Interactive System ──
+  const rWidthInput = document.getElementById('resizeWidth');
+  const rHeightInput = document.getElementById('resizeHeight');
+  const maintainCheckbox = document.getElementById('maintainRatio');
+  const resizeFeedback = document.getElementById('resizeFeedback');
+
+  let activeNaturalW = 0;
+  let activeNaturalH = 0;
+
+  function updateResizeFeedback() {
+    if (!resizeFeedback) return;
+    const w = parseInt(rWidthInput.value, 10) || 0;
+    const h = parseInt(rHeightInput.value, 10) || 0;
+    if (activeNaturalW > 0 && activeNaturalH > 0) {
+      resizeFeedback.style.display = 'block';
+      if (w > 0 && h > 0) {
+        const pctW = Math.round((w / activeNaturalW) * 100);
+        const pctH = Math.round((h / activeNaturalH) * 100);
+        const pctStr = (pctW === pctH) ? `${pctW}%` : `${pctW}% × ${pctH}%`;
+        resizeFeedback.innerHTML = `Original: <strong>${activeNaturalW} &times; ${activeNaturalH} px</strong> &rarr; Target: <strong>${w} &times; ${h} px</strong> <span class="badge" style="background:rgba(99,102,241,0.25); color:#a78bfa; padding:2px 7px; border-radius:4px; font-size:10px; font-weight:700; margin-left:6px;">${pctStr}</span>`;
+      } else {
+        resizeFeedback.innerHTML = `Original: <strong>${activeNaturalW} &times; ${activeNaturalH} px</strong>`;
+      }
+    } else {
+      resizeFeedback.style.display = 'none';
+    }
+  }
+
+  if (rWidthInput && rHeightInput) {
+    rWidthInput.addEventListener('input', () => {
+      const w = parseFloat(rWidthInput.value);
+      if (maintainCheckbox && maintainCheckbox.checked && activeNaturalW > 0 && activeNaturalH > 0 && w > 0) {
+        rHeightInput.value = Math.round(w * (activeNaturalH / activeNaturalW));
+      }
+      updateResizeFeedback();
+      invalidateResults();
+    });
+
+    rHeightInput.addEventListener('input', () => {
+      const h = parseFloat(rHeightInput.value);
+      if (maintainCheckbox && maintainCheckbox.checked && activeNaturalW > 0 && activeNaturalH > 0 && h > 0) {
+        rWidthInput.value = Math.round(h * (activeNaturalW / activeNaturalH));
+      }
+      updateResizeFeedback();
+      invalidateResults();
+    });
+
+    if (maintainCheckbox) {
+      maintainCheckbox.addEventListener('change', () => {
+        if (maintainCheckbox.checked && activeNaturalW > 0 && activeNaturalH > 0) {
+          const w = parseFloat(rWidthInput.value);
+          if (w > 0) {
+            rHeightInput.value = Math.round(w * (activeNaturalH / activeNaturalW));
+          }
+        }
+        updateResizeFeedback();
+        invalidateResults();
+      });
+    }
+
+    // Percentage Presets: 25%, 50%, 75%, 100%, 150%, 200%
+    const presetBtns = document.querySelectorAll('.resize-preset-btn');
+    presetBtns.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        presetBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const pct = parseFloat(btn.getAttribute('data-pct')) / 100;
+        const baseW = activeNaturalW > 0 ? activeNaturalW : (parseFloat(rWidthInput.value) || 1920);
+        const baseH = activeNaturalH > 0 ? activeNaturalH : (parseFloat(rHeightInput.value) || 1080);
+        rWidthInput.value = Math.round(baseW * pct);
+        rHeightInput.value = Math.round(baseH * pct);
+        updateResizeFeedback();
+        invalidateResults();
+      });
+    });
+  }
+
 
   function fmtBytes(b) {
     if (!b || b < 0) return '0 B';
@@ -816,6 +947,67 @@ document.addEventListener('DOMContentLoaded', () => {
     e.target.value = '';
   });
 
+  // ── Instant Clipboard Paste (Ctrl+V / Cmd+V Anywhere) ──
+  document.addEventListener('paste', (e) => {
+    // Safeguard: Never intercept when user is typing in form inputs, textareas, or editable elements
+    const activeEl = document.activeElement;
+    if (activeEl) {
+      const tag = activeEl.tagName;
+      if (tag === 'TEXTAREA' || activeEl.isContentEditable) return;
+      if (tag === 'INPUT' && !['button', 'submit', 'reset', 'file', 'checkbox', 'radio'].includes(activeEl.type)) {
+        return;
+      }
+    }
+
+    if (!e.clipboardData) return;
+
+    const pastedFiles = [];
+    const items = e.clipboardData.items;
+
+    if (items && items.length > 0) {
+      for (let i = 0; i < items.length; i++) {
+        const item = items[i];
+        if (item.kind === 'file' && item.type && (item.type.startsWith('image/') || item.type === 'application/pdf')) {
+          const blob = item.getAsFile();
+          if (blob) {
+            const now = new Date();
+            const timeStr = `${String(now.getHours()).padStart(2, '0')}-${String(now.getMinutes()).padStart(2, '0')}-${String(now.getSeconds()).padStart(2, '0')}`;
+            const subType = blob.type ? blob.type.split('/')[1] : 'png';
+            const ext = (subType === 'jpeg') ? 'jpg' : subType;
+            const fileName = (!blob.name || blob.name === 'image.png' || blob.name === 'blob')
+              ? `screenshot-${timeStr}.${ext}`
+              : blob.name;
+            pastedFiles.push(new File([blob], fileName, { type: blob.type || 'image/png' }));
+          }
+        }
+      }
+    }
+
+    // Fallback if items was empty but files exists
+    if (pastedFiles.length === 0 && e.clipboardData.files && e.clipboardData.files.length > 0) {
+      for (let i = 0; i < e.clipboardData.files.length; i++) {
+        const f = e.clipboardData.files[i];
+        if (f.type && (f.type.startsWith('image/') || f.name.match(/\.(png|jpe?g|webp|avif|heic|tiff?|svg|ico|pdf)$/i))) {
+          pastedFiles.push(f);
+        }
+      }
+    }
+
+    if (pastedFiles.length > 0) {
+      e.preventDefault();
+      if (dropZone) {
+        dropZone.classList.remove('paste-flash');
+        // Force reflow for re-triggering animation if user pastes multiple times
+        void dropZone.offsetWidth;
+        dropZone.classList.add('paste-flash');
+        setTimeout(() => dropZone.classList.remove('paste-flash'), 900);
+        dropZone.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      showToast(t.pastedSuccess || 'Pasted image from clipboard', 'info');
+      handleFiles(pastedFiles);
+    }
+  });
+
   // ── Browser AVIF Canvas Encoding Support Check ─────
   let isAvifSupported = null;
   function checkAvifSupport() {
@@ -837,6 +1029,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
     const script = document.createElement('script');
+    script.crossOrigin = 'anonymous';
     script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
     script.onload = () => resolve();
     script.onerror = () => reject(new Error("PDF library load failed"));
@@ -918,6 +1111,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
     const script = document.createElement('script');
+    script.crossOrigin = 'anonymous';
     script.src = 'https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js';
     script.onload = () => resolve();
     script.onerror = () => reject(new Error("HEIC library load failed"));
@@ -935,6 +1129,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
     const script = document.createElement('script');
+    script.crossOrigin = 'anonymous';
     script.src = 'https://cdn.jsdelivr.net/npm/utif@3.1.0/UTIF.js';
     script.onload = () => resolve();
     script.onerror = () => reject(new Error("TIFF library load failed"));
@@ -989,7 +1184,7 @@ document.addEventListener('DOMContentLoaded', () => {
       let fileToQueue = f;
       const queueId = Math.random().toString(36).substr(2, 9);
       if (ext === 'svg') {
-         // Pre-check and normalize SVG dimensions from viewBox if width/height are absent
+         // Pre-check and normalize SVG dimensions from viewBox if width/height are absent or percentage
          try {
            const svgText = await f.text();
            const parser = new DOMParser();
@@ -999,7 +1194,11 @@ document.addEventListener('DOMContentLoaded', () => {
              let sw = parseFloat(svgEl.getAttribute('width'));
              let sh = parseFloat(svgEl.getAttribute('height'));
              const vb = svgEl.getAttribute('viewBox');
-             if ((!sw || !sh || isNaN(sw) || isNaN(sh)) && vb) {
+             const widthAttr = (svgEl.getAttribute('width') || '').trim();
+             const heightAttr = (svgEl.getAttribute('height') || '').trim();
+             const isRelative = widthAttr.endsWith('%') || heightAttr.endsWith('%') || widthAttr.endsWith('vw') || heightAttr.endsWith('vh');
+
+             if ((isRelative || !sw || !sh || isNaN(sw) || isNaN(sh)) && vb) {
                const vbParts = vb.trim().split(/[\s,]+/).map(Number);
                if (vbParts.length === 4 && vbParts[2] > 0 && vbParts[3] > 0) {
                  svgEl.setAttribute('width', vbParts[2]);
@@ -1073,12 +1272,36 @@ document.addEventListener('DOMContentLoaded', () => {
          }
       }
       queuedFiles.push({ file: fileToQueue, result: null, id: queueId, processing: false, thumbUrl: URL.createObjectURL(fileToQueue) });
+
+      // Auto-detect and populate natural dimensions for resize tool
+      if (document.body.dataset.mode === 'resize' && rWidthInput && rHeightInput) {
+        const tempImg = new Image();
+        const tempObjUrl = URL.createObjectURL(fileToQueue);
+        tempImg.onload = () => {
+          if (!activeNaturalW) {
+            activeNaturalW = tempImg.naturalWidth;
+            activeNaturalH = tempImg.naturalHeight;
+            if (!rWidthInput.value || rWidthInput.value === '' || rWidthInput.value === '1080') {
+              rWidthInput.value = activeNaturalW;
+              rHeightInput.value = activeNaturalH;
+            }
+            const p100 = document.querySelector('.resize-preset-btn[data-pct="100"]');
+            if (p100) {
+              document.querySelectorAll('.resize-preset-btn').forEach(b => b.classList.remove('active'));
+              p100.classList.add('active');
+            }
+            updateResizeFeedback();
+          }
+          URL.revokeObjectURL(tempObjUrl);
+        };
+        tempImg.src = tempObjUrl;
+      }
     }
     renderGallery();
     if (wasEmpty && queuedFiles.length > 0) {
       setTimeout(() => {
-        convertBtn.scrollIntoView({ behavior: 'smooth', block: 'end' });
-      }, 100);
+        convertBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 350);
     }
   }
 
@@ -1088,6 +1311,12 @@ document.addEventListener('DOMContentLoaded', () => {
     queuedFiles = queuedFiles.filter(q => q.id !== id);
     convertedFiles = convertedFiles.filter(cf => cf.id !== id);
     if (queuedFiles.length === 0) {
+      if (document.body.dataset.mode === 'resize') {
+        activeNaturalW = 0;
+        activeNaturalH = 0;
+        if (resizeFeedback) resizeFeedback.style.display = 'none';
+        document.querySelectorAll('.resize-preset-btn').forEach(b => b.classList.remove('active'));
+      }
       resultCard.classList.remove('visible');
       progressContainer.classList.remove('visible');
       progressLabel.textContent = '';
@@ -1107,6 +1336,36 @@ document.addEventListener('DOMContentLoaded', () => {
     if (dlBtn && dlBtn.dataset.downloadId) {
       const cItem = convertedFiles.find(cf => cf.id === dlBtn.dataset.downloadId);
       if (cItem) {
+        if (document.body.dataset.mode === 'pdf') {
+          // Compile single-page PDF for this individual item
+          (async () => {
+             if (typeof window.jspdf === 'undefined') {
+                try { await loadPdfLibrary(); } catch(err) { showToast(t.pdfNotLoaded || 'Failed to load PDF library', 'error'); return; }
+             }
+             const { jsPDF } = window.jspdf;
+             const singleDoc = new jsPDF({ format: 'a4', unit: 'mm' });
+             const base64data = await new Promise(res => {
+                 const reader = new FileReader();
+                 reader.onloadend = () => res(reader.result);
+                 reader.readAsDataURL(cItem.blob);
+             });
+             const imgProps = singleDoc.getImageProperties(base64data);
+             const pW = singleDoc.internal.pageSize.getWidth();
+             const pH = singleDoc.internal.pageSize.getHeight();
+             const m = 10;
+             const maxW = pW - (m * 2);
+             const maxH = pH - (m * 2);
+             let fW = maxW;
+             let fH = (imgProps.height * maxW) / imgProps.width;
+             if (fH > maxH) { fH = maxH; fW = (imgProps.width * maxH) / imgProps.height; }
+             const x = m + ((maxW - fW) / 2);
+             const y = m + ((maxH - fH) / 2);
+             const fmt = cItem.blob.type === 'image/png' ? 'PNG' : (cItem.blob.type === 'image/webp' ? 'WEBP' : 'JPEG');
+             singleDoc.addImage(base64data, fmt, x, y, fW, fH);
+             singleDoc.save(`${cItem.name.replace(/\.[^.]+$/, '')}.pdf`);
+          })();
+          return;
+        }
         const url = URL.createObjectURL(cItem.blob);
         const a = document.createElement('a');
         a.href = url;
@@ -1122,9 +1381,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (queuedFiles.length === 0) {
       fileGallery.classList.remove('visible');
       convertBtn.classList.remove('visible');
+      if (dropZone) dropZone.classList.remove('has-files');
       if (dropZoneH2) dropZoneH2.textContent = defaultDropText;
       return;
     }
+    if (dropZone) dropZone.classList.add('has-files');
     if (dropZoneH2) dropZoneH2.textContent = `${queuedFiles.length} ${t.filesSelected}`;
     
     fileGallery.innerHTML = '';
@@ -1145,10 +1406,7 @@ document.addEventListener('DOMContentLoaded', () => {
     clearAllBtn.textContent = t.clearAll || 'Clear All';
     clearAllBtn.addEventListener('click', (e) => {
         e.stopPropagation();
-        queuedFiles.forEach(q => { if (q.thumbUrl) URL.revokeObjectURL(q.thumbUrl); });
-        queuedFiles = [];
-        renderGallery();
-        if (resultCard) resultCard.classList.remove('visible');
+        resetConverterState();
     });
     headerDiv.appendChild(clearAllBtn);
     fileGallery.appendChild(headerDiv);
@@ -1168,14 +1426,29 @@ document.addEventListener('DOMContentLoaded', () => {
       const metaText = q.processing ? t.decodingHeic : fmtBytes(q.file.size);
       
       let resultText = '';
+      let statusHtml = '';
       if (q.result) {
         if (q.result.error) {
           resultText = `→ <span style="color:#ef4444">${t.failed}</span>`;
+          statusHtml = `<div class="status error">${t.failed}</div>`;
         } else {
-          const pct = Math.round(((q.file.size - q.result.size) / q.file.size) * 100);
-          const badgeHtml = pct > 0 ? `<span class="savings-pill">-${pct}%</span>` : '';
-          resultText = `→ ${fmtBytes(q.result.size)} ${badgeHtml}`;
+          resultText = `→ <strong>${fmtBytes(q.result.size)}</strong>`;
+          if (document.body.dataset.mode === 'pdf') {
+            statusHtml = `<div class="status ready">✓ PDF</div>`;
+          } else {
+            const diff = q.file.size - q.result.size;
+            const pct = Math.round((diff / q.file.size) * 100);
+            if (pct > 0) {
+              statusHtml = `<div class="status saved">-${pct}%</div>`;
+            } else if (pct < 0) {
+              statusHtml = `<div class="status worse">+${Math.abs(pct)}%</div>`;
+            } else {
+              statusHtml = `<div class="status ready">✓ ${t.done || 'Done'}</div>`;
+            }
+          }
         }
+      } else {
+        statusHtml = `<div class="status">${t.done || 'Done'}</div>`;
       }
 
       let itemDownloadBtn = '';
@@ -1196,7 +1469,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="name" title="${safeName}">${safeName}</div>
           <div class="meta">${metaText} ${resultText}</div>
         </div>
-        <div class="status">${t.done || 'Done'}</div>
+        ${statusHtml}
         ${itemDownloadBtn}
         <button class="btn-remove remove" aria-label="Remove file" data-file-id="${q.id}" ${q.processing ? 'disabled' : ''}>
            <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -1280,6 +1553,16 @@ document.addEventListener('DOMContentLoaded', () => {
            const getBlob = (imgObj, w, h, outMime, outQuality) => new Promise(async res => {
                let targetW = w;
                let targetH = h;
+
+               // AUDIT-007: Safe bounds cap to prevent mobile canvas OOM crashes
+               const maxDim = 8192;
+               const maxTotalPixels = 16777216; // 16MP safety threshold
+               if (targetW > maxDim || targetH > maxDim || (targetW * targetH) > maxTotalPixels) {
+                   const ratio = Math.min(maxDim / targetW, maxDim / targetH, Math.sqrt(maxTotalPixels / (targetW * targetH)));
+                   targetW = Math.max(1, Math.round(targetW * ratio));
+                   targetH = Math.max(1, Math.round(targetH * ratio));
+               }
+
                if (outMime === 'image/x-icon') {
                    const size = Math.min(w, h, 256);
                    targetW = size;
@@ -1290,7 +1573,9 @@ document.addEventListener('DOMContentLoaded', () => {
                if (!ctx) {
                    throw new Error("Could not acquire 2D canvas context.");
                }
-               if (document.body.dataset.mode === 'bw') {
+               const isBw = document.body.dataset.mode === 'bw';
+               const supportsFilter = typeof ctx.filter === 'string';
+               if (isBw && supportsFilter) {
                    ctx.filter = 'grayscale(100%)';
                }
                if (outMime === 'image/jpeg') {
@@ -1305,14 +1590,32 @@ document.addEventListener('DOMContentLoaded', () => {
                } else {
                    ctx.drawImage(imgObj, 0, 0, targetW, targetH);
                }
-               ctx.filter = 'none'; // reset filter
+               if (supportsFilter) {
+                   ctx.filter = 'none'; // reset filter
+               }
+               // AUDIT-011: Direct pixel grayscale fallback if ctx.filter is unsupported
+               if (isBw && !supportsFilter) {
+                   try {
+                       const imgData = ctx.getImageData(0, 0, targetW, targetH);
+                       const d = imgData.data;
+                       for (let i = 0; i < d.length; i += 4) {
+                           const gray = Math.round(0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2]);
+                           d[i] = gray;
+                           d[i + 1] = gray;
+                           d[i + 2] = gray;
+                       }
+                       ctx.putImageData(imgData, 0, 0);
+                   } catch (e) {
+                       console.warn("Direct pixel grayscale conversion fallback failed:", e);
+                   }
+               }
                
                if (document.body.dataset.mode === 'watermark') {
                    const wText = document.getElementById('watermarkText') ? document.getElementById('watermarkText').value.trim() : '';
                    if (wText) {
                        const rawWSize = parseInt(document.getElementById('watermarkSize').value, 10) || 32;
-                        const scaleFactor = Math.max(1, Math.min(targetW, targetH) / 800);
-                        const wSize = Math.round(rawWSize * scaleFactor);
+                       const scaleFactor = Math.max(1, Math.min(targetW, targetH) / 800);
+                       const wSize = Math.round(rawWSize * scaleFactor);
                        const wPos = document.getElementById('watermarkPos') ? document.getElementById('watermarkPos').value : 'bottom-right';
                        
                        ctx.font = `bold ${wSize}px sans-serif`;
@@ -1322,22 +1625,22 @@ document.addEventListener('DOMContentLoaded', () => {
                        const textWidth = metrics.width;
                        
                        let wx = padding, wy = padding + wSize;
-                        if (wPos === 'bottom-right') {
-                            wx = targetW - textWidth - padding;
-                            wy = targetH - padding;
-                        } else if (wPos === 'bottom-left') {
-                            wx = padding;
-                            wy = targetH - padding;
-                        } else if (wPos === 'top-right') {
-                            wx = targetW - textWidth - padding;
-                            wy = padding + wSize;
-                        } else if (wPos === 'top-left') {
-                            wx = padding;
-                            wy = padding + wSize;
-                        } else if (wPos === 'center') {
-                            wx = (targetW - textWidth) / 2;
-                            wy = (targetH + wSize) / 2;
-                        }
+                       if (wPos === 'bottom-right') {
+                           wx = targetW - textWidth - padding;
+                           wy = targetH - padding;
+                       } else if (wPos === 'bottom-left') {
+                           wx = padding;
+                           wy = targetH - padding;
+                       } else if (wPos === 'top-right') {
+                           wx = targetW - textWidth - padding;
+                           wy = padding + wSize;
+                       } else if (wPos === 'top-left') {
+                           wx = padding;
+                           wy = padding + wSize;
+                       } else if (wPos === 'center') {
+                           wx = (targetW - textWidth) / 2;
+                           wy = (targetH + wSize) / 2;
+                       }
                        
                        // Text shadow for contrast
                        ctx.shadowColor = "rgba(0,0,0,0.8)";
@@ -1355,44 +1658,15 @@ document.addEventListener('DOMContentLoaded', () => {
                }
                
                if (outMime === 'image/x-icon') {
-                    try {
-                        const icoBlob = await generateMultiSizeIco(canvas);
-                        res(icoBlob);
-                        return;
-                    } catch (icoErr) {
-                        console.error("Multi-size ICO conversion error:", icoErr);
-                        res(null);
-                        return;
-                    }
-                }
-                if (false && outMime === 'image/x-icon') {
-                   canvas.toBlob(pngBlob => {
-                       if (!pngBlob) { res(null); return; }
-                       pngBlob.arrayBuffer().then(pngBuffer => {
-                           const pngBytes = new Uint8Array(pngBuffer);
-                           const icoBuffer = new ArrayBuffer(22 + pngBytes.length);
-                           const view = new DataView(icoBuffer);
-                           view.setUint16(0, 0, true);
-                           view.setUint16(2, 1, true);
-                           view.setUint16(4, 1, true);
-                           const icoW = targetW >= 256 ? 0 : targetW;
-                           const icoH = targetH >= 256 ? 0 : targetH;
-                           view.setUint8(6, icoW);
-                           view.setUint8(7, icoH);
-                           view.setUint8(8, 0);
-                           view.setUint8(9, 0);
-                           view.setUint16(10, 1, true);
-                           view.setUint16(12, 32, true);
-                           view.setUint32(14, pngBytes.length, true);
-                           view.setUint32(18, 22, true);
-                           const icoBytes = new Uint8Array(icoBuffer);
-                           icoBytes.set(pngBytes, 22);
-                           res(new Blob([icoBytes], { type: 'image/x-icon' }));
-                       }).catch(err => {
-                           console.error("ICO conversion error:", err);
-                           res(null);
-                       });
-                   }, 'image/png');
+                   try {
+                       const icoBlob = await generateMultiSizeIco(canvas);
+                       res(icoBlob);
+                       return;
+                   } catch (icoErr) {
+                       console.error("Multi-size ICO conversion error:", icoErr);
+                       res(null);
+                       return;
+                   }
                } else if (outMime === 'image/tiff') {
                    try {
                        const imgData = ctx.getImageData(0, 0, targetW, targetH);
@@ -1404,17 +1678,17 @@ document.addEventListener('DOMContentLoaded', () => {
                    }
                } else {
                    let effectiveMime = outMime;
-                    if (effectiveMime === 'image/avif' && !checkAvifSupport()) {
-                        console.warn("AVIF export not supported in browser canvas; falling back to WebP");
-                        effectiveMime = 'image/webp';
-                    }
-                    canvas.toBlob(b => {
-                        if (!b && effectiveMime === 'image/avif') {
-                            canvas.toBlob(fallbackB => res(fallbackB), 'image/webp', outQuality);
-                        } else {
-                            res(b);
-                        }
-                    }, effectiveMime, effectiveMime !== 'image/png' ? outQuality : undefined);
+                   if (effectiveMime === 'image/avif' && !checkAvifSupport()) {
+                       console.warn("AVIF export not supported in browser canvas; falling back to WebP");
+                       effectiveMime = 'image/webp';
+                   }
+                   canvas.toBlob(b => {
+                       if (!b && effectiveMime === 'image/avif') {
+                           canvas.toBlob(fallbackB => res(fallbackB), 'image/webp', outQuality);
+                       } else {
+                           res(b);
+                       }
+                   }, effectiveMime, effectiveMime !== 'image/png' ? outQuality : undefined);
                }
            });
 
@@ -1460,6 +1734,70 @@ document.addEventListener('DOMContentLoaded', () => {
                      const b = await getBlob(img, newW, newH, targetMime, 0.95);
                      URL.revokeObjectURL(objUrl);
                      resolve(b);
+                     return;
+                 }
+
+                 if (document.body.dataset.mode === 'crop') {
+                     const cropRatio = document.getElementById('cropRatio') ? document.getElementById('cropRatio').value : '1:1';
+                     let cX = 0, cY = 0, cW = baseW, cH = baseH;
+                     if (cropRatio === '1:1') {
+                         const dim = Math.min(baseW, baseH);
+                         cX = Math.round((baseW - dim) / 2);
+                         cY = Math.round((baseH - dim) / 2);
+                         cW = dim; cH = dim;
+                     } else if (cropRatio === '16:9') {
+                         if (baseW / baseH > 16 / 9) {
+                             cW = Math.round(baseH * (16 / 9));
+                             cX = Math.round((baseW - cW) / 2);
+                         } else {
+                             cH = Math.round(baseW * (9 / 16));
+                             cY = Math.round((baseH - cH) / 2);
+                         }
+                     } else if (cropRatio === '4:3') {
+                         if (baseW / baseH > 4 / 3) {
+                             cW = Math.round(baseH * (4 / 3));
+                             cX = Math.round((baseW - cW) / 2);
+                         } else {
+                             cH = Math.round(baseW * (3 / 4));
+                             cY = Math.round((baseH - cH) / 2);
+                         }
+                     } else if (cropRatio === '9:16') {
+                         if (baseW / baseH > 9 / 16) {
+                             cW = Math.round(baseH * (9 / 16));
+                             cX = Math.round((baseW - cW) / 2);
+                         } else {
+                             cH = Math.round(baseW * (16 / 9));
+                             cY = Math.round((baseH - cH) / 2);
+                         }
+                     } else if (cropRatio === '3:2') {
+                         if (baseW / baseH > 3 / 2) {
+                             cW = Math.round(baseH * (3 / 2));
+                             cX = Math.round((baseW - cW) / 2);
+                         } else {
+                             cH = Math.round(baseW * (2 / 3));
+                             cY = Math.round((baseH - cH) / 2);
+                         }
+                     } else if (cropRatio === 'custom') {
+                         const customCropX = parseInt(document.getElementById('cropX')?.value, 10) || 0;
+                         const customCropY = parseInt(document.getElementById('cropY')?.value, 10) || 0;
+                         const customCropW = parseInt(document.getElementById('cropW')?.value, 10) || baseW;
+                         const customCropH = parseInt(document.getElementById('cropH')?.value, 10) || baseH;
+                         cX = Math.max(0, Math.min(baseW - 1, customCropX));
+                         cY = Math.max(0, Math.min(baseH - 1, customCropY));
+                         cW = Math.max(1, Math.min(baseW - cX, customCropW));
+                         cH = Math.max(1, Math.min(baseH - cY, customCropH));
+                     }
+
+                     canvas.width = cW; canvas.height = cH;
+                     const ctx = canvas.getContext('2d');
+                     if (targetMime === 'image/jpeg') {
+                         ctx.fillStyle = '#ffffff';
+                         ctx.fillRect(0, 0, cW, cH);
+                     }
+                     ctx.drawImage(img, cX, cY, cW, cH, 0, 0, cW, cH);
+                     const cropBlob = await new Promise(r => canvas.toBlob(r, targetMime || 'image/png', 0.95));
+                     URL.revokeObjectURL(objUrl);
+                     resolve(cropBlob);
                      return;
                  }
 
@@ -1543,8 +1881,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
            if (blob && !blob.error) {
              q.result = blob;
+             let actualExt = targetExt;
+             if (blob.type === 'image/webp' && targetExt === 'avif') actualExt = 'webp';
              let baseName = q.file.name.replace(/\.[^.]+$/, '');
-             convertedFiles.push({ id: q.id, name: `${baseName}.${targetExt}`, blob: blob });
+             convertedFiles.push({ id: q.id, name: `${baseName}.${actualExt}`, blob: blob });
              totalNewSize += blob.size;
            } else {
              q.result = { error: true };
@@ -1632,11 +1972,12 @@ document.addEventListener('DOMContentLoaded', () => {
     resultCard.classList.add('success-anim');
     showToast(t.success, 'success');
     setTimeout(() => progressContainer.classList.remove('visible'), 1000);
-    
-    // Auto-download if only 1 file
-    if (convertedFiles.length === 1) {
-       setTimeout(() => { if (downloadBtn) downloadBtn.click(); }, 600);
-    }
+
+    // Smooth transition: bring results and download button directly into center view
+    setTimeout(() => {
+      const dlBtn = document.getElementById('downloadBtn') || resultCard;
+      dlBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 250);
   });
 
   const getPngBlobForClipboard = async (blob) => {
@@ -1704,6 +2045,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF({ format: 'a4', unit: 'mm' });
         
+        const marginMm = 10; // Standard 10mm margins for print-safe documents
+        const margin = marginMm;
+        
         for (let i = 0; i < convertedFiles.length; i++) {
             if (i > 0) doc.addPage();
             const blobType = convertedFiles[i].blob.type || 'image/jpeg';
@@ -1714,22 +2058,21 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             const imgProps = doc.getImageProperties(base64data);
             const pdfWidth = doc.internal.pageSize.getWidth();
-            let pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-            
-            // If image is taller than A4 page, scale to fit height instead
             const pageHeight = doc.internal.pageSize.getHeight();
-            let x = 0;
-            let y = 0;
-            let finalW = pdfWidth;
-            let finalH = pdfHeight;
             
-            if (pdfHeight > pageHeight) {
-                finalH = pageHeight;
-                finalW = (imgProps.width * pageHeight) / imgProps.height;
-                x = (pdfWidth - finalW) / 2; // center horizontally
-            } else {
-                y = (pageHeight - pdfHeight) / 2; // center vertically
+            const maxW = pdfWidth - (margin * 2);
+            const maxH = pageHeight - (margin * 2);
+            
+            let finalW = maxW;
+            let finalH = (imgProps.height * maxW) / imgProps.width;
+            
+            if (finalH > maxH) {
+                finalH = maxH;
+                finalW = (imgProps.width * maxH) / imgProps.height;
             }
+            
+            const x = margin + ((maxW - finalW) / 2);
+            const y = margin + ((maxH - finalH) / 2);
             
             let imgFormat = 'JPEG';
             if (blobType === 'image/png') imgFormat = 'PNG';
@@ -1737,7 +2080,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
             doc.addImage(base64data, imgFormat, x, y, finalW, finalH);
         }
-        doc.save('Converted_Images.pdf');
+        const pdfFileName = convertedFiles.length === 1 
+            ? `${convertedFiles[0].name.replace(/\.[^.]+$/, '')}.pdf`
+            : 'ImgLab_Converted_Documents.pdf';
+        doc.save(pdfFileName);
         downloadText.textContent = t.downloadPdf || 'Download PDF Document';
         return;
     }
@@ -1786,6 +2132,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (typeof JSZip === 'undefined') {
         downloadText.textContent = 'Loading ZIP Library...';
         const script = document.createElement('script');
+        script.crossOrigin = 'anonymous';
         script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';
         script.onload = () => startZip();
         script.onerror = () => showToast(t.zipNotLoaded, "error");

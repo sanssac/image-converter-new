@@ -676,6 +676,25 @@ main {
   border-color: rgba(255,255,255,0.2); 
   box-shadow: 0 10px 40px rgba(0,0,0,0.5), 0 0 30px rgba(239,68,68,0.1); 
 }
+.drop-zone.paste-flash {
+  animation: pastePulse 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes pastePulse {
+  0% {
+    border-color: rgba(129, 140, 248, 0.95);
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.4), 0 15px 50px rgba(99, 102, 241, 0.3);
+    transform: scale(1.012);
+  }
+  50% {
+    border-color: rgba(168, 85, 247, 0.75);
+    box-shadow: 0 0 0 2px rgba(168, 85, 247, 0.25), 0 12px 40px rgba(168, 85, 247, 0.2);
+  }
+  100% {
+    border-color: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    transform: scale(1);
+  }
+}
 .drop-zone .upload-icon {
   margin: 0 auto 16px;
   display: flex; align-items: center; justify-content: center;
@@ -683,6 +702,31 @@ main {
 .drop-zone h2 { font-size: 22px; font-weight: 600; margin-bottom: 8px; color: #fff; }
 .drop-zone p { font-size: 14px; color: #94a3b8; margin-bottom: 24px; }
 .drop-zone input { display: none; }
+
+/* Compact drop-zone when files are queued to keep Convert & Results in view */
+.drop-zone.has-files {
+  padding: 16px 20px;
+  border-style: dashed;
+  border-color: rgba(99, 102, 241, 0.35);
+  background: rgba(20, 20, 24, 0.75);
+}
+.drop-zone.has-files .upload-icon {
+  display: none;
+}
+.drop-zone.has-files h2 {
+  font-size: 15px;
+  margin-bottom: 2px;
+}
+.drop-zone.has-files p {
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+.drop-zone.has-files .btn-primary,
+.drop-zone.has-files .btn-cloud {
+  padding: 7px 16px;
+  font-size: 12.5px;
+  border-radius: 8px;
+}
 
 /* ── Cloud/Local Upload Button ────────── */
 .btn-cloud {
@@ -735,9 +779,20 @@ main {
 
 .file-item .info { width: 100%; display: flex; flex-direction: column; gap: 4px; align-items: center; text-align: center; }
 .file-item .info .name { font-size: 12px; font-weight: 600; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #e2e8f0; }
-.file-item .info .meta { font-size: 11px; color: #94a3b8; }
-.file-item .status { font-size: 11px; font-weight: 700; color: #4ade80; display: none; margin-top: auto; letter-spacing: 0.05em; text-transform: uppercase; background: rgba(74, 222, 128, 0.1); padding: 4px 8px; border-radius: 6px; }
-.file-item.done .status { display: block; }
+.file-item .info .meta { font-size: 11px; color: #94a3b8; line-height: 1.4; }
+.file-item .info .meta strong { color: #d8b4fe; font-weight: 600; }
+.file-item .status { 
+  font-size: 11px; font-weight: 700; color: #4ade80; display: none; 
+  margin-top: auto; letter-spacing: 0.03em;
+  background: rgba(34, 197, 94, 0.14); border: 1px solid rgba(34, 197, 94, 0.25);
+  padding: 3px 8px; border-radius: 8px; box-shadow: 0 0 10px rgba(34, 197, 94, 0.08);
+  transition: all 0.2s ease;
+}
+.file-item.done .status { display: inline-flex; align-items: center; justify-content: center; }
+.file-item .status.saved { color: #4ade80; background: rgba(34, 197, 94, 0.15); border-color: rgba(34, 197, 94, 0.35); }
+.file-item .status.worse { color: #fca5a5; background: rgba(239, 68, 68, 0.15); border-color: rgba(239, 68, 68, 0.35); }
+.file-item .status.ready { color: #c084fc; background: rgba(168, 85, 247, 0.15); border-color: rgba(168, 85, 247, 0.35); }
+.file-item .status.error { color: #ef4444; background: rgba(239, 68, 68, 0.15); border-color: rgba(239, 68, 68, 0.35); }
 
 .btn-remove { position: absolute; top: 6px; right: 6px; background: rgba(0,0,0,0.5); border-radius: 50%; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); color: white; border: none; cursor: pointer; transition: 0.2s; }
 .btn-remove:hover { background: #ef4444; }
@@ -1471,3 +1526,126 @@ footer::before {
 .trust-badge svg {
   color: #22c55e !important;
 }
+
+/* ── Resize Tool Component ───────────── */
+.resize-panel {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 18px 20px;
+  margin: 16px 0;
+  width: 100%;
+  max-width: 580px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  box-sizing: border-box;
+}
+.resize-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.resize-title {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #c084fc;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+}
+.resize-presets {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.resize-preset-btn {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  color: #94a3b8;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+.resize-preset-btn:hover {
+  background: rgba(99, 102, 241, 0.15);
+  border-color: rgba(99, 102, 241, 0.3);
+  color: #e2e8f0;
+}
+.resize-preset-btn.active {
+  background: rgba(99, 102, 241, 0.25);
+  border-color: #818cf8;
+  color: #fff;
+  box-shadow: 0 0 12px rgba(99, 102, 241, 0.3);
+}
+.resize-inputs-grid {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.resize-input-group {
+  flex: 1;
+}
+.resize-input-group label {
+  display: block;
+  font-size: 11px;
+  color: #94a3b8;
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+.resize-input-group input {
+  width: 100%;
+  box-sizing: border-box;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  padding: 9px 12px;
+  color: #fff;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.resize-input-group input:focus {
+  border-color: #818cf8;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+.resize-separator {
+  color: #64748b;
+  font-size: 18px;
+  font-weight: 700;
+  margin-top: 18px;
+}
+.resize-ratio-row {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #cbd5e1;
+}
+.resize-ratio-row input[type="checkbox"] {
+  accent-color: #818cf8;
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+}
+.resize-feedback {
+  margin-top: 12px;
+  padding: 8px 12px;
+  background: rgba(99, 102, 241, 0.08);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  border-radius: 8px;
+  font-size: 11.5px;
+  color: #cbd5e1;
+  display: none;
+}
+

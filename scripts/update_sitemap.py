@@ -31,7 +31,11 @@ all_tools = [
     "webp-to-png",
     "jpg-to-pdf",
     "jpg-to-tiff",
-    "tiff-to-jpg"
+    "tiff-to-jpg",
+    "png-to-webp",
+    "avif-to-jpg",
+    "avif-to-png",
+    "crop-image",
 ]
 
 languages = ["de", "es", "fr", "hi", "zh"]

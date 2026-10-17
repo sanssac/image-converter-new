@@ -1,4 +1,4 @@
-const CACHE_NAME = 'imglab_cache_v20261014';
+const CACHE_NAME = 'imglab_cache_v20261017';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
@@ -33,8 +33,12 @@ self.addEventListener('fetch', (event) => {
   event.respondWith(
     fetch(event.request)
       .then((networkResponse) => {
-        // Only cache valid responses
-        if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic' && networkResponse.type !== 'cors') {
+        // Cache valid basic/cors 200 responses, as well as opaque CDN assets
+        const isOk = networkResponse && (
+          networkResponse.status === 200 || 
+          (networkResponse.type === 'opaque' && isCDN)
+        );
+        if (!isOk) {
            return networkResponse;
         }
         const responseClone = networkResponse.clone();
@@ -46,7 +50,11 @@ self.addEventListener('fetch', (event) => {
       .catch(() => {
         return caches.match(event.request, { ignoreSearch: true }).then((cachedResponse) => {
           if (cachedResponse) return cachedResponse;
-          if (event.request.mode === 'navigate') return caches.match('/', { ignoreSearch: true });
+          if (event.request.mode === 'navigate') {
+            return caches.match(event.request).then((navMatch) => {
+              return navMatch || caches.match('/', { ignoreSearch: true });
+            });
+          }
           return new Response('Offline', { status: 503, statusText: 'Service Unavailable' });
         });
       })

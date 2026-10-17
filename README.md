@@ -33,13 +33,24 @@ image-converter/
 ├── png-to-jpg/                 # /png-to-jpg/  — PNG → JPG converter
 ├── webp-to-jpg/                # /webp-to-jpg/ — WebP → JPG converter
 ├── webp-to-png/                # /webp-to-png/ — WebP → PNG converter
+├── png-to-webp/                # /png-to-webp/ — PNG → WebP converter
 ├── heic-to-jpg/                # /heic-to-jpg/ — HEIC → JPG converter
 ├── jpeg-to-webp/               # /jpeg-to-webp/— JPEG → WebP converter
 ├── jpg-to-avif/                # /jpg-to-avif/ — JPG → AVIF converter
 ├── png-to-avif/                # /png-to-avif/ — PNG → AVIF converter
-├── png-to-ico/                 # /png-to-ico/  — PNG → ICO converter
+├── avif-to-jpg/                # /avif-to-jpg/ — AVIF → JPG converter
+├── avif-to-png/                # /avif-to-png/ — AVIF → PNG converter
+├── png-to-ico/                 # /png-to-ico/  — Multi-resolution ICO generator
 ├── svg-to-jpg/                 # /svg-to-jpg/  — SVG → JPG converter
-├── compress-image/             # /compress-image/ — General image compressor
+├── svg-to-png/                 # /svg-to-png/  — SVG → PNG vector rasterizer
+├── tiff-to-jpg/                # /tiff-to-jpg/ — TIFF → JPG converter
+├── jpg-to-tiff/                # /jpg-to-tiff/ — JPG → TIFF converter
+├── jpg-to-pdf/                 # /jpg-to-pdf/  — Multi-image PDF compiler
+├── resize-image/               # /resize-image/— Proportional & exact dimension resizer
+├── crop-image/                 # /crop-image/  — Aspect ratio (1:1, 16:9, 9:16) cropper
+├── watermark-image/            # /watermark-image/ — Dynamic text watermark overlay
+├── photo-to-black-and-white/   # /photo-to-black-and-white/ — Grayscale converter
+├── compress-image/             # /compress-image/ — Target file size compressor (KB/MB)
 │
 ├── ── Content Pages ───────────────────────────────────────
 ├── blog/                       # /blog/ — Informative blogs on image editing
