@@ -352,6 +352,19 @@ document.addEventListener('DOMContentLoaded', () => {
   progressLabel.setAttribute('aria-live', 'polite');
   progressContainer.insertAdjacentElement('afterend', progressLabel);
 
+  // Scroll helper: only scrolls the minimum distance needed when element is outside the viewport
+  function scrollIntoViewIfNeeded(el, margin = 24) {
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const viewH = window.innerHeight || document.documentElement.clientHeight;
+    const headerOffset = 80;
+    if (rect.top < headerOffset) {
+      window.scrollBy({ top: rect.top - headerOffset - margin, behavior: 'smooth' });
+    } else if (rect.bottom > viewH - margin) {
+      window.scrollBy({ top: rect.bottom - viewH + margin, behavior: 'smooth' });
+    }
+  }
+
   // Centralized converter state reset function
   function resetConverterState() {
     queuedFiles.forEach(q => { if (q.thumbUrl) URL.revokeObjectURL(q.thumbUrl); });
@@ -381,7 +394,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderGallery();
     if (dropZone) {
       dropZone.classList.remove('has-files');
-      dropZone.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      scrollIntoViewIfNeeded(dropZone);
     }
   }
 
@@ -1315,8 +1328,8 @@ document.addEventListener('DOMContentLoaded', () => {
     renderGallery();
     if (wasEmpty && queuedFiles.length > 0) {
       setTimeout(() => {
-        convertBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }, 350);
+        scrollIntoViewIfNeeded(convertBtn);
+      }, 420);
     }
   }
 
@@ -1987,10 +2000,10 @@ document.addEventListener('DOMContentLoaded', () => {
     showToast(t.success, 'success');
     setTimeout(() => progressContainer.classList.remove('visible'), 1000);
 
-    // Smooth transition: bring results and download button directly into center view
+    // Smooth transition: bring results and download button into view only if needed
     setTimeout(() => {
       const dlBtn = document.getElementById('downloadBtn') || resultCard;
-      dlBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      scrollIntoViewIfNeeded(dlBtn);
     }, 250);
   });
 
