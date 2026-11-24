@@ -1,11 +1,11 @@
 {
-  "name": "Image Converter PWA",
-  "short_name": "Converter",
-  "description": "Free, precise, and entirely client-side image converter supporting JPG, PNG, WEBP, and HEIC.",
+  "name": "Image Lab Converter",
+  "short_name": "ImgLab",
+  "description": "Free, precise, and entirely client-side image converter supporting JPG, PNG, WEBP, AVIF, and HEIC.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0f172a",
-  "theme_color": "#a855f7",
+  "background_color": "#09090b",
+  "theme_color": "#09090b",
   "icons": [
     {
       "src": "/favicon.svg",

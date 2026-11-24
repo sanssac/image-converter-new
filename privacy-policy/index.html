@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -52,12 +52,12 @@
   <div class="mesh-glow mesh-1"></div>
   <div class="mesh-glow mesh-2"></div>
   <div id="toastContainer"></div>
-                                                        <header>
+                                                          <header>
     <a href="/" class="logo-link">
       <div class="logo">
-        <img src="/apple-touch-icon.png" alt="Logo" style="width:44px; height:44px; border-radius:11px; object-fit:contain;">
+        <img src="/apple-touch-icon.png" alt="Image Lab Converter" style="width:44px; height:44px; border-radius:11px; object-fit:contain;">
       </div>
-      <div class="site-title">Image <span>Converter</span></div>
+      <div class="site-title">Image Lab <span>Converter</span></div>
     </a>
     <div class="header-right">
       <nav class="desktop-nav">
@@ -205,8 +205,8 @@
     <div class="mobile-drawer" id="mobileDrawer">
       <div class="drawer-header">
         <div class="drawer-logo">
-          <img src="/apple-touch-icon.png" alt="Logo" style="width:34px; height:34px; border-radius:8px; object-fit:contain; margin-right:8px;">
-          <span>Image Converter</span>
+          <img src="/apple-touch-icon.png" alt="Image Lab Converter" style="width:34px; height:34px; border-radius:8px; object-fit:contain; margin-right:8px;">
+          <span>Image Lab Converter</span>
         </div>
         <button class="drawer-close" aria-label="Close Menu">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
@@ -343,19 +343,78 @@
     <main>
       <article class="seo-article glass-panel">
         <h1>Privacy Policy</h1>
-        <p><strong>Last Updated: October 2023</strong></p>
+        <p><strong>Last Updated: November 2026</strong></p>
         <h2>1. Client-Side Processing</h2>
         <p>This image converter functions entirely inside your local browser instance. We do not upload your images to our servers. Because no data leaves your mobile device or computer, there is absolute zero risk of file leakage.</p>
-        <h2>2. Cookies and Trackers</h2>
-        <p>We utilize basic web analytics (Google Analytics) to monitor website traffic and improve user layout. We also embed Google AdSense which utilizes DART cookies to serve personalized ads based on past internet behavior.</p>
+        <h2>2. Analytics, Cookies, and Advertising</h2>
+        <p>We use privacy-friendly, cookieless Vercel Web Analytics to monitor aggregate performance and page traffic. We also use Google AdSense, which may use cookies or device identifiers to serve relevant ads based on your consent preferences.</p>
         <h2>3. Data Retention</h2>
         <p>Since nothing is uploaded, we retain zero files. Period.</p>
       </article>
     </main>
   </div>
   <canvas id="canvas" style="display:none;"></canvas>
-  <footer>
-    <div class="footer-links"><a href="/privacy-policy">Privacy Policy</a><a href="/terms">Terms of Service</a><a href="/about">About Us</a><a href="/contact">Contact</a></div>
+    <footer>
+    <div class="footer-container">
+      <div class="footer-grid">
+        <div class="footer-col footer-col-brand">
+          <div class="footer-brand">
+            <div class="footer-logo"><img src="/apple-touch-icon.png" alt="Image Lab Converter" style="width: 32px; height: 32px; object-fit: contain; border-radius: 9px;"></div>
+            <div class="footer-name">Image Lab <span>Converter</span></div>
+          </div>
+          <p class="footer-tagline">100% private, client-side online image conversion, compression, and editing suite. Your photos and documents never leave your device.</p>
+          <div class="footer-privacy-pill">
+            <span class="privacy-dot"></span> 100% Client-Side &amp; Private
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Popular Converters</h4>
+          <ul>
+            <li><a href="/jpg-to-png">JPG → PNG</a></li>
+            <li><a href="/png-to-jpg">PNG → JPG</a></li>
+            <li><a href="/webp-to-jpg">WebP → JPG</a></li>
+            <li><a href="/heic-to-jpg">HEIC → JPG</a></li>
+            <li><a href="/svg-to-png">SVG → PNG</a></li>
+            <li><a href="/svg-to-jpg">SVG → JPG</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Tools & Filters</h4>
+          <ul>
+            <li><a href="/compress-image">Compress</a></li>
+            <li><a href="/resize-image">Resize Image</a></li>
+            <li><a href="/crop-image">Crop Image</a></li>
+            <li><a href="/watermark-image">Watermark</a></li>
+            <li><a href="/jpg-to-pdf">JPG to PDF</a></li>
+            <li><a href="/png-to-ico">PNG → ICO</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Company &amp; Legal</h4>
+          <ul>
+            <li><a href="/about">About Us</a></li>
+            <li><a href="/blog">Blog</a></li>
+            <li><a href="/contact">Contact</a></li>
+            <li><a href="/privacy-policy">Privacy Policy</a></li>
+            <li><a href="/terms">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div class="footer-copy">
+          &copy; 2026 Image Lab Converter. All rights reserved. Zero server uploads.
+        </div>
+        <div class="footer-legal-badges">
+          <span>Client-Side PWA</span>
+          <span>&bull;</span>
+          <span>HTML5 Canvas Engine</span>
+        </div>
+      </div>
+    </div>
   </footer>
   <script src="/assets/js/app.js?v=20261017" defer></script>
 </body>

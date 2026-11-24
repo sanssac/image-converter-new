@@ -4,10 +4,10 @@ const ASSETS_TO_CACHE = [
   '/index.html',
   '/favicon.svg',
   '/manifest.json',
-  '/assets/css/style.css',
-  '/assets/js/app.js',
-  '/assets/js/modules/sticky-header.js',
-  '/assets/js/modules/accordion.js'
+  '/assets/css/style.css?v=20261017',
+  '/assets/js/app.js?v=20261017',
+  '/assets/js/modules/sticky-header.js?v=20261017',
+  '/assets/js/modules/accordion.js?v=20261017'
 ];
 
 self.addEventListener('install', (event) => {

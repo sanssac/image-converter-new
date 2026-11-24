@@ -327,9 +327,9 @@ def generate_header(current_lang, route):
     header_html = f'''  <header>
     <a href="{logo_href}" class="logo-link">
       <div class="logo">
-        <img src="/apple-touch-icon.png" alt="Logo" style="width:44px; height:44px; border-radius:11px; object-fit:contain;">
+        <img src="/apple-touch-icon.png" alt="Image Lab Converter" style="width:44px; height:44px; border-radius:11px; object-fit:contain;">
       </div>
-      <div class="site-title">Image <span>Converter</span></div>
+      <div class="site-title">Image Lab <span>Converter</span></div>
     </a>
     <div class="header-right">
       <nav class="desktop-nav">
@@ -387,8 +387,8 @@ def generate_header(current_lang, route):
     <div class="mobile-drawer" id="mobileDrawer">
       <div class="drawer-header">
         <div class="drawer-logo">
-          <img src="/apple-touch-icon.png" alt="Logo" style="width:34px; height:34px; border-radius:8px; object-fit:contain; margin-right:8px;">
-          <span>Image Converter</span>
+          <img src="/apple-touch-icon.png" alt="Image Lab Converter" style="width:34px; height:34px; border-radius:8px; object-fit:contain; margin-right:8px;">
+          <span>Image Lab Converter</span>
         </div>
         <button class="drawer-close" aria-label="Close Menu">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
@@ -514,6 +514,73 @@ def remove_mobile_drawer(html):
 def remove_drawer_backdrop(html):
     return re.sub(r'<div class="drawer-backdrop"></div>\s*', '', html)
 
+def generate_footer(current_lang):
+    trans = TRANSLATIONS.get(current_lang, TRANSLATIONS['en'])
+    lp = trans['logo_prefix']
+    footer_html = f'''  <footer>
+    <div class="footer-container">
+      <div class="footer-grid">
+        <div class="footer-col footer-col-brand">
+          <div class="footer-brand">
+            <div class="footer-logo"><img src="/apple-touch-icon.png" alt="Image Lab Converter" style="width: 32px; height: 32px; object-fit: contain; border-radius: 9px;"></div>
+            <div class="footer-name">Image Lab <span>Converter</span></div>
+          </div>
+          <p class="footer-tagline">100% private, client-side online image conversion, compression, and editing suite. Your photos and documents never leave your device.</p>
+          <div class="footer-privacy-pill">
+            <span class="privacy-dot"></span> 100% Client-Side &amp; Private
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>{trans['popular']}</h4>
+          <ul>
+            <li><a href="{lp}/jpg-to-png">{trans['jpg_png'][0]}</a></li>
+            <li><a href="{lp}/png-to-jpg">{trans['png_jpg'][0]}</a></li>
+            <li><a href="{lp}/webp-to-jpg">{trans['webp_jpg'][0]}</a></li>
+            <li><a href="{lp}/heic-to-jpg">{trans['heic_jpg'][0]}</a></li>
+            <li><a href="{lp}/svg-to-png">{trans['svg_png'][0]}</a></li>
+            <li><a href="{lp}/svg-to-jpg">{trans['svg_jpg'][0]}</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>{trans['tools']}</h4>
+          <ul>
+            <li><a href="{lp}/compress-image">{trans['compress'][0]}</a></li>
+            <li><a href="{lp}/resize-image">{trans['resize'][0]}</a></li>
+            <li><a href="{lp}/crop-image">{trans['crop'][0]}</a></li>
+            <li><a href="{lp}/watermark-image">{trans['watermark'][0]}</a></li>
+            <li><a href="{lp}/jpg-to-pdf">{trans['jpg_pdf'][0]}</a></li>
+            <li><a href="{lp}/png-to-ico">{trans['png_ico'][0]}</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Company &amp; Legal</h4>
+          <ul>
+            <li><a href="/about">About Us</a></li>
+            <li><a href="/blog">{trans['blog']}</a></li>
+            <li><a href="/contact">Contact</a></li>
+            <li><a href="/privacy-policy">Privacy Policy</a></li>
+            <li><a href="/terms">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div class="footer-copy">
+          &copy; 2026 Image Lab Converter. All rights reserved. Zero server uploads.
+        </div>
+        <div class="footer-legal-badges">
+          <span>Client-Side PWA</span>
+          <span>&bull;</span>
+          <span>HTML5 Canvas Engine</span>
+        </div>
+      </div>
+    </div>
+  </footer>'''
+    return footer_html
+
 def main():
     base_dir = r"c:\image converter new"
     html_files = glob.glob(os.path.join(base_dir, '**', '*.html'), recursive=True)
@@ -537,18 +604,20 @@ def main():
         rel_path = os.path.relpath(filepath, base_dir)
         route = get_route(rel_path)
         
-        # Generate the beautiful, pre-rendered static header HTML block
+        # Generate the beautiful, pre-rendered static header and footer HTML blocks
         header_block = generate_header(lang, route)
+        footer_block = generate_footer(lang)
         
         # Robust replacement: strip any existing pre-rendered elements first
         content = remove_mega_dropdown(content)
         content = remove_mobile_drawer(content)
         content = remove_drawer_backdrop(content)
         
-        # Replace the entire <header>...</header> block
+        # Replace the entire <header>...</header> and <footer>...</footer> blocks
         content_new, sub_count = re.subn(r'<header>.*?</header>', header_block, content, flags=re.DOTALL)
+        content_new, footer_sub_count = re.subn(r'<footer[^>]*>.*?</footer>', footer_block, content_new, flags=re.DOTALL)
         
-        if sub_count > 0:
+        if sub_count > 0 or footer_sub_count > 0:
             # Also clean up duplicate script injection if any
             content_new = re.sub(r'<script[^>]*jszip\.min\.js[^>]*></script>\s*', '', content_new)
             
@@ -556,7 +625,7 @@ def main():
                 f.write(content_new)
             count += 1
             
-    print(f"Statically pre-rendered localized navigation headers for {count} pages successfully!")
+    print(f"Statically pre-rendered localized navigation headers and footers for {count} pages successfully!")
 
 if __name__ == "__main__":
     main()

@@ -58,8 +58,8 @@ if (document.body) document.body.dataset.theme = 'dark';
 
 // ── Load Visual & UI Modules dynamically ────────────────
 const visualModules = [
-  '/assets/js/modules/sticky-header.js?v=20261014',
-  '/assets/js/modules/accordion.js?v=20261014'
+  '/assets/js/modules/sticky-header.js?v=20261017',
+  '/assets/js/modules/accordion.js?v=20261017'
 ];
 visualModules.forEach(url => {
   const script = document.createElement('script');
@@ -441,7 +441,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   if (copyBtn) {
-    copyBtn.setAttribute('aria-label', 'Copy image to clipboard');
+    copyBtn.setAttribute('aria-label', t.copiedClipboard ? t.copiedClipboard.replace(/!$/, '') : 'Copy image to clipboard');
   }
 
   if (document.body.hasAttribute('data-target-size')) {
@@ -814,6 +814,16 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   if (customSizeInput) customSizeInput.addEventListener('input', invalidateResults);
+  if (customSizeUnit) customSizeUnit.addEventListener('change', invalidateResults);
+  const cropRatioSelect = document.getElementById('cropRatio');
+  const customCropInputs = document.getElementById('customCropInputs');
+  if (cropRatioSelect && customCropInputs) {
+    const syncCustomCropVisibility = () => {
+      customCropInputs.style.display = cropRatioSelect.value === 'custom' ? 'grid' : 'none';
+    };
+    cropRatioSelect.addEventListener('change', syncCustomCropVisibility);
+    syncCustomCropVisibility();
+  }
   ['watermarkText', 'watermarkSize', 'watermarkPos', 'cropRatio', 'cropX', 'cropY', 'cropW', 'cropH'].forEach(id => {
     const el = document.getElementById(id);
     if (el) {
@@ -928,7 +938,12 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // Keyboard Shortcuts
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && convertBtn && !convertBtn.disabled && queuedFiles.length > 0 && !queuedFiles.some(q => q.processing) && !queuedFiles.every(q => q.result !== null)) {
+    const activeEl = document.activeElement;
+    const isInteractive = activeEl && (
+      ['INPUT', 'TEXTAREA', 'SELECT', 'BUTTON', 'A'].includes(activeEl.tagName) ||
+      activeEl.isContentEditable
+    );
+    if (e.key === 'Enter' && !isInteractive && convertBtn && !convertBtn.disabled && queuedFiles.length > 0 && !queuedFiles.some(q => q.processing) && !queuedFiles.every(q => q.result !== null)) {
       convertBtn.click();
     }
     if (e.key === 'Escape' && queuedFiles.length > 0) {
@@ -1177,7 +1192,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const ext = f.name.split('.').pop().toLowerCase();
       
       if (!f.type.startsWith('image/') && !['heic', 'heif', 'ico', 'svg', 'tiff', 'tif'].includes(ext)) {
-         showToast(t.error || 'Invalid file type: ' + f.name, 'error');
+         showToast((t.error || 'Invalid file type: ') + f.name, 'error');
          continue;
       }
       
@@ -1550,7 +1565,7 @@ document.addEventListener('DOMContentLoaded', () => {
            totalOrigSize += q.file.size;
            const objUrl = URL.createObjectURL(q.file);
            
-           const getBlob = (imgObj, w, h, outMime, outQuality) => new Promise(async res => {
+           const getBlob = async (imgObj, w, h, outMime, outQuality) => {
                let targetW = w;
                let targetH = h;
 
@@ -1659,22 +1674,19 @@ document.addEventListener('DOMContentLoaded', () => {
                
                if (outMime === 'image/x-icon') {
                    try {
-                       const icoBlob = await generateMultiSizeIco(canvas);
-                       res(icoBlob);
-                       return;
+                       return await generateMultiSizeIco(canvas);
                    } catch (icoErr) {
                        console.error("Multi-size ICO conversion error:", icoErr);
-                       res(null);
-                       return;
+                       return null;
                    }
                } else if (outMime === 'image/tiff') {
                    try {
                        const imgData = ctx.getImageData(0, 0, targetW, targetH);
                        const tiffBuffer = UTIF.encodeImage(imgData.data, targetW, targetH);
-                       res(new Blob([tiffBuffer], { type: 'image/tiff' }));
+                       return new Blob([tiffBuffer], { type: 'image/tiff' });
                    } catch (err) {
                        console.error("TIFF encoding error:", err);
-                       res(null);
+                       return null;
                    }
                } else {
                    let effectiveMime = outMime;
@@ -1682,15 +1694,17 @@ document.addEventListener('DOMContentLoaded', () => {
                        console.warn("AVIF export not supported in browser canvas; falling back to WebP");
                        effectiveMime = 'image/webp';
                    }
-                   canvas.toBlob(b => {
-                       if (!b && effectiveMime === 'image/avif') {
-                           canvas.toBlob(fallbackB => res(fallbackB), 'image/webp', outQuality);
-                       } else {
-                           res(b);
-                       }
-                   }, effectiveMime, effectiveMime !== 'image/png' ? outQuality : undefined);
+                   return await new Promise(res => {
+                       canvas.toBlob(b => {
+                           if (!b && effectiveMime === 'image/avif') {
+                               canvas.toBlob(fallbackB => res(fallbackB), 'image/webp', outQuality);
+                           } else {
+                               res(b);
+                           }
+                       }, effectiveMime, effectiveMime !== 'image/png' ? outQuality : undefined);
+                   });
                }
-           });
+           };
 
            const blob = await new Promise((resolve, reject) => {
              const img = new Image();
