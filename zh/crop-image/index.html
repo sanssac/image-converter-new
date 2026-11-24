@@ -66,7 +66,7 @@
   <div class="mesh-glow mesh-2"></div>
   <div id="toastContainer"></div>
 
-        <header>
+          <header>
     <a href="/zh" class="logo-link">
       <div class="logo">
         <img src="/apple-touch-icon.png" alt="Image Lab Converter" style="width:44px; height:44px; border-radius:11px; object-fit:contain;">
@@ -360,40 +360,47 @@
         <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
         </svg>
-        100% secure — images never leave your device
+        100% 安全 — 图片永远不会离开您的设备
       </div>
 
       <!-- Crop Controls -->
       <div id="cropControls" style="margin-top:20px; margin-bottom:20px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:16px;">
-         <h4 style="font-size:14px; margin-bottom:12px; color:#e2e8f0;">Aspect Ratio & Crop Framing</h4>
+         <h2 style="font-size:14px; margin-bottom:12px; color:#e2e8f0;">宽高比与裁剪构图</h2>
          <div style="display:flex; flex-direction:column; gap:12px;">
            <div>
-             <label for="cropRatio" style="font-size:11px; color:#94a3b8; display:block; margin-bottom:4px;">Select Aspect Ratio</label>
-             <select id="cropRatio" aria-label="Select Aspect Ratio" style="width:100%; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:8px; color:white; font-family:inherit; outline:none;">
-               <option value="1:1" selected>1:1 Square (Avatar, Instagram Feed)</option>
-               <option value="16:9">16:9 Widescreen (YouTube, Presentation)</option>
-               <option value="4:3">4:3 Standard Photo</option>
-               <option value="9:16">9:16 Vertical Story (Reels, Shorts, TikTok)</option>
-               <option value="3:2">3:2 Classic DSLR</option>
+             <label for="cropRatio" style="font-size:11px; color:#94a3b8; display:block; margin-bottom:4px;">选择宽高比</label>
+             <select id="cropRatio" aria-label="选择宽高比" style="width:100%; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:8px; color:white; font-family:inherit; outline:none;">
+               <option value="1:1" selected>1:1 正方形 (头像, Instagram)</option>
+               <option value="16:9">16:9 宽屏 (YouTube, 演示文稿)</option>
+               <option value="4:3">4:3 标准照片</option>
+               <option value="9:16">9:16 竖屏故事 (Reels, Shorts, TikTok)</option>
+               <option value="3:2">3:2 经典单反比例</option>
+               <option value="custom">自定义像素坐标 (X, Y, 宽, 高)</option>
              </select>
+           </div>
+           <div id="customCropInputs" style="display:none; grid-template-columns:repeat(4,1fr); gap:8px;">
+             <div><label for="cropX" style="font-size:11px; color:#94a3b8; display:block; margin-bottom:4px;">X (px)</label><input type="number" id="cropX" min="0" value="0" style="width:100%; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:8px; color:white; font-family:inherit; outline:none;" /></div>
+             <div><label for="cropY" style="font-size:11px; color:#94a3b8; display:block; margin-bottom:4px;">Y (px)</label><input type="number" id="cropY" min="0" value="0" style="width:100%; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:8px; color:white; font-family:inherit; outline:none;" /></div>
+             <div><label for="cropW" style="font-size:11px; color:#94a3b8; display:block; margin-bottom:4px;">宽度 (px)</label><input type="number" id="cropW" min="1" placeholder="Auto" style="width:100%; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:8px; color:white; font-family:inherit; outline:none;" /></div>
+             <div><label for="cropH" style="font-size:11px; color:#94a3b8; display:block; margin-bottom:4px;">高度 (px)</label><input type="number" id="cropH" min="1" placeholder="Auto" style="width:100%; background:rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:8px; color:white; font-family:inherit; outline:none;" /></div>
            </div>
          </div>
       </div>
       <div class="format-tabs glass-panel" id="formatTabs">
-        <button class="tab active" data-target="image/jpeg">To JPG</button>
-        <button class="tab" data-target="image/png">To PNG</button>
-        <button class="tab" data-target="image/webp">To WEBP</button>
+        <button class="tab active" data-target="image/jpeg">转为 JPG</button>
+        <button class="tab" data-target="image/png">转为 PNG</button>
+        <button class="tab" data-target="image/webp">转为 WEBP</button>
       </div>
 
       <div class="drop-zone glass-panel" id="dropZone">
         <div class="icon">
           <svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
         </div>
-        <h2>Drop image to crop</h2>
-        <p>Supports all major raster and vector image formats</p>
+        <h2>拖放图片至此处以裁剪</h2>
+        <p>支持所有主流位图和矢量图片格式</p>
         <button class="btn-primary" id="btnLocal">
           <svg aria-hidden="true" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" stroke="none"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
-          Device
+          本地设备
           <svg class="chevron-down" aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         </button>
         <input type="file" id="fileInput" aria-label="Upload image files" accept="image/*" multiple />
@@ -403,16 +410,16 @@
 
       <button class="btn-convert" id="convertBtn">
         <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3m6.366-.366-2.12 2.12M21 12h-3m.366 6.366-2.12-2.12M12 21v-3m-6.366.366 2.12-2.12M3 12h3m-.366-6.366 2.12 2.12"/></svg>
-        <span id="convertBtnText">Crop & Save Image</span>
+        <span id="convertBtnText">裁剪并保存</span>
       </button>
 
       <div class="progress-container" id="progressContainer"><div class="progress-fill" id="progressFill"></div></div>
 
       <div class="result-card glass-panel" id="resultCard">
-        <div class="result-header">Done successfully!</div>
+        <div class="result-header">处理成功！</div>
         <div class="stats"><span id="batchCountText"></span><span id="batchSizeOrig"></span><span id="batchSizeNew"></span></div>
         <div class="action-row">
-          <button class="btn-download" id="downloadBtn" style="flex:1"><span id="downloadText">Download Cropped Image</span></button>
+          <button class="btn-download" id="downloadBtn" style="flex:1"><span id="downloadText">下载裁剪后的图片</span></button>
           <button class="btn-copy" id="copyBtn" title="Copy to Clipboard" aria-label="Copy Base64">
             <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
               <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
@@ -424,12 +431,12 @@
 
       <!-- Related SEO Internal Links -->
       <section class="related-tools glass-panel">
-        <h3>Related Free Tools</h3>
-        <a href="/">Convert Multiple Formats</a>
-        <a href="/webp-to-jpg">Convert WebP to JPG</a>
-        <a href="/png-to-jpg">Convert PNG to JPG</a>
-        <a href="/compress-image">Compress Image Files</a>
-        <a href="/resize-image">Resize Images</a>
+        <h3>相关免费工具</h3>
+        <a href="/zh">多格式互转</a>
+        <a href="/zh/webp-to-jpg">WebP 转 JPG</a>
+        <a href="/zh/png-to-jpg">PNG 转 JPG</a>
+        <a href="/zh/compress-image">图片压缩</a>
+        <a href="/zh/resize-image">调整图片尺寸</a>
       </section>
 
       <!-- SEO Content -->
@@ -437,7 +444,7 @@
         <h2>如何精准快速地在线裁剪图片</h2>
         <p>为社交媒体（Instagram 1:1、YouTube封面 16:9、抖音/小红书 9:16）快速裁剪图片尺寸，完全在浏览器本地实时处理。</p>
         <div class="faq-section">
-          <h3>Frequently Asked Questions</h3>
+          <h3>常见问题</h3>
           <div class="faq-item">
             <div class="faq-question">支持哪些常用宽高比？</div>
             <div class="faq-answer">支持1:1正方形、16:9宽屏、4:3标准比例、9:16竖屏、3:2单反画幅以及自定义裁剪。</div>
@@ -452,7 +459,7 @@
   </div>
 
   <canvas id="canvas" style="display:none;"></canvas>
-    <footer>
+      <footer>
     <div class="footer-container">
       <div class="footer-grid">
         <div class="footer-col footer-col-brand">
@@ -460,9 +467,9 @@
             <div class="footer-logo"><img src="/apple-touch-icon.png" alt="Image Lab Converter" style="width: 32px; height: 32px; object-fit: contain; border-radius: 9px;"></div>
             <div class="footer-name">Image Lab <span>Converter</span></div>
           </div>
-          <p class="footer-tagline">100% private, client-side online image conversion, compression, and editing suite. Your photos and documents never leave your device.</p>
+          <p class="footer-tagline">100% 隐私安全的纯本地在线图片转换、压缩与编辑工具。您的照片和文档永远不会离开您的设备。</p>
           <div class="footer-privacy-pill">
-            <span class="privacy-dot"></span> 100% Client-Side &amp; Private
+            <span class="privacy-dot"></span> 100% 纯本地隐私处理
           </div>
         </div>
 
@@ -491,20 +498,20 @@
         </div>
 
         <div class="footer-col">
-          <h4>Company &amp; Legal</h4>
+          <h4>关于与法律条款</h4>
           <ul>
-            <li><a href="/about">About Us</a></li>
+            <li><a href="/about">关于我们</a></li>
             <li><a href="/blog">博客</a></li>
-            <li><a href="/contact">Contact</a></li>
-            <li><a href="/privacy-policy">Privacy Policy</a></li>
-            <li><a href="/terms">Terms of Service</a></li>
+            <li><a href="/contact">联系我们</a></li>
+            <li><a href="/privacy-policy">隐私政策</a></li>
+            <li><a href="/terms">服务条款</a></li>
           </ul>
         </div>
       </div>
 
       <div class="footer-bottom">
         <div class="footer-copy">
-          &copy; 2026 Image Lab Converter. All rights reserved. Zero server uploads.
+          &copy; 2026 Image Lab Converter. 保留所有权利。零服务器上传。
         </div>
         <div class="footer-legal-badges">
           <span>Client-Side PWA</span>

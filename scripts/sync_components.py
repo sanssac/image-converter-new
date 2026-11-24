@@ -517,6 +517,69 @@ def remove_drawer_backdrop(html):
 def generate_footer(current_lang):
     trans = TRANSLATIONS.get(current_lang, TRANSLATIONS['en'])
     lp = trans['logo_prefix']
+    footer_i18n = {
+        'en': {
+            'tagline': '100% private, client-side online image conversion, compression, and editing suite. Your photos and documents never leave your device.',
+            'pill': '100% Client-Side &amp; Private',
+            'company': 'Company &amp; Legal',
+            'about': 'About Us',
+            'contact': 'Contact',
+            'privacy': 'Privacy Policy',
+            'terms': 'Terms of Service',
+            'copy': '&copy; 2026 Image Lab Converter. All rights reserved. Zero server uploads.',
+        },
+        'de': {
+            'tagline': '100 % private, clientseitige Online-Suite für Bildkonvertierung, Komprimierung und Bearbeitung. Ihre Fotos verlassen niemals Ihr Gerät.',
+            'pill': '100 % Clientseitig &amp; Privat',
+            'company': 'Unternehmen &amp; Rechtliches',
+            'about': 'Über uns',
+            'contact': 'Kontakt',
+            'privacy': 'Datenschutz',
+            'terms': 'Nutzungsbedingungen',
+            'copy': '&copy; 2026 Image Lab Converter. Alle Rechte vorbehalten. Keine Server-Uploads.',
+        },
+        'es': {
+            'tagline': 'Suite online 100 % privada y del lado del cliente para convertir, comprimir y editar imágenes. Tus fotos nunca salen de tu dispositivo.',
+            'pill': '100 % Privado y Local',
+            'company': 'Empresa y Legal',
+            'about': 'Sobre nosotros',
+            'contact': 'Contacto',
+            'privacy': 'Privacidad',
+            'terms': 'Términos de servicio',
+            'copy': '&copy; 2026 Image Lab Converter. Todos los derechos reservados. Sin subidas al servidor.',
+        },
+        'fr': {
+            'tagline': 'Suite en ligne 100 % privée et côté client pour convertir, compresser et éditer vos images. Vos photos ne quittent jamais votre appareil.',
+            'pill': '100 % Local &amp; Privé',
+            'company': 'Entreprise &amp; Mentions',
+            'about': 'À propos',
+            'contact': 'Contact',
+            'privacy': 'Confidentialité',
+            'terms': "Conditions d'utilisation",
+            'copy': '&copy; 2026 Image Lab Converter. Tous droits réservés. Zéro envoi serveur.',
+        },
+        'hi': {
+            'tagline': '100% निजी, क्लाइंट-साइड ऑनलाइन इमेज कन्वर्टर, कंप्रेसर और एडिटर। आपकी तस्वीरें कभी आपके डिवाइस से बाहर नहीं जातीं।',
+            'pill': '100% क्लाइंट-साइड और सुरक्षित',
+            'company': 'कंपनी और कानूनी',
+            'about': 'हमारे बारे में',
+            'contact': 'संपर्क करें',
+            'privacy': 'गोपनीयता नीति',
+            'terms': 'सेवा की शर्तें',
+            'copy': '&copy; 2026 Image Lab Converter. सर्वाधिकार सुरक्षित। कोई सर्वर अपलोड नहीं।',
+        },
+        'zh': {
+            'tagline': '100% 隐私安全的纯本地在线图片转换、压缩与编辑工具。您的照片和文档永远不会离开您的设备。',
+            'pill': '100% 纯本地隐私处理',
+            'company': '关于与法律条款',
+            'about': '关于我们',
+            'contact': '联系我们',
+            'privacy': '隐私政策',
+            'terms': '服务条款',
+            'copy': '&copy; 2026 Image Lab Converter. 保留所有权利。零服务器上传。',
+        },
+    }
+    fi = footer_i18n.get(current_lang, footer_i18n['en'])
     footer_html = f'''  <footer>
     <div class="footer-container">
       <div class="footer-grid">
@@ -525,9 +588,9 @@ def generate_footer(current_lang):
             <div class="footer-logo"><img src="/apple-touch-icon.png" alt="Image Lab Converter" style="width: 32px; height: 32px; object-fit: contain; border-radius: 9px;"></div>
             <div class="footer-name">Image Lab <span>Converter</span></div>
           </div>
-          <p class="footer-tagline">100% private, client-side online image conversion, compression, and editing suite. Your photos and documents never leave your device.</p>
+          <p class="footer-tagline">{fi['tagline']}</p>
           <div class="footer-privacy-pill">
-            <span class="privacy-dot"></span> 100% Client-Side &amp; Private
+            <span class="privacy-dot"></span> {fi['pill']}
           </div>
         </div>
 
@@ -556,20 +619,20 @@ def generate_footer(current_lang):
         </div>
 
         <div class="footer-col">
-          <h4>Company &amp; Legal</h4>
+          <h4>{fi['company']}</h4>
           <ul>
-            <li><a href="/about">About Us</a></li>
+            <li><a href="/about">{fi['about']}</a></li>
             <li><a href="/blog">{trans['blog']}</a></li>
-            <li><a href="/contact">Contact</a></li>
-            <li><a href="/privacy-policy">Privacy Policy</a></li>
-            <li><a href="/terms">Terms of Service</a></li>
+            <li><a href="/contact">{fi['contact']}</a></li>
+            <li><a href="/privacy-policy">{fi['privacy']}</a></li>
+            <li><a href="/terms">{fi['terms']}</a></li>
           </ul>
         </div>
       </div>
 
       <div class="footer-bottom">
         <div class="footer-copy">
-          &copy; 2026 Image Lab Converter. All rights reserved. Zero server uploads.
+          {fi['copy']}
         </div>
         <div class="footer-legal-badges">
           <span>Client-Side PWA</span>
